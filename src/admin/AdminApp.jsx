@@ -1,0 +1,365 @@
+import { useState } from "react"
+import {
+  Trophy, User, Info, Cpu, Layers, Award, Flame, GraduationCap,
+  Users, Share2, FileText, Save, CheckCircle2, RefreshCw, Eye,
+  ShieldCheck, Download, AlertCircle, Sparkles
+} from "lucide-react"
+
+// Initial datasets
+import { profile as initialProfile } from "../data/profile"
+import { hackathons as initialHackathons } from "../data/hackathons"
+import { projects as initialProjects } from "../data/projects"
+import { achievements as initialAchievements } from "../data/achievements"
+import { certifications as initialCertifications } from "../data/certifications"
+import { techCategories as initialTechCategories } from "../data/techStack"
+import { education as initialEducation } from "../data/education"
+import { leadership as initialLeadership } from "../data/leadership"
+import { socialLinks as initialSocial } from "../data/social"
+
+// Editors & Modals
+import HackathonWinsManager from "./components/HackathonWinsManager"
+import ProfileEditor from "./components/ProfileEditor"
+import AboutEditor from "./components/AboutEditor"
+import SkillsEditor from "./components/SkillsEditor"
+import ProjectsEditor from "./components/ProjectsEditor"
+import AchievementsEditor from "./components/AchievementsEditor"
+import CertificationsEditor from "./components/CertificationsEditor"
+import DSAEditor from "./components/DSAEditor"
+import EducationEditor from "./components/EducationEditor"
+import LeadershipEditor from "./components/LeadershipEditor"
+import SocialEditor from "./components/SocialEditor"
+import ResumeEditor from "./components/ResumeEditor"
+import BuildCheckModal from "./components/BuildCheckModal"
+import ExportBackupModal from "./components/ExportBackupModal"
+
+const TABS = [
+  { id: "hackathon-wins", label: "Hackathon Wins (Photos)", icon: Trophy, featured: true },
+  { id: "profile", label: "Profile", icon: User },
+  { id: "about", label: "About & Stats", icon: Info },
+  { id: "skills", label: "Skills", icon: Cpu },
+  { id: "projects", label: "Projects", icon: Layers },
+  { id: "achievements", label: "Achievements", icon: Award },
+  { id: "certifications", label: "Certifications", icon: ShieldCheck },
+  { id: "dsa", label: "DSA & LeetCode", icon: Flame },
+  { id: "education", label: "Education", icon: GraduationCap },
+  { id: "leadership", label: "Leadership", icon: Users },
+  { id: "social", label: "Social Links", icon: Share2 },
+  { id: "resume", label: "Resume", icon: FileText }
+]
+
+export default function AdminApp() {
+  const [activeTab, setActiveTab] = useState("hackathon-wins")
+  const [saveStatus, setSaveStatus] = useState("")
+  const [isSaving, setIsSaving] = useState(false)
+  const [auditOpen, setAuditOpen] = useState(false)
+  const [exportOpen, setExportOpen] = useState(false)
+
+  // Local state for all datasets
+  const [profile, setProfile] = useState(initialProfile)
+  const [hackathons, setHackathons] = useState(initialHackathons)
+  const [projects, setProjects] = useState(initialProjects)
+  const [achievements, setAchievements] = useState(initialAchievements)
+  const [certifications, setCertifications] = useState(initialCertifications)
+  const [techCategories, setTechCategories] = useState(initialTechCategories)
+  const [education, setEducation] = useState(initialEducation)
+  const [leadership, setLeadership] = useState(initialLeadership)
+  const [socialLinks, setSocialLinks] = useState(initialSocial)
+  const [resumeUrl, setResumeUrl] = useState(initialProfile.resumeUrl || "[ADD RESUME URL / FILE]")
+  const [dsaStats, setDsaStats] = useState({ solvedCount: "100+", profileUrl: "[ADD LEETCODE URL]" })
+  const [aboutStats, setAboutStats] = useState([
+    { value: "100+", label: "LeetCode Problems", sub: "Algorithms & Data Structures" },
+    { value: "[X]", label: "Projects Built", sub: "Full-Stack & Backend Systems" },
+    { value: "[X]", label: "Hackathons", sub: "Competitions & SIH 2026" },
+    { value: "[X]", label: "Technologies", sub: "Languages, Frameworks & Tools" },
+    { value: "5th", label: "Semester", sub: "B.Tech Computer Science & Eng." }
+  ])
+
+  // Save all modified datasets directly to disk via local dev server
+  const handleSaveAll = async () => {
+    setIsSaving(true)
+    setSaveStatus("Saving changes to local files...")
+
+    try {
+      // 1. Save hackathons.js
+      const hackathonsContent = `export const hackathons = ${JSON.stringify(hackathons, null, 2)}\n`
+      await fetch("/__admin_api/save_file", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ filename: "hackathons.js", content: hackathonsContent })
+      })
+
+      // 2. Save projects.js
+      const projectsContent = `export const projects = ${JSON.stringify(projects, null, 2)}\n`
+      await fetch("/__admin_api/save_file", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ filename: "projects.js", content: projectsContent })
+      })
+
+      // 3. Save achievements.js
+      const achievementsContent = `export const achievements = ${JSON.stringify(achievements, null, 2)}\nexport const achievementCategories = ["All", "Hackathon", "Competitive Programming", "Academic", "Award", "Certification", "Events"]\n`
+      await fetch("/__admin_api/save_file", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ filename: "achievements.js", content: achievementsContent })
+      })
+
+      // 4. Save certifications.js
+      const certsContent = `export const certifications = ${JSON.stringify(certifications, null, 2)}\n`
+      await fetch("/__admin_api/save_file", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ filename: "certifications.js", content: certsContent })
+      })
+
+      // 5. Save profile.js
+      const profileContent = `export const profile = ${JSON.stringify({ ...profile, resumeUrl }, null, 2)}\n`
+      await fetch("/__admin_api/save_file", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ filename: "profile.js", content: profileContent })
+      })
+
+      // 6. Save techStack.js
+      const techStackContent = `export const techCategories = ${JSON.stringify(techCategories, null, 2)}\nexport const allTechs = techCategories.flatMap(cat => cat.techs)\nexport const techNodes = ["Java", "Python", "Spring Boot", "MySQL", "MongoDB", "Redis", "Docker", "Kafka", "React", "Git", "AI/ML", "REST API", "NumPy", "Pandas", "DSA", "Algorithms", "Security", "JavaScript", "Hibernate", "CSS"]\n`
+      await fetch("/__admin_api/save_file", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ filename: "techStack.js", content: techStackContent })
+      })
+
+      // 7. Save education.js & leadership.js & social.js
+      await fetch("/__admin_api/save_file", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ filename: "education.js", content: `export const education = ${JSON.stringify(education, null, 2)}\n` })
+      })
+      await fetch("/__admin_api/save_file", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ filename: "leadership.js", content: `export const leadership = ${JSON.stringify(leadership, null, 2)}\n` })
+      })
+      await fetch("/__admin_api/save_file", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ filename: "social.js", content: `export const socialLinks = ${JSON.stringify(socialLinks, null, 2)}\n` })
+      })
+
+      setSaveStatus("✓ All local files updated successfully!")
+      setTimeout(() => setSaveStatus(""), 4000)
+    } catch (err) {
+      setSaveStatus("Saved to state (Use Export button to save backup)")
+      setTimeout(() => setSaveStatus(""), 4000)
+    } finally {
+      setIsSaving(false)
+    }
+  }
+
+  const allDataPayload = {
+    profile: { ...profile, resumeUrl },
+    hackathons,
+    projects,
+    achievements,
+    certifications,
+    techCategories,
+    education,
+    leadership,
+    socialLinks,
+    aboutStats,
+    dsaStats
+  }
+
+  const handleImportAll = (imported) => {
+    if (imported.profile) setProfile(imported.profile)
+    if (imported.hackathons) setHackathons(imported.hackathons)
+    if (imported.projects) setProjects(imported.projects)
+    if (imported.achievements) setAchievements(imported.achievements)
+    if (imported.certifications) setCertifications(imported.certifications)
+    if (imported.techCategories) setTechCategories(imported.techCategories)
+    if (imported.education) setEducation(imported.education)
+    if (imported.leadership) setLeadership(imported.leadership)
+    if (imported.socialLinks) setSocialLinks(imported.socialLinks)
+  }
+
+  return (
+    <div className="min-h-screen bg-[#08080c] text-[#f1f5f9] flex flex-col font-sans">
+      {/* Top Console Bar */}
+      <header className="sticky top-0 z-50 bg-[#0d0d14]/90 backdrop-blur-xl border-b border-[#1e1e2e] px-6 py-3.5">
+        <div className="max-w-7xl mx-auto flex flex-wrap items-center justify-between gap-4">
+          {/* Logo & Local Status */}
+          <div className="flex items-center gap-3">
+            <div className="w-8 h-8 rounded-lg bg-gradient-to-tr from-accent-indigo to-accent-cyan flex items-center justify-center font-display font-bold text-xs text-white">
+              VS
+            </div>
+            <div>
+              <div className="font-display font-bold text-sm text-white flex items-center gap-2">
+                Portfolio Studio
+                <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 font-normal">
+                  Local-Only
+                </span>
+              </div>
+              <div className="text-[10px] text-text-muted font-mono">
+                Development Environment · Zero Backend
+              </div>
+            </div>
+          </div>
+
+          {/* Quick Actions */}
+          <div className="flex items-center gap-3">
+            {saveStatus && (
+              <span className="text-xs font-mono text-emerald-400 animate-fade-in flex items-center gap-1">
+                <CheckCircle2 size={13} /> {saveStatus}
+              </span>
+            )}
+
+            <button
+              onClick={() => window.open("http://localhost:5173", "_blank")}
+              className="btn-secondary text-xs flex items-center gap-1.5 py-1.5 px-3"
+              title="Preview public portfolio"
+            >
+              <Eye size={13} /> Preview Portfolio
+            </button>
+
+            <button
+              onClick={() => setAuditOpen(true)}
+              className="btn-secondary text-xs flex items-center gap-1.5 py-1.5 px-3"
+              title="Run data integrity check"
+            >
+              <ShieldCheck size={13} /> Build Audit
+            </button>
+
+            <button
+              onClick={() => setExportOpen(true)}
+              className="btn-secondary text-xs flex items-center gap-1.5 py-1.5 px-3"
+              title="Export portfolio data backup"
+            >
+              <Download size={13} /> Backup / Export
+            </button>
+
+            <button
+              onClick={handleSaveAll}
+              disabled={isSaving}
+              className="btn-primary text-xs flex items-center gap-1.5 py-1.5 px-4 font-semibold"
+            >
+              {isSaving ? <RefreshCw size={13} className="animate-spin" /> : <Save size={13} />}
+              {isSaving ? "Saving..." : "Save Changes"}
+            </button>
+          </div>
+        </div>
+      </header>
+
+      {/* Main Studio Body */}
+      <div className="max-w-7xl mx-auto w-full px-6 py-8 flex-1 grid lg:grid-cols-12 gap-8 items-start">
+        {/* Sidebar Nav */}
+        <aside className="lg:col-span-3 space-y-1.5 sticky top-24">
+          <div className="text-[10px] font-mono uppercase tracking-widest text-text-muted px-3 mb-2 font-semibold">
+            Content Sections
+          </div>
+          {TABS.map(tab => {
+            const Icon = tab.icon
+            const isActive = activeTab === tab.id
+            return (
+              <button
+                key={tab.id}
+                onClick={() => setActiveTab(tab.id)}
+                className={`w-full px-3.5 py-2.5 rounded-xl text-xs font-medium flex items-center justify-between transition-all duration-200 ${
+                  isActive
+                    ? "bg-accent-indigo text-white shadow-lg shadow-accent-indigo/20 font-semibold"
+                    : "text-text-secondary hover:text-white hover:bg-[#12121c]"
+                }`}
+              >
+                <div className="flex items-center gap-2.5">
+                  <Icon size={15} className={isActive ? "text-white" : tab.featured ? "text-amber-400" : "text-text-muted"} />
+                  <span>{tab.label}</span>
+                </div>
+                {tab.featured && (
+                  <span className="text-[9px] font-mono px-1.5 py-0.5 rounded bg-amber-400/20 text-amber-300">
+                    Hot
+                  </span>
+                )}
+              </button>
+            )
+          })}
+
+          <div className="mt-8 p-4 rounded-xl bg-[#0d0d14] border border-[#1e1e2e] space-y-2 text-[11px] text-text-muted">
+            <div className="font-semibold text-text-secondary flex items-center gap-1.5">
+              <ShieldCheck size={13} className="text-emerald-400" /> Production Security
+            </div>
+            <p>
+              This studio runs strictly on localhost. No admin routes, tokens, or credentials are ever bundled into production.
+            </p>
+          </div>
+        </aside>
+
+        {/* Content Area */}
+        <main className="lg:col-span-9 min-h-[600px]">
+          {activeTab === "hackathon-wins" && (
+            <HackathonWinsManager
+              hackathons={hackathons}
+              onUpdate={setHackathons}
+              onSave={handleSaveAll}
+            />
+          )}
+
+          {activeTab === "profile" && (
+            <ProfileEditor profile={profile} onUpdate={setProfile} />
+          )}
+
+          {activeTab === "about" && (
+            <AboutEditor stats={aboutStats} onUpdateStats={setAboutStats} />
+          )}
+
+          {activeTab === "skills" && (
+            <SkillsEditor techCategories={techCategories} onUpdate={setTechCategories} />
+          )}
+
+          {activeTab === "projects" && (
+            <ProjectsEditor projects={projects} onUpdate={setProjects} />
+          )}
+
+          {activeTab === "achievements" && (
+            <AchievementsEditor achievements={achievements} onUpdate={setAchievements} />
+          )}
+
+          {activeTab === "certifications" && (
+            <CertificationsEditor certifications={certifications} onUpdate={setCertifications} />
+          )}
+
+          {activeTab === "dsa" && (
+            <DSAEditor dsaStats={dsaStats} onUpdate={setDsaStats} />
+          )}
+
+          {activeTab === "education" && (
+            <EducationEditor education={education} onUpdate={setEducation} />
+          )}
+
+          {activeTab === "leadership" && (
+            <LeadershipEditor leadership={leadership} onUpdate={setLeadership} />
+          )}
+
+          {activeTab === "social" && (
+            <SocialEditor socialLinks={socialLinks} onUpdate={setSocialLinks} />
+          )}
+
+          {activeTab === "resume" && (
+            <ResumeEditor resumeUrl={resumeUrl} onUpdate={setResumeUrl} />
+          )}
+        </main>
+      </div>
+
+      {/* Modals */}
+      <BuildCheckModal
+        isOpen={auditOpen}
+        onClose={() => setAuditOpen(false)}
+        data={allDataPayload}
+      />
+
+      <ExportBackupModal
+        isOpen={exportOpen}
+        onClose={() => setExportOpen(false)}
+        data={allDataPayload}
+        onImport={handleImportAll}
+      />
+    </div>
+  )
+}
