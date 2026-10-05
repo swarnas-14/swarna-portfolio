@@ -1,9 +1,10 @@
-﻿import { useState } from "react"
+import { useState } from "react"
 import { motion, AnimatePresence } from "framer-motion"
 import { achievements, achievementCategories } from "../../data/achievements"
 import SectionHeader from "../ui/SectionHeader"
 import Lightbox from "../ui/Lightbox"
 import { Trophy, Award, Star, BookOpen, Code2, Calendar, ExternalLink, Image as ImageIcon } from "lucide-react"
+import { isRealValue } from "../../utils/hasContent"
 
 export default function Achievements() {
   const [activeCategory, setActiveCategory] = useState("All")
@@ -11,9 +12,14 @@ export default function Achievements() {
   const [currentImages, setCurrentImages] = useState([])
   const [imageIndex, setImageIndex] = useState(0)
 
+  const realAchievements = achievements.filter(a => isRealValue(a.title))
+
   const filteredAchievements = activeCategory === "All"
-    ? achievements
-    : achievements.filter(a => a.category.toLowerCase() === activeCategory.toLowerCase())
+    ? realAchievements
+    : realAchievements.filter(a => a.category.toLowerCase() === activeCategory.toLowerCase())
+
+  // Hide entire section if no real achievements (after all hooks)
+  if (realAchievements.length === 0) return null
 
   const openGallery = (item) => {
     if (item.images && item.images.length > 0) {

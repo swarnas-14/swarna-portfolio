@@ -1,6 +1,10 @@
-﻿import { motion } from "framer-motion"
+import { motion } from "framer-motion"
 import SectionHeader from "../ui/SectionHeader"
 import { FileText, Download, ExternalLink, GraduationCap, Briefcase, Code, Award } from "lucide-react"
+import { profile } from "../../data/profile"
+import { isRealValue } from "../../utils/hasContent"
+
+const resumeUrl = isRealValue(profile.resumeUrl) ? profile.resumeUrl : null
 
 export default function Resume() {
   return (
@@ -31,22 +35,30 @@ export default function Resume() {
             </div>
 
             <div className="flex flex-wrap items-center gap-3">
-              <a
-                href="[ADD RESUME URL / FILE]"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="btn-primary text-xs flex items-center gap-2"
-              >
-                <Download size={14} /> Download PDF
-              </a>
-              <a
-                href="[ADD RESUME URL / FILE]"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="btn-secondary text-xs flex items-center gap-2"
-              >
-                <ExternalLink size={14} /> View Fullscreen
-              </a>
+              {resumeUrl ? (
+                <>
+                  <a
+                    href={resumeUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="btn-primary text-xs flex items-center gap-2"
+                  >
+                    <Download size={14} /> Download PDF
+                  </a>
+                  <a
+                    href={resumeUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="btn-secondary text-xs flex items-center gap-2"
+                  >
+                    <ExternalLink size={14} /> View Fullscreen
+                  </a>
+                </>
+              ) : (
+                <span className="text-xs text-text-muted font-mono px-3 py-1.5 rounded-lg border border-border bg-bg-card">
+                  Resume link not yet configured
+                </span>
+              )}
             </div>
           </div>
 
@@ -87,7 +99,7 @@ export default function Resume() {
 
           {/* Footer note */}
           <div className="pt-6 border-t border-border/50 flex flex-col sm:flex-row items-center justify-between gap-3 text-xs text-text-muted font-mono">
-            <span>[ADD RESUME PDF TO /public FOLDER]</span>
+            <span>{resumeUrl ? profile.college || "Resume Available" : "Add resume URL in the Admin Panel → Profile section"}</span>
             <span className="text-accent-indigo">Updated for 2026 Opportunities</span>
           </div>
         </motion.div>

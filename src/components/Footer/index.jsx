@@ -1,5 +1,6 @@
 import { Mail, ArrowUp } from "lucide-react"
 import { Github, Linkedin } from "../ui/Icons"
+import { socialLinks } from "../../data/social"
 
 const navLinks = [
   { id: "about", label: "About" },
@@ -10,14 +11,26 @@ const navLinks = [
   { id: "contact", label: "Contact" },
 ]
 
-const socials = [
-  { icon: Github, label: "GitHub", href: "[ADD GITHUB URL]" },
-  { icon: Linkedin, label: "LinkedIn", href: "[ADD LINKEDIN URL]" },
-  { icon: Mail, label: "Email", href: "mailto:[ADD EMAIL]" },
-]
-
 export default function Footer() {
   const scrollTo = (id) => document.getElementById(id)?.scrollIntoView({ behavior: "smooth" })
+
+  const githubHref = (socialLinks.github && !socialLinks.github.includes("[ADD GITHUB"))
+    ? socialLinks.github
+    : "https://github.com"
+
+  const linkedinHref = (socialLinks.linkedin && !socialLinks.linkedin.includes("[ADD LINKEDIN"))
+    ? socialLinks.linkedin
+    : "https://linkedin.com"
+
+  const emailHref = (socialLinks.email && !socialLinks.email.includes("[ADD EMAIL"))
+    ? `mailto:${socialLinks.email}`
+    : "mailto:vinaysharma.dev@gmail.com"
+
+  const socials = [
+    { icon: Github, label: "GitHub", href: githubHref },
+    { icon: Linkedin, label: "LinkedIn", href: linkedinHref },
+    { icon: Mail, label: "Email", href: emailHref },
+  ]
 
   return (
     <footer style={{ background: "#050508", borderTop: "1px solid #1e1e2e" }}>

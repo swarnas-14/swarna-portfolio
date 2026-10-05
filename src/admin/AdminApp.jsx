@@ -1,8 +1,9 @@
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import {
   Trophy, User, Info, Cpu, Layers, Award, Flame, GraduationCap,
   Users, Share2, FileText, Save, CheckCircle2, RefreshCw, Eye,
-  ShieldCheck, Download, AlertCircle, Sparkles
+  ShieldCheck, Download, AlertCircle, Sparkles, LogOut, Milestone,
+  Image as ImageIcon
 } from "lucide-react"
 
 // Initial datasets
@@ -15,6 +16,7 @@ import { techCategories as initialTechCategories } from "../data/techStack"
 import { education as initialEducation } from "../data/education"
 import { leadership as initialLeadership } from "../data/leadership"
 import { socialLinks as initialSocial } from "../data/social"
+import { timeline as initialTimeline } from "../data/timeline"
 
 // Editors & Modals
 import HackathonWinsManager from "./components/HackathonWinsManager"
@@ -29,11 +31,14 @@ import EducationEditor from "./components/EducationEditor"
 import LeadershipEditor from "./components/LeadershipEditor"
 import SocialEditor from "./components/SocialEditor"
 import ResumeEditor from "./components/ResumeEditor"
+import TimelineEditor from "./components/TimelineEditor"
+import MediaManager from "./components/MediaManager"
 import BuildCheckModal from "./components/BuildCheckModal"
 import ExportBackupModal from "./components/ExportBackupModal"
+import AdminLogin from "./components/AdminLogin"
 
 const TABS = [
-  { id: "hackathon-wins", label: "Hackathon Wins (Photos)", icon: Trophy, featured: true },
+  { id: "hackathon-wins", label: "Hackathons (Photos)", icon: Trophy, featured: true },
   { id: "profile", label: "Profile", icon: User },
   { id: "about", label: "About & Stats", icon: Info },
   { id: "skills", label: "Skills", icon: Cpu },
@@ -42,12 +47,18 @@ const TABS = [
   { id: "certifications", label: "Certifications", icon: ShieldCheck },
   { id: "dsa", label: "DSA & LeetCode", icon: Flame },
   { id: "education", label: "Education", icon: GraduationCap },
+  { id: "timeline", label: "Journey / Timeline", icon: Milestone },
   { id: "leadership", label: "Leadership", icon: Users },
   { id: "social", label: "Social Links", icon: Share2 },
-  { id: "resume", label: "Resume", icon: FileText }
+  { id: "resume", label: "Resume", icon: FileText },
+  { id: "media", label: "Media / Images", icon: ImageIcon }
 ]
 
 export default function AdminApp() {
+  const [isAuthenticated, setIsAuthenticated] = useState(() => {
+    return sessionStorage.getItem("vinay_admin_authenticated") === "true"
+  })
+
   const [activeTab, setActiveTab] = useState("hackathon-wins")
   const [saveStatus, setSaveStatus] = useState("")
   const [isSaving, setIsSaving] = useState(false)
@@ -64,6 +75,7 @@ export default function AdminApp() {
   const [education, setEducation] = useState(initialEducation)
   const [leadership, setLeadership] = useState(initialLeadership)
   const [socialLinks, setSocialLinks] = useState(initialSocial)
+  const [timeline, setTimeline] = useState(initialTimeline)
   const [resumeUrl, setResumeUrl] = useState(initialProfile.resumeUrl || "[ADD RESUME URL / FILE]")
   const [dsaStats, setDsaStats] = useState({ solvedCount: "100+", profileUrl: "[ADD LEETCODE URL]" })
   const [aboutStats, setAboutStats] = useState([
@@ -74,10 +86,15 @@ export default function AdminApp() {
     { value: "5th", label: "Semester", sub: "B.Tech Computer Science & Eng." }
   ])
 
+  const handleLogout = () => {
+    sessionStorage.removeItem("vinay_admin_authenticated")
+    setIsAuthenticated(false)
+  }
+
   // Save all modified datasets directly to disk via local dev server
   const handleSaveAll = async () => {
     setIsSaving(true)
-    setSaveStatus("Saving changes to local files...")
+    setSaveStatus("Saving changes to local data files...")
 
     try {
       // 1. Save hackathons.js
@@ -128,7 +145,7 @@ export default function AdminApp() {
         body: JSON.stringify({ filename: "techStack.js", content: techStackContent })
       })
 
-      // 7. Save education.js & leadership.js & social.js
+      // 7. Save education.js, leadership.js, social.js, timeline.js
       await fetch("/__admin_api/save_file", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -143,6 +160,11 @@ export default function AdminApp() {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ filename: "social.js", content: `export const socialLinks = ${JSON.stringify(socialLinks, null, 2)}\n` })
+      })
+      await fetch("/__admin_api/save_file", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ filename: "timeline.js", content: `export const timeline = ${JSON.stringify(timeline, null, 2)}\n` })
       })
 
       setSaveStatus("✓ All local files updated successfully!")
@@ -165,6 +187,7 @@ export default function AdminApp() {
     education,
     leadership,
     socialLinks,
+    timeline,
     aboutStats,
     dsaStats
   }
@@ -179,6 +202,12 @@ export default function AdminApp() {
     if (imported.education) setEducation(imported.education)
     if (imported.leadership) setLeadership(imported.leadership)
     if (imported.socialLinks) setSocialLinks(imported.socialLinks)
+    if (imported.timeline) setTimeline(imported.timeline)
+  }
+
+  // If not authenticated, show local convenience login screen
+  if (!isAuthenticated) {
+    return <AdminLogin onLoginSuccess={() => setIsAuthenticated(true)} />
   }
 
   return (
@@ -205,15 +234,15 @@ export default function AdminApp() {
           </div>
 
           {/* Quick Actions */}
-          <div className="flex items-center gap-3">
+          <div className="flex items-center gap-2.5">
             {saveStatus && (
-              <span className="text-xs font-mono text-emerald-400 animate-fade-in flex items-center gap-1">
+              <span className="text-xs font-mono text-emerald-400 animate-fade-in flex items-center gap-1 mr-1">
                 <CheckCircle2 size={13} /> {saveStatus}
               </span>
             )}
 
             <button
-              onClick={() => window.open("http://localhost:5173", "_blank")}
+              onClick={() => window.open("/", "_blank")}
               className="btn-secondary text-xs flex items-center gap-1.5 py-1.5 px-3"
               title="Preview public portfolio"
             >
@@ -222,7 +251,7 @@ export default function AdminApp() {
 
             <button
               onClick={() => setAuditOpen(true)}
-              className="btn-secondary text-xs flex items-center gap-1.5 py-1.5 px-3"
+              className="btn-secondary text-xs flex items-center gap-1.5 py-1.5 px-3 hidden sm:flex"
               title="Run data integrity check"
             >
               <ShieldCheck size={13} /> Build Audit
@@ -244,6 +273,14 @@ export default function AdminApp() {
               {isSaving ? <RefreshCw size={13} className="animate-spin" /> : <Save size={13} />}
               {isSaving ? "Saving..." : "Save Changes"}
             </button>
+
+            <button
+              onClick={handleLogout}
+              className="p-2 rounded-xl bg-[#12121c] border border-[#1e1e2e] text-text-muted hover:text-rose-400 hover:border-rose-500/30 transition-colors"
+              title="Log out of local session"
+            >
+              <LogOut size={14} />
+            </button>
           </div>
         </div>
       </header>
@@ -253,7 +290,7 @@ export default function AdminApp() {
         {/* Sidebar Nav */}
         <aside className="lg:col-span-3 space-y-1.5 sticky top-24">
           <div className="text-[10px] font-mono uppercase tracking-widest text-text-muted px-3 mb-2 font-semibold">
-            Content Sections
+            Management Sections
           </div>
           {TABS.map(tab => {
             const Icon = tab.icon
@@ -283,10 +320,10 @@ export default function AdminApp() {
 
           <div className="mt-8 p-4 rounded-xl bg-[#0d0d14] border border-[#1e1e2e] space-y-2 text-[11px] text-text-muted">
             <div className="font-semibold text-text-secondary flex items-center gap-1.5">
-              <ShieldCheck size={13} className="text-emerald-400" /> Production Security
+              <ShieldCheck size={13} className="text-emerald-400" /> Local Development Tooling
             </div>
             <p>
-              This studio runs strictly on localhost. No admin routes, tokens, or credentials are ever bundled into production.
+              This studio runs strictly in local development. When deployed on Vercel/production, this admin interface is excluded from the public portfolio.
             </p>
           </div>
         </aside>
@@ -333,6 +370,10 @@ export default function AdminApp() {
             <EducationEditor education={education} onUpdate={setEducation} />
           )}
 
+          {activeTab === "timeline" && (
+            <TimelineEditor timeline={timeline} onUpdate={setTimeline} />
+          )}
+
           {activeTab === "leadership" && (
             <LeadershipEditor leadership={leadership} onUpdate={setLeadership} />
           )}
@@ -343,6 +384,10 @@ export default function AdminApp() {
 
           {activeTab === "resume" && (
             <ResumeEditor resumeUrl={resumeUrl} onUpdate={setResumeUrl} />
+          )}
+
+          {activeTab === "media" && (
+            <MediaManager />
           )}
         </main>
       </div>

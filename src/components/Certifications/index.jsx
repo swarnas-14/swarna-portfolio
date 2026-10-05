@@ -1,20 +1,27 @@
-﻿import { useState } from "react"
+import { useState } from "react"
 import { motion } from "framer-motion"
 import { certifications } from "../../data/certifications"
 import SectionHeader from "../ui/SectionHeader"
 import Lightbox from "../ui/Lightbox"
 import { Award, ExternalLink, Eye, ShieldCheck } from "lucide-react"
+import { isRealValue } from "../../utils/hasContent"
 
 export default function Certifications() {
   const [viewerOpen, setViewerOpen] = useState(false)
   const [selectedCertIndex, setSelectedCertIndex] = useState(0)
+
+  // Only show certifications that have real (non-placeholder) titles
+  const realCertifications = certifications.filter(c => isRealValue(c.title))
+
+  // Hide entire section if no real certifications exist
+  if (realCertifications.length === 0) return null
 
   const openCert = (index) => {
     setSelectedCertIndex(index)
     setViewerOpen(true)
   }
 
-  const lightboxImages = certifications.map(c => ({
+  const lightboxImages = realCertifications.map(c => ({
     src: c.image,
     title: c.title,
     description: `${c.organization} • ${c.date} ${c.credentialId ? `(ID: ${c.credentialId})` : ""}`
@@ -30,7 +37,7 @@ export default function Certifications() {
         />
 
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 mt-12">
-          {certifications.map((cert, index) => (
+          {realCertifications.map((cert, index) => (
             <motion.div
               key={cert.id}
               initial={{ opacity: 0, y: 20 }}

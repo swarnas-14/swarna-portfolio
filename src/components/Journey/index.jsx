@@ -1,7 +1,8 @@
-﻿import { motion } from "framer-motion"
+import { motion } from "framer-motion"
 import { timeline } from "../../data/timeline"
 import SectionHeader from "../ui/SectionHeader"
 import { Code, Brain, Server, Layers, Cpu, Rocket } from "lucide-react"
+import { hasContent } from "../../utils/hasContent"
 
 const iconMap = {
   Code: Code,
@@ -13,6 +14,8 @@ const iconMap = {
 }
 
 export default function Journey() {
+  if (!hasContent(timeline)) return null
+
   return (
     <section id="journey" className="section-padding relative overflow-hidden">
       <div className="max-w-6xl mx-auto px-6">

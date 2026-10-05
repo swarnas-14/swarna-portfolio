@@ -4,14 +4,20 @@ import { hackathons } from "../../data/hackathons"
 import SectionHeader from "../ui/SectionHeader"
 import Lightbox from "../ui/Lightbox"
 import { Trophy, CheckCircle2, Clock, GitBranch, Users, Calendar, MapPin, Images, Eye, ExternalLink } from "lucide-react"
+import { isRealValue } from "../../utils/hasContent"
 
 export default function Hackathons() {
   const [lightboxOpen, setLightboxOpen] = useState(false)
   const [lightboxImages, setLightboxImages] = useState([])
   const [photoIndex, setPhotoIndex] = useState(0)
 
-  const sih = hackathons.find(h => h.id === "hackathon-001" || h.id === 1) || hackathons[0]
-  const otherHackathons = hackathons.filter(h => h.id !== sih?.id)
+  const realHackathons = hackathons.filter(h => isRealValue(h.name))
+
+  // Hide section if no real hackathons
+  if (realHackathons.length === 0) return null
+
+  const sih = realHackathons.find(h => h.id === "hackathon-001" || h.id === 1) || realHackathons[0]
+  const otherHackathons = realHackathons.filter(h => h.id !== sih?.id)
 
   const openGallery = (hackathon, startIndex = 0) => {
     const rawPhotos = hackathon.photos && hackathon.photos.length > 0

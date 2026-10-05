@@ -5,13 +5,19 @@ import SectionHeader from "../ui/SectionHeader"
 import ProjectModal from "../ui/ProjectModal"
 import { ExternalLink, ArrowRight, Layers, Terminal } from "lucide-react"
 import { Github } from "../ui/Icons"
+import { isRealValue } from "../../utils/hasContent"
 
 export default function Projects() {
   const [selectedProject, setSelectedProject] = useState(null)
   const [isModalOpen, setIsModalOpen] = useState(false)
 
-  const featured = projects.find(p => p.featured) || projects[0]
-  const otherProjects = projects.filter(p => p.id !== featured?.id)
+  const realProjects = projects.filter(p => isRealValue(p.title))
+
+  // Hide section if no real projects
+  if (realProjects.length === 0) return null
+
+  const featured = realProjects.find(p => p.featured) || realProjects[0]
+  const otherProjects = realProjects.filter(p => p.id !== featured?.id)
 
   const openProject = (project) => {
     setSelectedProject(project)
