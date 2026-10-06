@@ -8,6 +8,7 @@ import { projects } from "../../data/projects"
 import { hackathons } from "../../data/hackathons"
 import { dsaStats } from "../../data/dsa"
 import { isRealValue } from "../../utils/hasContent"
+import ComputationalCore from "./ComputationalCore"
 
 // ── Error Boundary ──────────────────────────────────────────────────────────
 class CanvasErrorBoundary extends Component {
@@ -136,11 +137,11 @@ function SceneCamera({ mouse }) {
 function NodeNetwork({ mouse }) {
   return (
     <>
-      <ambientLight intensity={0.3} />
-      <pointLight position={[5, 5, 5]} color="#6366f1" intensity={2} />
-      <pointLight position={[-5, -5, -5]} color="#22d3ee" intensity={1.5} />
+      <ambientLight intensity={0.4} />
+      <pointLight position={[5, 5, 5]} color="#6366f1" intensity={2.5} />
+      <pointLight position={[-5, -5, -5]} color="#22d3ee" intensity={2} />
       <SceneCamera mouse={mouse} />
-      <Particles />
+      <ComputationalCore />
       {TECH_NODES.map((node, i) => (
         <Node key={i} position={node.pos} color={node.color} label={node.label} />
       ))}
@@ -192,18 +193,18 @@ export default function Hero() {
           animate="visible"
           className="space-y-8"
         >
-          {/* Availability badge */}
+          {/* Availability badge with Spider-Sense wave & radar ping */}
           <motion.div variants={item} className="inline-flex items-center gap-2">
             <span
-              className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full text-xs font-medium"
+              className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full text-xs font-medium spider-sense"
               style={{ background: "rgba(34,197,94,0.1)", border: "1px solid rgba(34,197,94,0.3)", color: "#4ade80" }}
             >
-              <span className="w-2 h-2 rounded-full bg-green-400 animate-pulse" />
+              <span className="w-2 h-2 rounded-full bg-emerald-400 radar-ring animate-pulse" />
               {profile.availableForInternships ? `Available for Opportunities · ${profile.city || "India"}` : profile.city || "India"}
             </span>
           </motion.div>
 
-          {/* Name */}
+          {/* Name with Spider-Verse Chromatic Glitch */}
           <motion.div variants={item}>
             <h1 className="font-display font-black leading-none tracking-tighter" style={{ fontSize: "clamp(4rem, 10vw, 7rem)" }}>
               {(() => {
@@ -211,10 +212,10 @@ export default function Hero() {
                 const first = nameParts[0] || "VINAY"
                 const rest = nameParts.slice(1).join(" ") || "SHARMA"
                 return (
-                  <>
-                    <span className="block text-text-primary uppercase">{first}</span>
-                    <span className="block gradient-text uppercase">{rest}</span>
-                  </>
+                  <div className="spider-glitch" data-text={`${first} ${rest}`}>
+                    <span className="block text-text-primary uppercase tracking-tight">{first}</span>
+                    <span className="block gradient-text uppercase tracking-tight">{rest}</span>
+                  </div>
                 )
               })()}
             </h1>

@@ -1,12 +1,14 @@
 import { useState, useEffect, lazy, Suspense } from "react"
+import Lenis from "lenis"
 import CustomCursor from "./components/ui/CustomCursor"
+import Loader from "./components/ui/Loader"
+import GlobalParticleField from "./components/ui/GlobalParticleField"
 import Navbar from "./components/Navbar"
 import Hero from "./components/Hero"
 import About from "./components/About"
 import Journey from "./components/Journey"
 import TechStack from "./components/TechStack"
 import Projects from "./components/Projects"
-import Hackathons from "./components/Hackathons"
 import Achievements from "./components/Achievements"
 import Certifications from "./components/Certifications"
 import DSA from "./components/DSA"
@@ -27,6 +29,30 @@ export default function App() {
     window.addEventListener("popstate", handleLocationChange)
     return () => window.removeEventListener("popstate", handleLocationChange)
   }, [])
+
+  // Kinetic Smooth Scroll Animation (Lenis) with mathematical inertia decay formula
+  useEffect(() => {
+    if (currentPath.startsWith("/admin")) return
+
+    const lenis = new Lenis({
+      duration: 1.2,
+      easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+      smoothWheel: true,
+      smoothTouch: false
+    })
+
+    let rafId
+    function raf(time) {
+      lenis.raf(time)
+      rafId = requestAnimationFrame(raf)
+    }
+    rafId = requestAnimationFrame(raf)
+
+    return () => {
+      cancelAnimationFrame(rafId)
+      lenis.destroy()
+    }
+  }, [currentPath])
 
   const isAdminRoute = currentPath.startsWith("/admin")
   const isLocalEnvironment =
@@ -78,8 +104,14 @@ export default function App() {
 
   // ── Public Portfolio ───────────────────────────────────────────────
   return (
-    <div className="min-h-screen bg-bg-primary text-text-primary selection:bg-accent-indigo/30 selection:text-white">
-      {/* Custom dynamic interactive cursor */}
+    <div className="min-h-screen bg-bg-primary text-text-primary selection:bg-accent-indigo/30 selection:text-white relative">
+      {/* Cinematic Kernel Bootloader Sequence */}
+      <Loader />
+
+      {/* Global 3D Particle Field Background */}
+      <GlobalParticleField />
+
+      {/* Custom dynamic interactive spring cursor */}
       <CustomCursor />
 
       {/* Persistent glass navigation */}
@@ -92,7 +124,6 @@ export default function App() {
         <Journey />
         <TechStack />
         <Projects />
-        <Hackathons />
         <Achievements />
         <Certifications />
         <DSA />

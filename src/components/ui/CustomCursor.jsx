@@ -1,74 +1,108 @@
-﻿import { useEffect, useRef, useState } from "react"
-import { motion } from "framer-motion"
+import { useEffect, useRef, useState } from "react"
+import { motion, useSpring, useMotionValue } from "framer-motion"
 
 export default function CustomCursor() {
-  const dotRef = useRef(null)
-  const ringRef = useRef(null)
   const [label, setLabel] = useState("")
   const [isHovering, setIsHovering] = useState(false)
-  const pos = useRef({ x: 0, y: 0 })
-  const ring = useRef({ x: 0, y: 0 })
-  const raf = useRef(null)
+  const [isVisible, setIsVisible] = useState(false)
+
+  // Cursor position
+  const mouseX = useMotionValue(-100)
+  const mouseY = useMotionValue(-100)
+
+  // Outer ring spring physics (stiffness: 200, damping: 24)
+  const springX = useSpring(mouseX, { stiffness: 200, damping: 24 })
+  const springY = useSpring(mouseY, { stiffness: 200, damping: 24 })
 
   useEffect(() => {
+    if (typeof window === "undefined") return
     if (navigator.maxTouchPoints > 0) return
 
-    const onMove = (e) => {
-      pos.current = { x: e.clientX, y: e.clientY }
-      if (dotRef.current) {
-        dotRef.current.style.transform = `translate(${e.clientX - 4}px, ${e.clientY - 4}px)`
-      }
+    const handleMouseMove = (e) => {
+      setIsVisible(true)
+      mouseX.set(e.clientX)
+      mouseY.set(e.clientY)
+
       const el = document.elementFromPoint(e.clientX, e.clientY)
-      const cursor = el?.closest("[data-cursor]")
-      setLabel(cursor?.getAttribute("data-cursor") || "")
-      const interactive = el?.closest("a,button,[role=button]")
-      setIsHovering(!!interactive || !!cursor)
-    }
+      const cursorEl = el?.closest("[data-cursor]")
+      const interactiveEl = el?.closest("a, button, [role=button], input, textarea, select")
 
-    const lerp = () => {
-      ring.current.x += (pos.current.x - ring.current.x) * 0.12
-      ring.current.y += (pos.current.y - ring.current.y) * 0.12
-      if (ringRef.current) {
-        ringRef.current.style.transform = `translate(${ring.current.x - 16}px, ${ring.current.y - 16}px)`
+      if (cursorEl) {
+        setLabel(cursorEl.getAttribute("data-cursor") || "")
+        setIsHovering(true)
+      } else if (interactiveEl) {
+        setLabel("")
+        setIsHovering(true)
+      } else {
+        setLabel("")
+        setIsHovering(false)
       }
-      raf.current = requestAnimationFrame(lerp)
     }
-    raf.current = requestAnimationFrame(lerp)
 
-    window.addEventListener("mousemove", onMove)
+    const handleMouseLeave = () => setIsVisible(false)
+
+    window.addEventListener("mousemove", handleMouseMove)
+    document.addEventListener("mouseleave", handleMouseLeave)
+
     return () => {
-      window.removeEventListener("mousemove", onMove)
-      if (raf.current) cancelAnimationFrame(raf.current)
+      window.removeEventListener("mousemove", handleMouseMove)
+      document.removeEventListener("mouseleave", handleMouseLeave)
     }
-  }, [])
+  }, [mouseX, mouseY])
 
   if (typeof navigator !== "undefined" && navigator.maxTouchPoints > 0) return null
+  if (!isVisible) return null
 
   return (
     <>
-      <div
-        ref={dotRef}
-        className="fixed top-0 left-0 w-2 h-2 rounded-full bg-white z-[9999] pointer-events-none will-change-transform"
-        style={{ transition: "none" }}
-      />
-      <div
-        ref={ringRef}
-        className="fixed top-0 left-0 z-[9998] pointer-events-none will-change-transform flex items-center justify-center"
+      {/* Instant Center Pointer Dot */}
+      <motion.div
+        className="fixed top-0 left-0 w-1.5 h-1.5 rounded-full bg-accent-cyan pointer-events-none z-[99999]"
         style={{
-          width: isHovering ? 48 : 32,
-          height: isHovering ? 48 : 32,
-          borderRadius: "50%",
-          border: `1.5px solid ${isHovering ? "rgba(99,102,241,0.9)" : "rgba(99,102,241,0.5)"}`,
-          transition: "width 0.2s ease, height 0.2s ease, border-color 0.2s ease",
-          backdropFilter: isHovering ? "blur(2px)" : "none",
+          x: mouseX,
+          y: mouseY,
+          translateX: "-50%",
+          translateY: "-50%"
         }}
+      />
+
+      {/* Spring Follower Outer Ring / Morphing Pill Badge */}
+      <motion.div
+        className="fixed top-0 left-0 pointer-events-none z-[99998] flex items-center justify-center font-mono font-bold tracking-widest text-[9px] uppercase backdrop-blur-sm"
+        style={{
+          x: springX,
+          y: springY,
+          translateX: "-50%",
+          translateY: "-50%"
+        }}
+        animate={{
+          width: label ? 74 : isHovering ? 46 : 30,
+          height: label ? 28 : isHovering ? 46 : 30,
+          borderRadius: label ? "14px" : "50%",
+          backgroundColor: label
+            ? "rgba(10, 10, 20, 0.85)"
+            : isHovering
+            ? "rgba(99, 102, 241, 0.12)"
+            : "rgba(34, 211, 238, 0.05)",
+          borderColor: label
+            ? "#22d3ee"
+            : isHovering
+            ? "rgba(99, 102, 241, 0.7)"
+            : "rgba(34, 211, 238, 0.4)",
+          borderWidth: "1.5px"
+        }}
+        transition={{ type: "spring", stiffness: 350, damping: 25 }}
       >
         {label && (
-          <span style={{ fontSize: 9, fontWeight: 600, color: "#a78bfa", letterSpacing: "0.08em", textTransform: "uppercase", whiteSpace: "nowrap" }}>
+          <motion.span
+            initial={{ opacity: 0, scale: 0.8 }}
+            animate={{ opacity: 1, scale: 1 }}
+            className="text-accent-cyan select-none"
+          >
             {label}
-          </span>
+          </motion.span>
         )}
-      </div>
+      </motion.div>
     </>
   )
 }

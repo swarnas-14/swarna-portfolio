@@ -6,6 +6,7 @@ import ProjectModal from "../ui/ProjectModal"
 import { ExternalLink, ArrowRight, Layers, Terminal } from "lucide-react"
 import { Github } from "../ui/Icons"
 import { isRealValue } from "../../utils/hasContent"
+import GlowCard from "../ui/GlowCard"
 
 export default function Projects() {
   const [selectedProject, setSelectedProject] = useState(null)
@@ -117,7 +118,7 @@ export default function Projects() {
           </motion.div>
         )}
 
-        {/* Regular Projects Grid */}
+        {/* Regular Projects Grid with 3D Gyroscopic Tilt */}
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
           {otherProjects.map((project, idx) => (
             <motion.div
@@ -126,65 +127,70 @@ export default function Projects() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.5, delay: idx * 0.1 }}
-              className="card-base p-6 flex flex-col justify-between group hover:border-accent-indigo/50 transition-all duration-300"
+              className="h-full"
             >
-              <div>
-                <div className="flex items-center justify-between mb-4">
-                  <span className="badge">{project.category}</span>
-                  <div className="flex items-center gap-2 text-text-muted">
-                    {project.githubUrl && (
-                      <a
-                        href={project.githubUrl}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="hover:text-text-primary transition-colors"
-                        title="GitHub Repo"
-                      >
-                        <Github size={16} />
-                      </a>
-                    )}
-                    {project.liveUrl && (
-                      <a
-                        href={project.liveUrl}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="hover:text-text-primary transition-colors"
-                        title="Live Demo"
-                      >
-                        <ExternalLink size={16} />
-                      </a>
-                    )}
+              <GlowCard
+                className="card-base p-6 flex flex-col justify-between h-full group hover:border-accent-indigo/50 transition-all duration-300"
+                glowColor="rgba(99, 102, 241, 0.2)"
+              >
+                <div>
+                  <div className="flex items-center justify-between mb-4">
+                    <span className="badge">{project.category}</span>
+                    <div className="flex items-center gap-2 text-text-muted">
+                      {project.githubUrl && (
+                        <a
+                          href={project.githubUrl}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="hover:text-text-primary transition-colors"
+                          title="GitHub Repo"
+                        >
+                          <Github size={16} />
+                        </a>
+                      )}
+                      {project.liveUrl && (
+                        <a
+                          href={project.liveUrl}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="hover:text-text-primary transition-colors"
+                          title="Live Demo"
+                        >
+                          <ExternalLink size={16} />
+                        </a>
+                      )}
+                    </div>
                   </div>
+
+                  <h4 className="font-display font-bold text-lg text-text-primary mb-2 group-hover:text-accent-cyan transition-colors">
+                    {project.title}
+                  </h4>
+
+                  <p className="text-text-secondary text-xs leading-relaxed line-clamp-3 mb-6">
+                    {project.description}
+                  </p>
                 </div>
 
-                <h4 className="font-display font-bold text-lg text-text-primary mb-2 group-hover:text-accent-cyan transition-colors">
-                  {project.title}
-                </h4>
+                <div>
+                  <div className="flex flex-wrap gap-1.5 mb-6">
+                    {project.techStack.map((tech, i) => (
+                      <span
+                        key={i}
+                        className="text-[11px] px-2 py-0.5 rounded bg-bg-secondary text-text-muted border border-border"
+                      >
+                        {tech}
+                      </span>
+                    ))}
+                  </div>
 
-                <p className="text-text-secondary text-xs leading-relaxed line-clamp-3 mb-6">
-                  {project.description}
-                </p>
-              </div>
-
-              <div>
-                <div className="flex flex-wrap gap-1.5 mb-6">
-                  {project.techStack.map((tech, i) => (
-                    <span
-                      key={i}
-                      className="text-[11px] px-2 py-0.5 rounded bg-bg-secondary text-text-muted border border-border"
-                    >
-                      {tech}
-                    </span>
-                  ))}
+                  <button
+                    onClick={() => openProject(project)}
+                    className="w-full py-2.5 px-4 rounded-lg glass text-xs font-semibold text-text-primary hover:border-accent-indigo/50 flex items-center justify-center gap-2 transition-colors"
+                  >
+                    Inspect Architecture <ArrowRight size={14} />
+                  </button>
                 </div>
-
-                <button
-                  onClick={() => openProject(project)}
-                  className="w-full py-2.5 px-4 rounded-lg glass text-xs font-semibold text-text-primary hover:border-accent-indigo/50 flex items-center justify-center gap-2 transition-colors"
-                >
-                  Inspect Architecture <ArrowRight size={14} />
-                </button>
-              </div>
+              </GlowCard>
             </motion.div>
           ))}
         </div>

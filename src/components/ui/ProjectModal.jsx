@@ -32,10 +32,10 @@ export default function ProjectModal({ project, isOpen, onClose }) {
           <motion.div
             className="relative w-full max-w-4xl rounded-2xl overflow-hidden my-auto"
             style={{ background: "#0d0d14", border: "1px solid #1e1e2e" }}
-            initial={{ y: 40, opacity: 0 }}
-            animate={{ y: 0, opacity: 1 }}
-            exit={{ y: 40, opacity: 0 }}
-            transition={{ duration: 0.4, ease: [0.25, 0.46, 0.45, 0.94] }}
+            initial={{ scale: 0.95, opacity: 0, y: 20 }}
+            animate={{ scale: 1, opacity: 1, y: 0 }}
+            exit={{ scale: 0.95, opacity: 0, y: 20 }}
+            transition={{ duration: 0.35, ease: [0.16, 1, 0.3, 1] }}
             onClick={(e) => e.stopPropagation()}
           >
             {/* Header */}

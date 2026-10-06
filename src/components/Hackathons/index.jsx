@@ -5,6 +5,7 @@ import SectionHeader from "../ui/SectionHeader"
 import Lightbox from "../ui/Lightbox"
 import { Trophy, CheckCircle2, Clock, GitBranch, Users, Calendar, MapPin, Images, Eye, ExternalLink } from "lucide-react"
 import { isRealValue } from "../../utils/hasContent"
+import GlowCard from "../ui/GlowCard"
 
 export default function Hackathons() {
   const [lightboxOpen, setLightboxOpen] = useState(false)
@@ -199,7 +200,7 @@ export default function Hackathons() {
         {otherHackathons.length > 0 && (
           <div className="grid md:grid-cols-2 gap-6">
             {otherHackathons.map((hackathon) => (
-              <div key={hackathon.id} className="card-base p-6 border-border flex flex-col justify-between">
+              <GlowCard key={hackathon.id} className="card-base p-6 border-border flex flex-col justify-between h-full" glowColor="rgba(34, 211, 238, 0.15)">
                 <div>
                   <div className="flex items-center justify-between mb-3">
                     <span className="badge">{hackathon.shortName || hackathon.name}</span>
@@ -238,7 +239,7 @@ export default function Hackathons() {
                     </a>
                   )}
                 </div>
-              </div>
+              </GlowCard>
             ))}
           </div>
         )}

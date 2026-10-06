@@ -1,4 +1,4 @@
-﻿import { useState, useEffect } from "react"
+import { useState, useEffect } from "react"
 import { motion, AnimatePresence } from "framer-motion"
 import { Menu, X } from "lucide-react"
 
@@ -7,7 +7,6 @@ const navLinks = [
   { id: "about", label: "About" },
   { id: "skills", label: "Skills" },
   { id: "projects", label: "Projects" },
-  { id: "hackathons", label: "Hackathons" },
   { id: "achievements", label: "Achievements" },
   { id: "journey", label: "Journey" },
   { id: "contact", label: "Contact" },
@@ -81,10 +80,9 @@ export default function Navbar() {
               >
                 {activeSection === link.id && (
                   <motion.div
-                    layoutId="nav-active"
-                    className="absolute inset-0 rounded-lg"
-                    style={{ background: "rgba(99,102,241,0.12)" }}
-                    transition={{ type: "spring", bounce: 0.2, duration: 0.5 }}
+                    layoutId="activeNavPill"
+                    className="absolute inset-0 rounded-lg border border-accent-indigo/40 bg-accent-indigo/15 shadow-sm shadow-accent-indigo/20"
+                    transition={{ type: "spring", stiffness: 400, damping: 30 }}
                   />
                 )}
                 <span className="relative z-10">{link.label}</span>

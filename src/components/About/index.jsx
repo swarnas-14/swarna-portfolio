@@ -2,6 +2,7 @@ import { motion } from "framer-motion"
 import { Code2, Brain, Cpu, Trophy, BookOpen, Rocket } from "lucide-react"
 import SectionHeader from "../ui/SectionHeader"
 import { aboutStats } from "../../data/aboutStats"
+import GlowCard from "../ui/GlowCard"
 
 const interests = [
   {
@@ -84,20 +85,25 @@ export default function About() {
                     whileInView={{ opacity: 1, y: 0 }}
                     viewport={{ once: true }}
                     transition={{ duration: 0.5, delay: idx * 0.08 }}
-                    className="card-base p-5 group relative overflow-hidden"
+                    className="h-full"
                   >
-                    <div
-                      className="w-10 h-10 rounded-lg flex items-center justify-center mb-3 transition-transform duration-300 group-hover:scale-110"
-                      style={{ background: `${item.color}15`, color: item.color, border: `1px solid ${item.color}30` }}
+                    <GlowCard
+                      className="card-base p-5 h-full group relative overflow-hidden"
+                      glowColor={`${item.color}25`}
                     >
-                      <Icon size={20} />
-                    </div>
-                    <h3 className="font-display font-semibold text-text-primary text-base mb-1">
-                      {item.title}
-                    </h3>
-                    <p className="text-text-muted text-xs leading-relaxed">
-                      {item.desc}
-                    </p>
+                      <div
+                        className="w-10 h-10 rounded-lg flex items-center justify-center mb-3 transition-transform duration-300 group-hover:scale-110"
+                        style={{ background: `${item.color}15`, color: item.color, border: `1px solid ${item.color}30` }}
+                      >
+                        <Icon size={20} />
+                      </div>
+                      <h3 className="font-display font-semibold text-text-primary text-base mb-1">
+                        {item.title}
+                      </h3>
+                      <p className="text-text-muted text-xs leading-relaxed">
+                        {item.desc}
+                      </p>
+                    </GlowCard>
                   </motion.div>
                 )
               })}

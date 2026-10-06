@@ -1,4 +1,4 @@
-﻿@tailwind base;
+@tailwind base;
 @tailwind components;
 @tailwind utilities;
 
@@ -173,3 +173,89 @@ body {
   .timeline-line { left: 20px; }
   .section-padding { padding: 4rem 0; }
 }
+
+/* ── 3. Spider-Verse & Comic Visual Animations ───────────────────────────────── */
+
+/* Chromatic Aberration & Spider-Verse Glitch */
+.spider-glitch {
+  position: relative;
+  display: inline-block;
+}
+
+.spider-glitch::before,
+.spider-glitch::after {
+  content: attr(data-text);
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
+
+.spider-glitch::before {
+  left: -2px;
+  text-shadow: 2px 0 #ff0055;
+  clip-path: inset(20% 0 30% 0);
+  animation: spider-noise-1 3s infinite linear alternate-reverse;
+}
+
+.spider-glitch::after {
+  left: 2px;
+  text-shadow: -2px 0 #00f0ff;
+  clip-path: inset(50% 0 10% 0);
+  animation: spider-noise-2 2.5s infinite linear alternate-reverse;
+}
+
+@keyframes spider-noise-1 {
+  0% { clip-path: inset(10% 0 85% 0); transform: skew(0.5deg); }
+  20% { clip-path: inset(62% 0 12% 0); transform: skew(-0.5deg); }
+  40% { clip-path: inset(25% 0 58% 0); transform: skew(0.8deg); }
+  60% { clip-path: inset(80% 0 5% 0); transform: skew(-0.3deg); }
+  80% { clip-path: inset(35% 0 40% 0); transform: skew(0.4deg); }
+  100% { clip-path: inset(5% 0 90% 0); transform: skew(0deg); }
+}
+
+@keyframes spider-noise-2 {
+  0% { clip-path: inset(70% 0 15% 0); transform: skew(-0.8deg); }
+  25% { clip-path: inset(15% 0 65% 0); transform: skew(0.4deg); }
+  50% { clip-path: inset(45% 0 30% 0); transform: skew(-0.5deg); }
+  75% { clip-path: inset(5% 0 80% 0); transform: skew(0.6deg); }
+  100% { clip-path: inset(60% 0 25% 0); transform: skew(0deg); }
+}
+
+/* Spider-Sense Pulse */
+.spider-sense {
+  animation: spiderSenseWave 2.5s ease-in-out infinite;
+}
+
+@keyframes spiderSenseWave {
+  0%, 100% {
+    transform: scale(1);
+    filter: drop-shadow(0 0 8px rgba(34, 211, 238, 0.4));
+  }
+  50% {
+    transform: scale(1.04);
+    filter: drop-shadow(0 0 16px rgba(255, 0, 85, 0.7)) drop-shadow(0 0 6px rgba(0, 240, 255, 0.6));
+  }
+}
+
+/* Radar Ping Signal */
+.radar-ring {
+  position: relative;
+}
+
+.radar-ring::after {
+  content: "";
+  position: absolute;
+  inset: -4px;
+  border-radius: 9999px;
+  border: 1px solid rgba(34, 197, 94, 0.6);
+  animation: radarPing 2s cubic-bezier(0, 0, 0.2, 1) infinite;
+}
+
+@keyframes radarPing {
+  0% { transform: scale(1); opacity: 0.8; }
+  100% { transform: scale(1.6); opacity: 0; }
+}
+
