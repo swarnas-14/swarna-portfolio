@@ -61,9 +61,9 @@ export default function Contact() {
     setSubmissionStatus("submitting")
     setStatusMessage("")
 
-    // Retrieve optional configured Web3Forms access key or custom endpoint
-    const accessKey = import.meta.env.VITE_WEB3FORMS_ACCESS_KEY
-    const customEndpoint = import.meta.env.VITE_CONTACT_FORM_ENDPOINT
+    // Retrieve optional configured Web3Forms access key or custom endpoint (supports WEB3FORMS_ACCESS_KEY and VITE_WEB3FORMS_ACCESS_KEY)
+    const accessKey = import.meta.env.WEB3FORMS_ACCESS_KEY || import.meta.env.VITE_WEB3FORMS_ACCESS_KEY
+    const customEndpoint = import.meta.env.VITE_CONTACT_FORM_ENDPOINT || import.meta.env.CONTACT_FORM_ENDPOINT
 
     const formattedPayload = {
       name: data.name.trim(),

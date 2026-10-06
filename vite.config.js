@@ -1,4 +1,4 @@
-import { defineConfig } from "vite"
+import { defineConfig, loadEnv } from "vite"
 import react from "@vitejs/plugin-react"
 import fs from "fs"
 import path from "path"
@@ -63,15 +63,24 @@ function localAdminDevPlugin() {
   }
 }
 
-export default defineConfig({
-  plugins: [react(), localAdminDevPlugin()],
-  build: {
-    rollupOptions: {
-      output: {
-        manualChunks: {
-          three: ["three", "@react-three/fiber", "@react-three/drei"],
-          motion: ["framer-motion"],
-          vendor: ["react", "react-dom", "react-hook-form", "clsx", "tailwind-merge"]
+export default defineConfig(({ mode }) => {
+  const env = loadEnv(mode, process.cwd(), "")
+  const accessKey = env.WEB3FORMS_ACCESS_KEY || env.VITE_WEB3FORMS_ACCESS_KEY || process.env.WEB3FORMS_ACCESS_KEY || process.env.VITE_WEB3FORMS_ACCESS_KEY || ""
+
+  return {
+    define: {
+      "import.meta.env.WEB3FORMS_ACCESS_KEY": JSON.stringify(accessKey),
+      "import.meta.env.VITE_WEB3FORMS_ACCESS_KEY": JSON.stringify(accessKey)
+    },
+    plugins: [react(), localAdminDevPlugin()],
+    build: {
+      rollupOptions: {
+        output: {
+          manualChunks: {
+            three: ["three", "@react-three/fiber", "@react-three/drei"],
+            motion: ["framer-motion"],
+            vendor: ["react", "react-dom", "react-hook-form", "clsx", "tailwind-merge"]
+          }
         }
       }
     }
