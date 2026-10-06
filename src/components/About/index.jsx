@@ -1,6 +1,7 @@
-﻿import { motion } from "framer-motion"
+import { motion } from "framer-motion"
 import { Code2, Brain, Cpu, Trophy, BookOpen, Rocket } from "lucide-react"
 import SectionHeader from "../ui/SectionHeader"
+import { aboutStats } from "../../data/aboutStats"
 
 const interests = [
   {
@@ -41,15 +42,8 @@ const interests = [
   }
 ]
 
-const stats = [
-  { value: "100+", label: "LeetCode Problems", sub: "Algorithms & Data Structures" },
-  { value: "[X]", label: "Projects Built", sub: "Full-Stack & Backend Systems" },
-  { value: "[X]", label: "Hackathons", sub: "Competitions & SIH 2026" },
-  { value: "[X]", label: "Technologies", sub: "Languages, Frameworks & Tools" },
-  { value: "5th", label: "Semester", sub: "B.Tech Computer Science & Eng." }
-]
-
 export default function About() {
+  const stats = aboutStats
   return (
     <section id="about" className="section-padding relative">
       <div className="max-w-7xl mx-auto px-6">

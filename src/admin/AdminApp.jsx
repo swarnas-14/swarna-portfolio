@@ -17,6 +17,8 @@ import { education as initialEducation } from "../data/education"
 import { leadership as initialLeadership } from "../data/leadership"
 import { socialLinks as initialSocial } from "../data/social"
 import { timeline as initialTimeline } from "../data/timeline"
+import { aboutStats as initialAboutStats } from "../data/aboutStats"
+import { dsaStats as initialDsaStats } from "../data/dsa"
 
 // Editors & Modals
 import HackathonWinsManager from "./components/HackathonWinsManager"
@@ -77,12 +79,12 @@ export default function AdminApp() {
   const [socialLinks, setSocialLinks] = useState(initialSocial)
   const [timeline, setTimeline] = useState(initialTimeline)
   const [resumeUrl, setResumeUrl] = useState(initialProfile.resumeUrl || "[ADD RESUME URL / FILE]")
-  const [dsaStats, setDsaStats] = useState({ solvedCount: "100+", profileUrl: "[ADD LEETCODE URL]" })
-  const [aboutStats, setAboutStats] = useState([
+  const [dsaStats, setDsaStats] = useState(initialDsaStats || { solvedCount: "100+", profileUrl: "[ADD LEETCODE URL]" })
+  const [aboutStats, setAboutStats] = useState(initialAboutStats || [
     { value: "100+", label: "LeetCode Problems", sub: "Algorithms & Data Structures" },
-    { value: "[X]", label: "Projects Built", sub: "Full-Stack & Backend Systems" },
-    { value: "[X]", label: "Hackathons", sub: "Competitions & SIH 2026" },
-    { value: "[X]", label: "Technologies", sub: "Languages, Frameworks & Tools" },
+    { value: "5+", label: "Projects Built", sub: "Full-Stack & Backend Systems" },
+    { value: "3+", label: "Hackathons", sub: "Competitions & SIH 2026" },
+    { value: "15+", label: "Technologies", sub: "Languages, Frameworks & Tools" },
     { value: "5th", label: "Semester", sub: "B.Tech Computer Science & Eng." }
   ])
 
@@ -91,87 +93,65 @@ export default function AdminApp() {
     setIsAuthenticated(false)
   }
 
+  // Helper to save a single data file and verify HTTP response
+  const saveFileOnDisk = async (filename, content) => {
+    const res = await fetch("/__admin_api/save_file", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ filename, content })
+    })
+    if (!res.ok) {
+      throw new Error(`Server returned HTTP ${res.status} when saving ${filename}`)
+    }
+    const data = await res.json()
+    if (!data.success) {
+      throw new Error(data.error || `Failed to write ${filename}`)
+    }
+    return data
+  }
+
   // Save all modified datasets directly to disk via local dev server
   const handleSaveAll = async () => {
     setIsSaving(true)
-    setSaveStatus("Saving changes to local data files...")
+    setSaveStatus("Saving changes to local files...")
 
     try {
       // 1. Save hackathons.js
-      const hackathonsContent = `export const hackathons = ${JSON.stringify(hackathons, null, 2)}\n`
-      await fetch("/__admin_api/save_file", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ filename: "hackathons.js", content: hackathonsContent })
-      })
+      await saveFileOnDisk("hackathons.js", `export const hackathons = ${JSON.stringify(hackathons, null, 2)}\n`)
 
       // 2. Save projects.js
-      const projectsContent = `export const projects = ${JSON.stringify(projects, null, 2)}\n`
-      await fetch("/__admin_api/save_file", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ filename: "projects.js", content: projectsContent })
-      })
+      await saveFileOnDisk("projects.js", `export const projects = ${JSON.stringify(projects, null, 2)}\n`)
 
       // 3. Save achievements.js
       const achievementsContent = `export const achievements = ${JSON.stringify(achievements, null, 2)}\nexport const achievementCategories = ["All", "Hackathon", "Competitive Programming", "Academic", "Award", "Certification", "Events"]\n`
-      await fetch("/__admin_api/save_file", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ filename: "achievements.js", content: achievementsContent })
-      })
+      await saveFileOnDisk("achievements.js", achievementsContent)
 
       // 4. Save certifications.js
-      const certsContent = `export const certifications = ${JSON.stringify(certifications, null, 2)}\n`
-      await fetch("/__admin_api/save_file", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ filename: "certifications.js", content: certsContent })
-      })
+      await saveFileOnDisk("certifications.js", `export const certifications = ${JSON.stringify(certifications, null, 2)}\n`)
 
       // 5. Save profile.js
-      const profileContent = `export const profile = ${JSON.stringify({ ...profile, resumeUrl }, null, 2)}\n`
-      await fetch("/__admin_api/save_file", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ filename: "profile.js", content: profileContent })
-      })
+      await saveFileOnDisk("profile.js", `export const profile = ${JSON.stringify({ ...profile, resumeUrl }, null, 2)}\n`)
 
       // 6. Save techStack.js
       const techStackContent = `export const techCategories = ${JSON.stringify(techCategories, null, 2)}\nexport const allTechs = techCategories.flatMap(cat => cat.techs)\nexport const techNodes = ["Java", "Python", "Spring Boot", "MySQL", "MongoDB", "Redis", "Docker", "Kafka", "React", "Git", "AI/ML", "REST API", "NumPy", "Pandas", "DSA", "Algorithms", "Security", "JavaScript", "Hibernate", "CSS"]\n`
-      await fetch("/__admin_api/save_file", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ filename: "techStack.js", content: techStackContent })
-      })
+      await saveFileOnDisk("techStack.js", techStackContent)
 
       // 7. Save education.js, leadership.js, social.js, timeline.js
-      await fetch("/__admin_api/save_file", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ filename: "education.js", content: `export const education = ${JSON.stringify(education, null, 2)}\n` })
-      })
-      await fetch("/__admin_api/save_file", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ filename: "leadership.js", content: `export const leadership = ${JSON.stringify(leadership, null, 2)}\n` })
-      })
-      await fetch("/__admin_api/save_file", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ filename: "social.js", content: `export const socialLinks = ${JSON.stringify(socialLinks, null, 2)}\n` })
-      })
-      await fetch("/__admin_api/save_file", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ filename: "timeline.js", content: `export const timeline = ${JSON.stringify(timeline, null, 2)}\n` })
-      })
+      await saveFileOnDisk("education.js", `export const education = ${JSON.stringify(education, null, 2)}\n`)
+      await saveFileOnDisk("leadership.js", `export const leadership = ${JSON.stringify(leadership, null, 2)}\n`)
+      await saveFileOnDisk("social.js", `export const socialLinks = ${JSON.stringify(socialLinks, null, 2)}\n`)
+      await saveFileOnDisk("timeline.js", `export const timeline = ${JSON.stringify(timeline, null, 2)}\n`)
 
-      setSaveStatus("✓ All local files updated successfully!")
-      setTimeout(() => setSaveStatus(""), 4000)
+      // 8. Save aboutStats.js and dsa.js
+      await saveFileOnDisk("aboutStats.js", `export const aboutStats = ${JSON.stringify(aboutStats, null, 2)}\n`)
+      await saveFileOnDisk("dsa.js", `export const dsaStats = ${JSON.stringify(dsaStats, null, 2)}\n`)
+
+      setSaveStatus("✓ Saved to src/data! Now commit & push to deploy.")
+      setTimeout(() => setSaveStatus(""), 6000)
     } catch (err) {
-      setSaveStatus("Saved to state (Use Export button to save backup)")
-      setTimeout(() => setSaveStatus(""), 4000)
+      console.error("Save error:", err)
+      setSaveStatus(`❌ ${err.message}`)
+      setTimeout(() => setSaveStatus(""), 6000)
     } finally {
       setIsSaving(false)
     }

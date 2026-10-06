@@ -1,8 +1,13 @@
-﻿import { useRef, useState, useEffect, Suspense, Component } from "react"
+import { useRef, useState, useEffect, Suspense, Component } from "react"
 import { Canvas, useFrame, useThree } from "@react-three/fiber"
 import { motion } from "framer-motion"
 import { ArrowDown, FileText, ChevronRight } from "lucide-react"
 import * as THREE from "three"
+import { profile } from "../../data/profile"
+import { projects } from "../../data/projects"
+import { hackathons } from "../../data/hackathons"
+import { dsaStats } from "../../data/dsa"
+import { isRealValue } from "../../utils/hasContent"
 
 // ── Error Boundary ──────────────────────────────────────────────────────────
 class CanvasErrorBoundary extends Component {
@@ -194,34 +199,40 @@ export default function Hero() {
               style={{ background: "rgba(34,197,94,0.1)", border: "1px solid rgba(34,197,94,0.3)", color: "#4ade80" }}
             >
               <span className="w-2 h-2 rounded-full bg-green-400 animate-pulse" />
-              Available for Internships · India
+              {profile.availableForInternships ? `Available for Opportunities · ${profile.city || "India"}` : profile.city || "India"}
             </span>
           </motion.div>
 
           {/* Name */}
           <motion.div variants={item}>
             <h1 className="font-display font-black leading-none tracking-tighter" style={{ fontSize: "clamp(4rem, 10vw, 7rem)" }}>
-              <span className="block text-text-primary">VINAY</span>
-              <span className="block gradient-text">SHARMA</span>
+              {(() => {
+                const nameParts = (profile.name || "Vinay Sharma").split(" ")
+                const first = nameParts[0] || "VINAY"
+                const rest = nameParts.slice(1).join(" ") || "SHARMA"
+                return (
+                  <>
+                    <span className="block text-text-primary uppercase">{first}</span>
+                    <span className="block gradient-text uppercase">{rest}</span>
+                  </>
+                )
+              })()}
             </h1>
           </motion.div>
 
           {/* Subtitle */}
           <motion.p variants={item} className="text-text-muted font-mono text-sm tracking-widest uppercase">
-            B.Tech Computer Science & Engineering · 5th Semester
+            {[profile.degree, profile.branch, profile.semester].filter(isRealValue).join(" · ") || "Computer Science & Engineering"}
           </motion.p>
 
           {/* Tagline */}
           <motion.p variants={item} className="text-text-secondary text-xl leading-relaxed max-w-lg">
-            I build <span className="text-text-primary font-medium">scalable software</span>, intelligent systems, and{" "}
-            <span className="text-text-primary font-medium">interactive digital experiences</span>.
+            {profile.tagline || "I build scalable software, intelligent systems, and interactive digital experiences."}
           </motion.p>
 
           {/* Bio */}
           <motion.p variants={item} className="text-text-muted text-base leading-relaxed max-w-lg">
-            Computer Science undergraduate focused on software development, backend engineering, problem solving,
-            and emerging technologies. I continuously learn, build projects, participate in hackathons, and turn
-            ideas into practical systems.
+            {profile.introduction || "Computer Science undergraduate focused on software development, backend engineering, problem solving, and emerging technologies."}
           </motion.p>
 
           {/* CTAs */}
@@ -229,17 +240,23 @@ export default function Hero() {
             <button onClick={scrollToProjects} className="btn-primary" data-cursor="EXPLORE">
               Explore My Work <ArrowDown size={16} />
             </button>
-            <a href="[ADD RESUME URL]" target="_blank" rel="noopener noreferrer" className="btn-secondary" data-cursor="RESUME">
-              <FileText size={16} /> View Resume
-            </a>
+            {isRealValue(profile.resumeUrl) ? (
+              <a href={profile.resumeUrl} target="_blank" rel="noopener noreferrer" className="btn-secondary" data-cursor="RESUME">
+                <FileText size={16} /> View Resume
+              </a>
+            ) : (
+              <a href="#contact" className="btn-secondary" data-cursor="CONTACT">
+                <FileText size={16} /> Get In Touch
+              </a>
+            )}
           </motion.div>
 
           {/* Stats row */}
           <motion.div variants={item} className="flex flex-wrap items-center gap-6 pt-2">
             {[
-              { value: "100+", label: "LeetCode" },
-              { value: "[X]", label: "Projects" },
-              { value: "[X]", label: "Hackathons" },
+              { value: dsaStats?.solvedCount || "100+", label: "LeetCode" },
+              { value: `${projects.length}+`, label: "Projects" },
+              { value: `${hackathons.length}+`, label: "Hackathons" },
             ].map((stat, i) => (
               <div key={i} className="flex items-center gap-4">
                 {i > 0 && <div className="w-px h-8 bg-border" />}

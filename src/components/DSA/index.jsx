@@ -1,6 +1,7 @@
-﻿import { motion } from "framer-motion"
+import { motion } from "framer-motion"
 import SectionHeader from "../ui/SectionHeader"
 import { Code2, ExternalLink, CheckCircle2, Flame, ArrowUpRight, Cpu } from "lucide-react"
+import { dsaStats } from "../../data/dsa"
 
 const dsaTopics = [
   { name: "Arrays & Strings", status: "Active Practice", count: "30+" },
@@ -52,7 +53,7 @@ export default function DSA() {
 
               <div className="my-8 text-center">
                 <div className="font-display font-black text-6xl gradient-text mb-2">
-                  100+
+                  {dsaStats.solvedCount || "100+"}
                 </div>
                 <div className="text-text-secondary text-sm font-medium">
                   Problems Solved & Analyzed
@@ -75,7 +76,7 @@ export default function DSA() {
 
               <div className="mt-8 pt-6 border-t border-border">
                 <a
-                  href="[ADD LEETCODE URL]"
+                  href={dsaStats.profileUrl && dsaStats.profileUrl !== "[ADD LEETCODE URL]" ? dsaStats.profileUrl : "https://leetcode.com/"}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="btn-primary w-full text-xs flex items-center justify-center gap-2"

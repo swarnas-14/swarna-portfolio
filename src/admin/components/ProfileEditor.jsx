@@ -39,6 +39,30 @@ export default function ProfileEditor({ profile, onUpdate }) {
         </div>
       </div>
 
+      <div className="grid sm:grid-cols-2 gap-5">
+        <div>
+          <label className="block text-[11px] font-mono text-text-muted uppercase mb-1.5">College / University</label>
+          <input
+            type="text"
+            placeholder="e.g. ABC Institute of Technology"
+            value={profile.college || ""}
+            onChange={e => update("college", e.target.value)}
+            className="w-full px-3.5 py-2.5 rounded-xl bg-[#12121c] border border-[#1e1e2e] text-xs text-white focus:outline-none focus:border-accent-indigo"
+          />
+        </div>
+
+        <div>
+          <label className="block text-[11px] font-mono text-text-muted uppercase mb-1.5">CGPA</label>
+          <input
+            type="text"
+            placeholder="e.g. 8.5/10"
+            value={profile.cgpa || ""}
+            onChange={e => update("cgpa", e.target.value)}
+            className="w-full px-3.5 py-2.5 rounded-xl bg-[#12121c] border border-[#1e1e2e] text-xs text-white focus:outline-none focus:border-accent-indigo"
+          />
+        </div>
+      </div>
+
       <div className="grid sm:grid-cols-3 gap-5">
         <div>
           <label className="block text-[11px] font-mono text-text-muted uppercase mb-1.5">Current Semester</label>
@@ -69,6 +93,30 @@ export default function ProfileEditor({ profile, onUpdate }) {
             className="w-full px-3.5 py-2.5 rounded-xl bg-[#12121c] border border-[#1e1e2e] text-xs text-white focus:outline-none focus:border-accent-indigo"
           />
         </div>
+      </div>
+
+      <div>
+        <label className="block text-[11px] font-mono text-text-muted uppercase mb-1.5">Rotating Titles (comma-separated)</label>
+        <input
+          type="text"
+          placeholder="Full-Stack Developer, AI/ML Enthusiast, Problem Solver"
+          value={Array.isArray(profile.titles) ? profile.titles.join(", ") : (profile.titles || "")}
+          onChange={e => update("titles", e.target.value.split(",").map(t => t.trim()).filter(Boolean))}
+          className="w-full px-3.5 py-2.5 rounded-xl bg-[#12121c] border border-[#1e1e2e] text-xs text-white focus:outline-none focus:border-accent-indigo"
+        />
+      </div>
+
+      <div className="flex items-center gap-3 pt-1">
+        <input
+          type="checkbox"
+          id="internships"
+          checked={profile.availableForInternships ?? true}
+          onChange={e => update("availableForInternships", e.target.checked)}
+          className="rounded border-[#1e1e2e] bg-[#12121c] text-accent-indigo focus:ring-0"
+        />
+        <label htmlFor="internships" className="text-xs text-text-secondary select-none cursor-pointer">
+          Show "Available for Opportunities / Internships" badge on portfolio
+        </label>
       </div>
 
       <div>
