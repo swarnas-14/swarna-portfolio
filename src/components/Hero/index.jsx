@@ -181,8 +181,8 @@ export default function Hero() {
     <section id="home" className="relative min-h-screen flex items-center grid-bg overflow-hidden">
       {/* Background gradient blobs */}
       <div className="absolute inset-0 pointer-events-none">
-        <div className="absolute top-1/4 left-1/4 w-96 h-96 rounded-full opacity-10 blur-3xl" style={{ background: "radial-gradient(circle, #6366f1, transparent)" }} />
-        <div className="absolute bottom-1/4 right-1/4 w-72 h-72 rounded-full opacity-8 blur-3xl" style={{ background: "radial-gradient(circle, #22d3ee, transparent)" }} />
+        <div className="absolute top-1/4 left-1/4 w-96 h-96 rounded-full opacity-10 blur-3xl" style={{ background: "radial-gradient(circle, #e879a0, transparent)" }} />
+        <div className="absolute bottom-1/4 right-1/4 w-72 h-72 rounded-full opacity-8 blur-3xl" style={{ background: "radial-gradient(circle, #f59e42, transparent)" }} />
       </div>
 
       <div className="relative max-w-7xl mx-auto px-6 w-full py-24 grid lg:grid-cols-2 gap-16 items-center">
@@ -208,9 +208,9 @@ export default function Hero() {
           <motion.div variants={item}>
             <h1 className="font-display font-black leading-none tracking-tighter" style={{ fontSize: "clamp(4rem, 10vw, 7rem)" }}>
               {(() => {
-                const nameParts = (profile.name || "Vinay Sharma").split(" ")
-                const first = nameParts[0] || "VINAY"
-                const rest = nameParts.slice(1).join(" ") || "SHARMA"
+                const nameParts = (profile.name || "Swarna Sahu").split(" ")
+                const first = nameParts[0] || "SWARNA"
+                const rest = nameParts.slice(1).join(" ") || "SAHU"
                 return (
                   <div className="spider-glitch" data-text={`${first} ${rest}`}>
                     <span className="block text-text-primary uppercase tracking-tight">{first}</span>

@@ -1,8 +1,9 @@
 import { useState } from "react"
-import { Plus, Trash2, Star, Layers, ExternalLink } from "lucide-react"
+import { Plus, Trash2, Star, Layers, ExternalLink, Save, RefreshCw } from "lucide-react"
 import { Github } from "../../components/ui/Icons"
+import EditorActionBar from "./EditorActionBar"
 
-export default function ProjectsEditor({ projects, onUpdate }) {
+export default function ProjectsEditor({ projects, onUpdate, onSave, isSaving }) {
   const [selectedId, setSelectedId] = useState(projects[0]?.id || 1)
   const activeProj = projects.find(p => p.id === selectedId) || projects[0]
 
@@ -51,9 +52,19 @@ export default function ProjectsEditor({ projects, onUpdate }) {
           <h2 className="font-display font-bold text-2xl text-white">Projects & Case Studies</h2>
           <p className="text-xs text-text-muted mt-1">Configure featured architectures, problem statements, and code repositories.</p>
         </div>
-        <button onClick={addProject} className="btn-primary text-xs flex items-center gap-1.5">
-          <Plus size={14} /> Add Project
-        </button>
+        <div className="flex items-center gap-3">
+          <button onClick={addProject} className="btn-secondary text-xs flex items-center gap-1.5 py-2 px-3">
+            <Plus size={14} /> Add Project
+          </button>
+          <button
+            onClick={onSave}
+            disabled={isSaving}
+            className="btn-primary text-xs flex items-center gap-1.5 py-2 px-4 font-semibold"
+          >
+            {isSaving ? <RefreshCw size={13} className="animate-spin" /> : <Save size={13} />}
+            {isSaving ? "Saving..." : "Save Projects"}
+          </button>
+        </div>
       </div>
 
       <div className="flex flex-wrap gap-2 pb-2 border-b border-[#1e1e2e]">
@@ -186,6 +197,13 @@ export default function ProjectsEditor({ projects, onUpdate }) {
             />
           </div>
         </div>
+
+        <EditorActionBar
+          onSave={onSave}
+          isSaving={isSaving}
+          label="Save Projects"
+          helperText="Updates case studies, architecture notes & GitHub links on the portfolio"
+        />
       </div>
     </div>
   )

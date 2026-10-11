@@ -32,7 +32,7 @@ export default function Contact() {
   const triggerMailtoFallback = (data) => {
     const targetEmail = (socialLinks.email && !socialLinks.email.includes("[ADD EMAIL]"))
       ? socialLinks.email
-      : "vinaysharma.dev@gmail.com"
+      : "swarna.sahu@example.com"
     const subject = encodeURIComponent(`New Portfolio Contact: ${data.subject || "Message from Portfolio"}`)
     const body = encodeURIComponent(
       `New Portfolio Contact\n\nName: ${data.name}\nEmail: ${data.email}\nSubject: ${data.subject}\n\nMessage:\n${data.message}`
@@ -136,9 +136,9 @@ export default function Contact() {
   const hasValidLinkedin = socialLinks.linkedin && !socialLinks.linkedin.includes("[ADD LINKEDIN URL]")
   const hasValidResume = profile.resumeUrl && !profile.resumeUrl.includes("[ADD RESUME")
 
-  const emailDisplay = hasValidEmail ? socialLinks.email : "vinaysharma.dev@gmail.com"
-  const githubDisplay = hasValidGithub ? socialLinks.github : "github.com/vinaysharma"
-  const linkedinDisplay = hasValidLinkedin ? socialLinks.linkedin : "linkedin.com/in/vinaysharma"
+  const emailDisplay = hasValidEmail ? socialLinks.email : "swarna.sahu@example.com"
+  const githubDisplay = hasValidGithub ? socialLinks.github : "github.com/swarnasahu"
+  const linkedinDisplay = hasValidLinkedin ? socialLinks.linkedin : "linkedin.com/in/swarnasahu"
 
   return (
     <section id="contact" className="section-padding relative">

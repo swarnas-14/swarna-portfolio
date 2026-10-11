@@ -8,23 +8,23 @@ export default {
     extend: {
       colors: {
         bg: {
-          primary: "#050508",
-          secondary: "#0d0d14",
-          card: "#12121c",
+          primary: "#060408",
+          secondary: "#0f0a10",
+          card: "#160e18",
         },
         border: {
-          DEFAULT: "#1e1e2e",
-          subtle: "#16162a",
+          DEFAULT: "#2a1a2e",
+          subtle: "#1e1020",
         },
         accent: {
-          indigo: "#6366f1",
-          cyan: "#22d3ee",
-          purple: "#a78bfa",
+          indigo: "#e879a0",
+          cyan: "#f59e42",
+          purple: "#c084fc",
         },
         text: {
-          primary: "#f1f5f9",
-          secondary: "#94a3b8",
-          muted: "#64748b",
+          primary: "#fdf2f8",
+          secondary: "#d1a5c0",
+          muted: "#8b6a80",
         },
       },
       fontFamily: {

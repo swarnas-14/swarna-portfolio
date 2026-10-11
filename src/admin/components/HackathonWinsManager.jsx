@@ -2,8 +2,9 @@ import { useState, useRef } from "react"
 import {
   Trophy, Plus, Trash2, ArrowUp, ArrowDown, Image as ImageIcon,
   CheckCircle2, Star, Eye, Upload, AlertCircle, Sparkles, Move,
-  Calendar, Users, MapPin, ExternalLink, ShieldCheck, Tag
+  Calendar, Users, MapPin, ExternalLink, ShieldCheck, Tag, Save, RefreshCw
 } from "lucide-react"
+import EditorActionBar from "./EditorActionBar"
 
 const PHOTO_TYPES = [
   { id: "winning-moment", label: "Winning Moment / Trophy" },
@@ -14,7 +15,7 @@ const PHOTO_TYPES = [
   { id: "project", label: "Project Demo Screenshot" }
 ]
 
-export default function HackathonWinsManager({ hackathons, onUpdate, onSave }) {
+export default function HackathonWinsManager({ hackathons, onUpdate, onSave, isSaving }) {
   const [selectedId, setSelectedId] = useState(hackathons[0]?.id || "")
   const [activePhotoIndex, setActivePhotoIndex] = useState(null)
   const [previewModalImg, setPreviewModalImg] = useState(null)
@@ -177,12 +178,22 @@ export default function HackathonWinsManager({ hackathons, onUpdate, onSave }) {
           </p>
         </div>
 
-        <button
-          onClick={addNewWin}
-          className="btn-primary text-xs flex items-center gap-2 py-2.5 px-4"
-        >
-          <Plus size={14} /> Add Hackathon Win
-        </button>
+        <div className="flex items-center gap-3">
+          <button
+            onClick={addNewWin}
+            className="btn-secondary text-xs flex items-center gap-2 py-2 px-3"
+          >
+            <Plus size={14} /> Add Hackathon Win
+          </button>
+          <button
+            onClick={onSave}
+            disabled={isSaving}
+            className="btn-primary text-xs flex items-center gap-2 py-2 px-4 font-semibold"
+          >
+            {isSaving ? <RefreshCw size={14} className="animate-spin" /> : <Save size={14} />}
+            {isSaving ? "Saving..." : "Save Hackathons"}
+          </button>
+        </div>
       </div>
 
       {/* Wins Tabs */}
@@ -518,6 +529,15 @@ export default function HackathonWinsManager({ hackathons, onUpdate, onSave }) {
             )}
           </div>
         </div>
+      </div>
+
+      <div className="p-6 rounded-2xl bg-[#0d0d14] border border-[#1e1e2e]">
+        <EditorActionBar
+          onSave={onSave}
+          isSaving={isSaving}
+          label="Save Hackathons"
+          helperText="Saves hackathon wins, photos, links, and evidence directly to disk"
+        />
       </div>
 
       {/* Lightbox Preview Modal */}

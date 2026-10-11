@@ -1,17 +1,14 @@
 export const education = [
   {
     "id": 1,
-    "college": "Bansal Institue of Science and Technology ",
-    "degree": "Bachelor of Technology (B.Tech)",
-    "branch": "Computer Science & Engineering",
-    "year": "3rd Year",
-    "semester": "5th Semester",
-    "graduationYear": "2026",
+    "degree": "B.tech",
+    "institution": "[ADD COLLEGE NAME]",
+    "duration": "[ADD DURATION e.g. 2022 - 2026]",
     "cgpa": "[ADD CGPA]",
-    "highlights": [
-      "Core Courses: Data Structures & Algorithms, Object-Oriented Programming, Database Management Systems",
-      "Operating Systems, Computer Networks, Software Engineering Principles",
-      "Active participant in technical hackathons and competitive problem solving"
-    ]
+    "location": "[ADD CITY]",
+    "description": "[ADD DESCRIPTION]",
+    "highlights": [],
+    "college": "Bansal Institue Science and Technology",
+    "branch": "CSE"
   }
 ]

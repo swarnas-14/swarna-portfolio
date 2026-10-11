@@ -1,6 +1,7 @@
 import { Sparkles } from "lucide-react"
+import EditorActionBar from "./EditorActionBar"
 
-export default function AboutEditor({ stats, onUpdateStats }) {
+export default function AboutEditor({ stats, onUpdateStats, onSave, isSaving }) {
   return (
     <div className="p-8 rounded-2xl bg-[#0d0d14] border border-[#1e1e2e] space-y-6">
       <div className="flex items-center justify-between pb-4 border-b border-[#1e1e2e]">
@@ -40,6 +41,13 @@ export default function AboutEditor({ stats, onUpdateStats }) {
           ))}
         </div>
       </div>
+
+      <EditorActionBar
+        onSave={onSave}
+        isSaving={isSaving}
+        label="Save About Stats"
+        helperText="Updates your numbers and metrics scorecard on the portfolio"
+      />
     </div>
   )
 }

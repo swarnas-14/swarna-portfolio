@@ -1,101 +1,26 @@
 export const projects = [
   {
     "id": 1,
-    "title": "Job Search",
-    "description": "A full-stack job search and application management platform built with Spring Boot, Spring Security, JWT, MongoDB, Redis, and Kafka. It enables users to discover jobs, manage applications, and track recruitment progress.",
-    "problem": "Job seekers often struggle to organize job opportunities and track applications across multiple platforms, resulting in scattered information and inefficient application management.",
-    "solution": "[ADD SOLUTION DESCRIPTION — How does your system solve the problem?]",
-    "architecture": "The system centralizes job discovery and application tracking through a secure REST-based platform, using JWT authentication, MongoDB for persistence, Redis for caching, and Kafka for asynchronous processing.",
-    "techStack": [
-      "Java",
-      "Spring Boot",
-      "MySQL",
-      "[ADD MORE TECHNOLOGIES]"
-    ],
-    "features": [
-      "[ADD FEATURE 1]",
-      "[ADD FEATURE 2]",
-      "[ADD FEATURE 3]",
-      "[ADD FEATURE 4]"
-    ],
-    "githubUrl": "https://github.com/vinaysharma-code/JobSearch",
-    "liveUrl": "https://jobsearch-z4tt.onrender.com/swagger-ui/index.html#/",
-    "image": "/images/projects/project-1.jpg",
-    "featured": true,
-    "category": "Backend"
-  },
-  {
-    "id": 2,
     "title": "Urban Clean",
-    "description": "### Urban Clean – AI-Powered Waste Management System\n\nUrban Clean is an AI-powered waste management solution designed to promote sustainable waste disposal and smart waste segregation. The project focuses on improving how waste is reported, categorized, and managed by connecting citizens with an organized waste-management workflow.\n\nThe system enables users to report waste-related issues and supports intelligent waste segregation using AI-based analysis. It aims to improve cleanliness, reduce improper waste disposal, and provide a more efficient approach to managing urban waste through technology.\n",
-    "problem": "### Problem Addressed\n\nUrban areas often face problems such as improper waste disposal, inadequate waste segregation, overflowing garbage, and delayed reporting of waste-related issues. Traditional waste-management systems can make it difficult to identify problems quickly and ensure that waste is properly categorized and handled.\n\nUrban Clean addresses these challenges by providing a technology-driven approach for reporting waste issues, supporting smart waste segregation, and improving the overall efficiency of urban waste management.\n",
-    "solution": "Urban Clean provides a technology-driven solution for efficient urban waste management by enabling users to report waste-related issues and supporting smart waste segregation. The system helps identify and categorize waste, streamline issue reporting, and improve coordination in waste-management activities. By using AI-based capabilities, Urban Clean aims to make waste disposal more organized, efficient, and sustainable.\n",
-    "architecture": "Urban Clean follows a modular web-based architecture consisting of a user-facing frontend, backend services, database, and AI-powered waste analysis components. Users can submit waste-related complaints or information through the frontend, which communicates with the backend through REST APIs. The backend processes requests, manages user and complaint data, and coordinates waste classification and management workflows. The database securely stores relevant records, while the AI component assists with intelligent waste identification and segregation.\n",
+    "subtitle": "[ADD SHORT SUBTITLE]",
+    "description": "**Urban Clean – AI-Powered Smart Waste Management System**\n\nUrban Clean is an innovative, AI-powered waste management solution designed to improve urban cleanliness, optimize waste segregation, and promote environmental sustainability. The project combines smart waste management concepts, ALOS integration, and a rapid complaint reporting system to address real-world sanitation challenges.\n\nThe system aims to enable citizens to report waste-related issues through a complaint interface designed for approximately 3-second input, helping make reporting quick and convenient. The project focuses on improving complaint accessibility, encouraging responsible waste disposal, and supporting more efficient sanitation management. Its innovative, problem-oriented approach formed the basis of its winning concept.",
+    "longDescription": "[ADD DETAILED DESCRIPTION]",
+    "category": "Full-Stack",
+    "status": "Completed",
+    "featured": true,
+    "githubUrl": "https://github.com/swarnas-14/UrbanClean",
+    "liveUrl": "https://urbanclean-4mn8.onrender.com/",
+    "images": [],
+    "highlights": [
+      "[ADD KEY FEATURE 1]",
+      "[ADD KEY FEATURE 2]"
+    ],
+    "problem": "Urban Clean proposes an AI-powered approach to waste management that aims to improve waste segregation and promote sustainable disposal practices. By leveraging artificial intelligence and smart waste management concepts, the solution seeks to support more efficient waste handling, reduce improper disposal, and encourage recycling.\n\nThe system is designed around the goal of creating cleaner urban environments through smarter waste management, improved operational efficiency, and greater environmental awareness.",
+    "solution": "**Engineered Solution – Urban Clean**\n\nUrban Clean is an AI-powered smart waste management solution engineered to address urban sanitation challenges through intelligent waste segregation, ALOS integration, and a rapid complaint reporting system designed for approximately 3-second input. The system focuses on simplifying citizen participation, streamlining sanitation issue reporting, and supporting efficient waste management. By combining technology, automation, and sustainability-driven design, Urban Clean aims to reduce waste management inefficiencies and contribute to cleaner, smarter, and more sustainable urban environments.",
+    "architecture": "**System Architecture**\n\nUrban Clean follows a modular architecture integrating the user interface, rapid complaint reporting, AI-powered waste management, ALOS integration, and sanitation management.\n\n1. **Presentation Layer:** Provides a user-friendly interface for citizens to report waste-related issues and interact with the system.\n2. **Complaint Management Layer:** Accepts complaint details through a streamlined input workflow designed for approximately 3-second submission.\n3. **AI Processing Layer:** Supports intelligent waste management and waste segregation based on the implemented AI capabilities.\n4. **ALOS Integration Layer:** Connects the ALOS component with the relevant system workflow.\n5. **Backend Services Layer:** Handles complaint processing, validation, business logic, and communication between system components.\n6. **Data Management Layer:** Stores complaint records and associated information for tracking and management.\n7. **Output and Monitoring Layer:** Supports complaint status tracking and sanitation issue monitoring, depending on the implemented features.\n\n**Workflow:** Citizen Input → Complaint Submission → Backend Processing → Data Storage → Sanitation Management → Status Updates.\n\nThe modular design separates user interaction, processing, and data management to support maintainability, scalability, and future enhancements.",
     "techStack": [
-      "Python",
-      "Flask",
-      "MongoDB",
-      "[ADD MORE TECHNOLOGIES]"
-    ],
-    "features": [
-      "[ADD FEATURE 1]",
-      "[ADD FEATURE 2]",
-      "[ADD FEATURE 3]"
-    ],
-    "githubUrl": "https://github.com/vinaysharma-code/urbanclean",
-    "liveUrl": "https://jobsearch-z4tt.onrender.com/swagger-ui/index.html",
-    "image": "/images/projects/project-2.jpg",
-    "featured": false,
-    "category": "Full-Stack"
-  },
-  {
-    "id": 3,
-    "title": "[ADD PROJECT NAME]",
-    "description": "[ADD PROJECT DESCRIPTION]",
-    "problem": "[ADD PROBLEM STATEMENT]",
-    "solution": "[ADD SOLUTION DESCRIPTION]",
-    "architecture": "[ADD ARCHITECTURE DESCRIPTION]",
-    "techStack": [
-      "Java",
-      "Spring Boot",
-      "Redis",
-      "Kafka",
-      "[ADD MORE]"
-    ],
-    "features": [
-      "[ADD FEATURE 1]",
-      "[ADD FEATURE 2]",
-      "[ADD FEATURE 3]"
-    ],
-    "githubUrl": "[ADD GITHUB URL]",
-    "liveUrl": "",
-    "image": "/images/projects/project-3.jpg",
-    "featured": false,
-    "category": "Backend"
-  },
-  {
-    "id": 4,
-    "title": "[ADD PROJECT NAME]",
-    "description": "[ADD PROJECT DESCRIPTION]",
-    "problem": "[ADD PROBLEM STATEMENT]",
-    "solution": "[ADD SOLUTION DESCRIPTION]",
-    "architecture": "[ADD ARCHITECTURE DESCRIPTION]",
-    "techStack": [
-      "Python",
-      "NumPy",
-      "Pandas",
-      "Machine Learning",
-      "[ADD MORE]"
-    ],
-    "features": [
-      "[ADD FEATURE 1]",
-      "[ADD FEATURE 2]",
-      "[ADD FEATURE 3]"
-    ],
-    "githubUrl": "[ADD GITHUB URL]",
-    "liveUrl": "",
-    "image": "/images/projects/project-4.jpg",
-    "featured": false,
-    "category": "AI/ML"
+      "[TECH 1]",
+      "[TECH 2]"
+    ]
   }
 ]

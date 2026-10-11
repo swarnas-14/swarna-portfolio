@@ -1,6 +1,7 @@
 import { Flame, ExternalLink } from "lucide-react"
+import EditorActionBar from "./EditorActionBar"
 
-export default function DSAEditor({ dsaStats, onUpdate }) {
+export default function DSAEditor({ dsaStats, onUpdate, onSave, isSaving }) {
   return (
     <div className="p-8 rounded-2xl bg-[#0d0d14] border border-[#1e1e2e] space-y-6">
       <div className="flex items-center justify-between pb-4 border-b border-[#1e1e2e]">
@@ -27,12 +28,19 @@ export default function DSAEditor({ dsaStats, onUpdate }) {
           <input
             type="text"
             placeholder="https://leetcode.com/u/..."
-            value={dsaStats?.profileUrl || "[ADD LEETCODE URL]"}
+            value={dsaStats?.profileUrl || ""}
             onChange={e => onUpdate({ ...dsaStats, profileUrl: e.target.value })}
             className="w-full px-3.5 py-2.5 rounded-xl bg-[#12121c] border border-[#1e1e2e] text-xs text-white focus:outline-none focus:border-accent-indigo"
           />
         </div>
       </div>
+
+      <EditorActionBar
+        onSave={onSave}
+        isSaving={isSaving}
+        label="Save DSA Stats"
+        helperText="Updates your LeetCode problem counter and profile URL on the portfolio"
+      />
     </div>
   )
 }

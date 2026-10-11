@@ -1,6 +1,7 @@
-import { Plus, Trash2, Award, ShieldCheck } from "lucide-react"
+import { Plus, Trash2, Award, ShieldCheck, Save, RefreshCw } from "lucide-react"
+import EditorActionBar from "./EditorActionBar"
 
-export default function CertificationsEditor({ certifications, onUpdate }) {
+export default function CertificationsEditor({ certifications, onUpdate, onSave, isSaving }) {
   const addCert = () => {
     const newId = Date.now()
     const item = {
@@ -22,14 +23,24 @@ export default function CertificationsEditor({ certifications, onUpdate }) {
 
   return (
     <div className="space-y-6">
-      <div className="flex items-center justify-between p-6 rounded-2xl bg-[#0d0d14] border border-[#1e1e2e]">
+      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 p-6 rounded-2xl bg-[#0d0d14] border border-[#1e1e2e]">
         <div>
           <h2 className="font-display font-bold text-2xl text-white">Certifications & Accreditations</h2>
           <p className="text-xs text-text-muted mt-1">Manage verified credentials, certificate images, and issuer links.</p>
         </div>
-        <button onClick={addCert} className="btn-primary text-xs flex items-center gap-1.5">
-          <Plus size={14} /> Add Certificate
-        </button>
+        <div className="flex items-center gap-3">
+          <button onClick={addCert} className="btn-secondary text-xs flex items-center gap-1.5 py-2 px-3">
+            <Plus size={14} /> Add Certificate
+          </button>
+          <button
+            onClick={onSave}
+            disabled={isSaving}
+            className="btn-primary text-xs flex items-center gap-1.5 py-2 px-4 font-semibold"
+          >
+            {isSaving ? <RefreshCw size={13} className="animate-spin" /> : <Save size={13} />}
+            {isSaving ? "Saving..." : "Save Certifications"}
+          </button>
+        </div>
       </div>
 
       <div className="grid md:grid-cols-2 gap-4">
@@ -124,6 +135,15 @@ export default function CertificationsEditor({ certifications, onUpdate }) {
             </div>
           </div>
         ))}
+      </div>
+
+      <div className="p-6 rounded-2xl bg-[#0d0d14] border border-[#1e1e2e]">
+        <EditorActionBar
+          onSave={onSave}
+          isSaving={isSaving}
+          label="Save Certifications"
+          helperText="Updates your certifications, credential IDs and issuer links"
+        />
       </div>
     </div>
   )

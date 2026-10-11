@@ -1,7 +1,27 @@
 import { User, CheckCircle2 } from "lucide-react"
+import EditorActionBar from "./EditorActionBar"
 
-export default function ProfileEditor({ profile, onUpdate }) {
-  const update = (key, val) => onUpdate({ ...profile, [key]: val })
+export default function ProfileEditor({ profile, onUpdate, onSave, isSaving }) {
+  const update = (key, val) => {
+    const updated = { ...profile, [key]: val }
+    if (key === "city") updated.location = val
+    if (key === "location") updated.city = val
+    if (key === "availableForInternships") updated.availability = val
+    if (key === "availability") updated.availableForInternships = val
+    onUpdate(updated)
+  }
+
+  const handleNameChange = (nameVal) => {
+    const parts = nameVal.trim().split(" ")
+    const first = parts[0] || ""
+    const last = parts.slice(1).join(" ") || ""
+    onUpdate({
+      ...profile,
+      name: nameVal,
+      firstName: first,
+      lastName: last
+    })
+  }
 
   return (
     <div className="p-8 rounded-2xl bg-[#0d0d14] border border-[#1e1e2e] space-y-6">
@@ -19,7 +39,7 @@ export default function ProfileEditor({ profile, onUpdate }) {
           <input
             type="text"
             value={profile.name || ""}
-            onChange={e => update("name", e.target.value)}
+            onChange={e => handleNameChange(e.target.value)}
             className="w-full px-3.5 py-2.5 rounded-xl bg-[#12121c] border border-[#1e1e2e] text-xs text-white focus:outline-none focus:border-accent-indigo"
           />
         </div>
@@ -31,8 +51,9 @@ export default function ProfileEditor({ profile, onUpdate }) {
             value={`${profile.degree || "B.Tech"} - ${profile.branch || "Computer Science and Engineering"}`}
             onChange={e => {
               const parts = e.target.value.split("-")
-              update("degree", parts[0]?.trim() || "B.Tech")
-              update("branch", parts[1]?.trim() || "Computer Science and Engineering")
+              const deg = parts[0]?.trim() || "B.Tech"
+              const br = parts[1]?.trim() || "Computer Science and Engineering"
+              onUpdate({ ...profile, degree: deg, branch: br })
             }}
             className="w-full px-3.5 py-2.5 rounded-xl bg-[#12121c] border border-[#1e1e2e] text-xs text-white focus:outline-none focus:border-accent-indigo"
           />
@@ -44,7 +65,7 @@ export default function ProfileEditor({ profile, onUpdate }) {
           <label className="block text-[11px] font-mono text-text-muted uppercase mb-1.5">College / University</label>
           <input
             type="text"
-            placeholder="e.g. ABC Institute of Technology"
+            placeholder="e.g. Bansal Institute of Science and Technology"
             value={profile.college || ""}
             onChange={e => update("college", e.target.value)}
             className="w-full px-3.5 py-2.5 rounded-xl bg-[#12121c] border border-[#1e1e2e] text-xs text-white focus:outline-none focus:border-accent-indigo"
@@ -85,11 +106,35 @@ export default function ProfileEditor({ profile, onUpdate }) {
         </div>
 
         <div>
-          <label className="block text-[11px] font-mono text-text-muted uppercase mb-1.5">Location / Country</label>
+          <label className="block text-[11px] font-mono text-text-muted uppercase mb-1.5">Location / City</label>
           <input
             type="text"
-            value={profile.city || "India"}
+            value={profile.city || profile.location || "India"}
             onChange={e => update("city", e.target.value)}
+            className="w-full px-3.5 py-2.5 rounded-xl bg-[#12121c] border border-[#1e1e2e] text-xs text-white focus:outline-none focus:border-accent-indigo"
+          />
+        </div>
+      </div>
+
+      <div className="grid sm:grid-cols-2 gap-5">
+        <div>
+          <label className="block text-[11px] font-mono text-text-muted uppercase mb-1.5">Contact Email</label>
+          <input
+            type="email"
+            placeholder="e.g. swarna@example.com"
+            value={profile.email || ""}
+            onChange={e => update("email", e.target.value)}
+            className="w-full px-3.5 py-2.5 rounded-xl bg-[#12121c] border border-[#1e1e2e] text-xs text-white focus:outline-none focus:border-accent-indigo"
+          />
+        </div>
+
+        <div>
+          <label className="block text-[11px] font-mono text-text-muted uppercase mb-1.5">Contact Phone</label>
+          <input
+            type="tel"
+            placeholder="e.g. +91 9876543210"
+            value={profile.phone || ""}
+            onChange={e => update("phone", e.target.value)}
             className="w-full px-3.5 py-2.5 rounded-xl bg-[#12121c] border border-[#1e1e2e] text-xs text-white focus:outline-none focus:border-accent-indigo"
           />
         </div>
@@ -99,7 +144,7 @@ export default function ProfileEditor({ profile, onUpdate }) {
         <label className="block text-[11px] font-mono text-text-muted uppercase mb-1.5">Rotating Titles (comma-separated)</label>
         <input
           type="text"
-          placeholder="Full-Stack Developer, AI/ML Enthusiast, Problem Solver"
+          placeholder="Software Developer, Full-Stack Developer, Problem Solver"
           value={Array.isArray(profile.titles) ? profile.titles.join(", ") : (profile.titles || "")}
           onChange={e => update("titles", e.target.value.split(",").map(t => t.trim()).filter(Boolean))}
           className="w-full px-3.5 py-2.5 rounded-xl bg-[#12121c] border border-[#1e1e2e] text-xs text-white focus:outline-none focus:border-accent-indigo"
@@ -110,7 +155,7 @@ export default function ProfileEditor({ profile, onUpdate }) {
         <input
           type="checkbox"
           id="internships"
-          checked={profile.availableForInternships ?? true}
+          checked={profile.availableForInternships ?? profile.availability ?? true}
           onChange={e => update("availableForInternships", e.target.checked)}
           className="rounded border-[#1e1e2e] bg-[#12121c] text-accent-indigo focus:ring-0"
         />
@@ -138,6 +183,13 @@ export default function ProfileEditor({ profile, onUpdate }) {
           className="w-full px-3.5 py-2.5 rounded-xl bg-[#12121c] border border-[#1e1e2e] text-xs text-white focus:outline-none focus:border-accent-indigo resize-none"
         />
       </div>
+
+      <EditorActionBar
+        onSave={onSave}
+        isSaving={isSaving}
+        label="Save Profile Changes"
+        helperText="Updates your name, bio, college & identity on the portfolio"
+      />
     </div>
   )
 }

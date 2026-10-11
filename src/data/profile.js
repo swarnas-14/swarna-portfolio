@@ -1,21 +1,25 @@
 export const profile = {
-  "name": "Vinay Sharma",
+  "name": "Swarna Sahu",
+  "firstName": "Swarna",
+  "lastName": "Sahu",
   "titles": [
-    "Computer Science Undergraduate",
-    "Full-Stack & Backend Developer",
-    "AI/ML Enthusiast",
-    "Problem Solver"
+    "Software Developer",
+    "Full-Stack Developer",
+    "B.Tech CSE Student"
   ],
+  "tagline": "Building elegant solutions to complex problems.",
+  "introduction": "Hi! I'm Swarna — a Computer Science Engineering student passionate about building clean, impactful software. I love working across the stack and turning ideas into reality.",
+  "location": "Bhopal, India",
+  "city": "Bhopal, India",
+  "college": "Bansal Institute of Science and Technology",
   "degree": "B.Tech",
   "branch": "Computer Science and Engineering",
-  "college": "Bansal Institue of Science and Technology ",
-  "year": "3rd Year",
   "semester": "5th Semester",
+  "cgpa": "8.5/10",
   "graduationYear": "2026",
-  "cgpa": "7.4",
-  "city": "India",
-  "tagline": "I build scalable software, intelligent systems, and interactive digital experiences.",
-  "introduction": "Computer Science undergraduate focused on software development, backend engineering, problem solving, and emerging technologies. I continuously learn, build projects, participate in hackathons, and turn ideas into practical systems.",
+  "availability": true,
   "availableForInternships": true,
-  "resumeUrl": "https://drive.google.com/file/d/13I3jJAxRGbzPBowtSApwiZEqYQ5OOB5p/view?usp=drivesdk"
+  "resumeUrl": "https://drive.google.com/file/d/1atN2fSM0uUaVrluHpFQJaPs26eb-EXwN/view?usp=drivesdk",
+  "email": "swarna@example.com",
+  "phone": "+91 9876543210"
 }

@@ -62,11 +62,11 @@ export default function Navbar() {
           <button onClick={() => scrollTo("home")} className="flex items-center gap-3 group">
             <div
               className="w-9 h-9 rounded-lg flex items-center justify-center font-display font-bold text-sm"
-              style={{ background: "linear-gradient(135deg, #6366f1, #22d3ee)" }}
+              style={{ background: "linear-gradient(135deg, #e879a0, #f59e42)" }}
             >
-              VS
+              SS
             </div>
-            <span className="font-display font-semibold text-text-primary hidden sm:block">Vinay Sharma</span>
+            <span className="font-display font-semibold text-text-primary hidden sm:block">Swarna Sahu</span>
           </button>
 
           {/* Desktop Nav */}

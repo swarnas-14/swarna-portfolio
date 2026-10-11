@@ -1,6 +1,7 @@
 import { Plus, Trash2, Tag } from "lucide-react"
+import EditorActionBar from "./EditorActionBar"
 
-export default function SkillsEditor({ techCategories, onUpdate }) {
+export default function SkillsEditor({ techCategories, onUpdate, onSave, isSaving }) {
   const addTech = (catIndex) => {
     const copy = [...techCategories]
     copy[catIndex].techs.push({
@@ -77,6 +78,15 @@ export default function SkillsEditor({ techCategories, onUpdate }) {
             </div>
           </div>
         ))}
+      </div>
+
+      <div className="p-6 rounded-2xl bg-[#0d0d14] border border-[#1e1e2e]">
+        <EditorActionBar
+          onSave={onSave}
+          isSaving={isSaving}
+          label="Save Skills Stack"
+          helperText="Updates your tech stack nodes and categorized tools on the portfolio"
+        />
       </div>
     </div>
   )

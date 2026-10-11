@@ -27,10 +27,10 @@ export default function Resume() {
           <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-6 pb-8 border-b border-border">
             <div>
               <h3 className="font-display font-black text-2xl sm:text-3xl text-text-primary">
-                Vinay Sharma
+                Swarna Sahu
               </h3>
               <p className="text-text-secondary text-sm mt-1">
-                B.Tech Computer Science & Engineering (5th Semester) · India
+                B.Tech Computer Science & Engineering · India
               </p>
             </div>
 

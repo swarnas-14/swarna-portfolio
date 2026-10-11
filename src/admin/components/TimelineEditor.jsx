@@ -1,5 +1,6 @@
 import { useState } from "react"
-import { Plus, Trash2, ArrowUp, ArrowDown, Milestone, Code, Brain, Server, Layers, Cpu, Rocket, Award, Tag } from "lucide-react"
+import { Plus, Trash2, ArrowUp, ArrowDown, Milestone, Code, Brain, Server, Layers, Cpu, Rocket, Award, Tag, Save, RefreshCw } from "lucide-react"
+import EditorActionBar from "./EditorActionBar"
 
 const AVAILABLE_ICONS = [
   { id: "Code", label: "Code", Icon: Code },
@@ -11,7 +12,7 @@ const AVAILABLE_ICONS = [
   { id: "Award", label: "Award / Milestone", Icon: Award },
 ]
 
-export default function TimelineEditor({ timeline, onUpdate }) {
+export default function TimelineEditor({ timeline, onUpdate, onSave, isSaving }) {
   const [selectedId, setSelectedId] = useState(timeline[0]?.id || 1)
   const [newTechInput, setNewTechInput] = useState("")
 
@@ -91,9 +92,19 @@ export default function TimelineEditor({ timeline, onUpdate }) {
             Curate chronological engineering milestones, learning phases, and technical evolution.
           </p>
         </div>
-        <button onClick={addTimelineItem} className="btn-primary text-xs flex items-center gap-1.5">
-          <Plus size={14} /> Add Milestone
-        </button>
+        <div className="flex items-center gap-3">
+          <button onClick={addTimelineItem} className="btn-secondary text-xs flex items-center gap-1.5 py-2 px-3">
+            <Plus size={14} /> Add Milestone
+          </button>
+          <button
+            onClick={onSave}
+            disabled={isSaving}
+            className="btn-primary text-xs flex items-center gap-1.5 py-2 px-4 font-semibold"
+          >
+            {isSaving ? <RefreshCw size={13} className="animate-spin" /> : <Save size={13} />}
+            {isSaving ? "Saving..." : "Save Journey"}
+          </button>
+        </div>
       </div>
 
       {/* Milestone Tabs */}
@@ -270,6 +281,13 @@ export default function TimelineEditor({ timeline, onUpdate }) {
             </button>
           </div>
         </div>
+
+        <EditorActionBar
+          onSave={onSave}
+          isSaving={isSaving}
+          label="Save Journey Timeline"
+          helperText="Updates your chronological milestones and career progression"
+        />
       </div>
     </div>
   )

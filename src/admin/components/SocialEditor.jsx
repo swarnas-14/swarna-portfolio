@@ -1,7 +1,8 @@
 import { Mail, Globe } from "lucide-react"
 import { Github, Linkedin } from "../../components/ui/Icons"
+import EditorActionBar from "./EditorActionBar"
 
-export default function SocialEditor({ socialLinks, onUpdate }) {
+export default function SocialEditor({ socialLinks, onUpdate, onSave, isSaving }) {
   const update = (key, val) => onUpdate({ ...socialLinks, [key]: val })
 
   return (
@@ -60,6 +61,13 @@ export default function SocialEditor({ socialLinks, onUpdate }) {
           />
         </div>
       </div>
+
+      <EditorActionBar
+        onSave={onSave}
+        isSaving={isSaving}
+        label="Save Social Links"
+        helperText="Updates your GitHub, LinkedIn, email & external links on the portfolio"
+      />
     </div>
   )
 }

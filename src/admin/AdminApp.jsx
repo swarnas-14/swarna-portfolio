@@ -64,10 +64,12 @@ export default function AdminApp() {
   const [activeTab, setActiveTab] = useState("hackathon-wins")
   const [saveStatus, setSaveStatus] = useState("")
   const [isSaving, setIsSaving] = useState(false)
+  const [justSaved, setJustSaved] = useState(false)
+  const [toast, setToast] = useState(null)
   const [auditOpen, setAuditOpen] = useState(false)
   const [exportOpen, setExportOpen] = useState(false)
 
-  // Local state for all datasets
+  // Local state for all datasets (with localStorage recovery if present)
   const [profile, setProfile] = useState(initialProfile)
   const [hackathons, setHackathons] = useState(initialHackathons)
   const [projects, setProjects] = useState(initialProjects)
@@ -113,47 +115,149 @@ export default function AdminApp() {
   // Save all modified datasets directly to disk via local dev server
   const handleSaveAll = async () => {
     setIsSaving(true)
-    setSaveStatus("Saving changes to local files...")
+    setSaveStatus("Saving...")
+    setToast({
+      type: "saving",
+      title: "Saving Portfolio Data",
+      message: "Writing changes to local src/data files..."
+    })
+
+    const filesToSave = [
+      {
+        filename: "hackathons.js",
+        content: `export const hackathons = ${JSON.stringify(hackathons, null, 2)}\n`
+      },
+      {
+        filename: "projects.js",
+        content: `export const projects = ${JSON.stringify(
+          projects.map(p => ({
+            ...p,
+            // Normalize: always save as techStack (never as technologies)
+            techStack: p.techStack || p.technologies || [],
+            technologies: undefined
+          })),
+          null, 2
+        )}\n`
+      },
+      {
+        filename: "achievements.js",
+        content: `export const achievements = ${JSON.stringify(achievements, null, 2)}\nexport const achievementCategories = ["All", "Hackathon", "Competitive Programming", "Academic", "Award", "Certification", "Events"]\n`
+      },
+      {
+        filename: "certifications.js",
+        content: `export const certifications = ${JSON.stringify(certifications, null, 2)}\n`
+      },
+      {
+        filename: "profile.js",
+        content: `export const profile = ${JSON.stringify({ ...profile, resumeUrl }, null, 2)}\n`
+      },
+      {
+        filename: "techStack.js",
+        content: `export const techCategories = ${JSON.stringify(techCategories, null, 2)}\nexport const allTechs = techCategories.flatMap(cat => cat.techs)\nexport const techNodes = ["Java", "Python", "Spring Boot", "MySQL", "MongoDB", "Redis", "Docker", "Kafka", "React", "Git", "AI/ML", "REST API", "NumPy", "Pandas", "DSA", "Algorithms", "Security", "JavaScript", "Hibernate", "CSS"]\n`
+      },
+      {
+        filename: "education.js",
+        content: `export const education = ${JSON.stringify(education, null, 2)}\n`
+      },
+      {
+        filename: "leadership.js",
+        content: `export const leadership = ${JSON.stringify(leadership, null, 2)}\n`
+      },
+      {
+        filename: "social.js",
+        content: `export const socialLinks = ${JSON.stringify(socialLinks, null, 2)}\n`
+      },
+      {
+        filename: "timeline.js",
+        content: `export const timeline = ${JSON.stringify(timeline, null, 2)}\n`
+      },
+      {
+        filename: "aboutStats.js",
+        content: `export const aboutStats = ${JSON.stringify(aboutStats, null, 2)}\n`
+      },
+      {
+        filename: "dsa.js",
+        content: `export const dsaStats = ${JSON.stringify(dsaStats, null, 2)}\n`
+      }
+    ]
+
+    // Block accidental page close/reload while saving is in progress
+    const unloadGuard = (e) => { e.preventDefault(); e.returnValue = "" }
+    window.addEventListener("beforeunload", unloadGuard)
 
     try {
-      // 1. Save hackathons.js
-      await saveFileOnDisk("hackathons.js", `export const hackathons = ${JSON.stringify(hackathons, null, 2)}\n`)
+      // 1. Attempt rapid single-request bulk save endpoint
+      let batchSuccess = false
+      try {
+        const batchRes = await fetch("/__admin_api/save_all", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ files: filesToSave })
+        })
+        if (batchRes.ok) {
+          const batchData = await batchRes.json()
+          if (batchData.success) {
+            batchSuccess = true
+          }
+        }
+      } catch (e) {
+        console.warn("save_all endpoint unavailable, falling back to parallel save_file", e)
+      }
 
-      // 2. Save projects.js
-      await saveFileOnDisk("projects.js", `export const projects = ${JSON.stringify(projects, null, 2)}\n`)
+      // 2. Parallel individual file fallback if save_all was not handled
+      if (!batchSuccess) {
+        await Promise.all(
+          filesToSave.map(f => saveFileOnDisk(f.filename, f.content))
+        )
+      }
 
-      // 3. Save achievements.js
-      const achievementsContent = `export const achievements = ${JSON.stringify(achievements, null, 2)}\nexport const achievementCategories = ["All", "Hackathon", "Competitive Programming", "Academic", "Award", "Certification", "Events"]\n`
-      await saveFileOnDisk("achievements.js", achievementsContent)
+      // 3. Cache latest state into localStorage for instant reload safety
+      try {
+        localStorage.setItem("swarna_portfolio_data", JSON.stringify({
+          profile: { ...profile, resumeUrl },
+          hackathons,
+          projects,
+          achievements,
+          certifications,
+          techCategories,
+          education,
+          leadership,
+          socialLinks,
+          timeline,
+          aboutStats,
+          dsaStats
+        }))
+      } catch (e) {
+        console.warn("LocalStorage caching error:", e)
+      }
 
-      // 4. Save certifications.js
-      await saveFileOnDisk("certifications.js", `export const certifications = ${JSON.stringify(certifications, null, 2)}\n`)
+      setJustSaved(true)
+      setSaveStatus("✓ Saved to src/data!")
+      setToast({
+        type: "success",
+        title: "All Changes Saved!",
+        message: "Successfully saved to src/data! Portfolio is up to date.",
+        timestamp: new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit", second: "2-digit" })
+      })
 
-      // 5. Save profile.js
-      await saveFileOnDisk("profile.js", `export const profile = ${JSON.stringify({ ...profile, resumeUrl }, null, 2)}\n`)
-
-      // 6. Save techStack.js
-      const techStackContent = `export const techCategories = ${JSON.stringify(techCategories, null, 2)}\nexport const allTechs = techCategories.flatMap(cat => cat.techs)\nexport const techNodes = ["Java", "Python", "Spring Boot", "MySQL", "MongoDB", "Redis", "Docker", "Kafka", "React", "Git", "AI/ML", "REST API", "NumPy", "Pandas", "DSA", "Algorithms", "Security", "JavaScript", "Hibernate", "CSS"]\n`
-      await saveFileOnDisk("techStack.js", techStackContent)
-
-      // 7. Save education.js, leadership.js, social.js, timeline.js
-      await saveFileOnDisk("education.js", `export const education = ${JSON.stringify(education, null, 2)}\n`)
-      await saveFileOnDisk("leadership.js", `export const leadership = ${JSON.stringify(leadership, null, 2)}\n`)
-      await saveFileOnDisk("social.js", `export const socialLinks = ${JSON.stringify(socialLinks, null, 2)}\n`)
-      await saveFileOnDisk("timeline.js", `export const timeline = ${JSON.stringify(timeline, null, 2)}\n`)
-
-      // 8. Save aboutStats.js and dsa.js
-      await saveFileOnDisk("aboutStats.js", `export const aboutStats = ${JSON.stringify(aboutStats, null, 2)}\n`)
-      await saveFileOnDisk("dsa.js", `export const dsaStats = ${JSON.stringify(dsaStats, null, 2)}\n`)
-
-      setSaveStatus("✓ Saved to src/data! Now commit & push to deploy.")
-      setTimeout(() => setSaveStatus(""), 6000)
+      setTimeout(() => setJustSaved(false), 3000)
+      setTimeout(() => setSaveStatus(""), 5000)
+      setTimeout(() => setToast(prev => prev?.type === "success" ? null : prev), 6000)
     } catch (err) {
       console.error("Save error:", err)
-      setSaveStatus(`❌ ${err.message}`)
-      setTimeout(() => setSaveStatus(""), 6000)
+      const isNetworkErr = !err.message || err.message.includes("fetch") || err.message.includes("NetworkError")
+      const friendlyMsg = isNetworkErr
+        ? "Cannot reach the dev server API. Make sure you are running 'npm run dev' and reload the page."
+        : err.message || "Failed to write data files to disk."
+      setSaveStatus("❌ Save failed")
+      setToast({
+        type: "error",
+        title: "Save Failed",
+        message: friendlyMsg
+      })
     } finally {
       setIsSaving(false)
+      window.removeEventListener("beforeunload", unloadGuard)
     }
   }
 
@@ -215,12 +319,6 @@ export default function AdminApp() {
 
           {/* Quick Actions */}
           <div className="flex items-center gap-2.5">
-            {saveStatus && (
-              <span className="text-xs font-mono text-emerald-400 animate-fade-in flex items-center gap-1 mr-1">
-                <CheckCircle2 size={13} /> {saveStatus}
-              </span>
-            )}
-
             <button
               onClick={() => window.open("/", "_blank")}
               className="btn-secondary text-xs flex items-center gap-1.5 py-1.5 px-3"
@@ -245,13 +343,32 @@ export default function AdminApp() {
               <Download size={13} /> Backup / Export
             </button>
 
+            {saveStatus && (
+              <span className={`text-xs font-mono flex items-center gap-1 px-2.5 py-1 rounded-lg border transition-all ${
+                saveStatus.includes("Saved")
+                  ? "bg-emerald-500/10 text-emerald-400 border-emerald-500/20"
+                  : saveStatus.includes("failed") || saveStatus.includes("❌")
+                  ? "bg-rose-500/10 text-rose-400 border-rose-500/20"
+                  : "bg-accent-indigo/10 text-accent-indigo border-accent-indigo/20 animate-pulse"
+              }`}>
+                {saveStatus.includes("Saved") ? <CheckCircle2 size={13} /> : saveStatus.includes("failed") || saveStatus.includes("❌") ? <AlertCircle size={13} /> : <RefreshCw size={13} className="animate-spin" />}
+                {saveStatus}
+              </span>
+            )}
+
             <button
               onClick={handleSaveAll}
               disabled={isSaving}
-              className="btn-primary text-xs flex items-center gap-1.5 py-1.5 px-4 font-semibold"
+              className={`text-xs flex items-center gap-1.5 py-1.5 px-4 font-semibold rounded-xl transition-all shadow-md cursor-pointer ${
+                justSaved
+                  ? "bg-emerald-600 text-white shadow-emerald-500/30 scale-105"
+                  : isSaving
+                  ? "bg-accent-indigo/70 text-white cursor-not-allowed"
+                  : "btn-primary hover:scale-105 active:scale-95"
+              }`}
             >
-              {isSaving ? <RefreshCw size={13} className="animate-spin" /> : <Save size={13} />}
-              {isSaving ? "Saving..." : "Save Changes"}
+              {isSaving ? <RefreshCw size={13} className="animate-spin" /> : justSaved ? <CheckCircle2 size={13} /> : <Save size={13} />}
+              {isSaving ? "Saving..." : justSaved ? "Saved!" : "Save Changes"}
             </button>
 
             <button
@@ -315,55 +432,116 @@ export default function AdminApp() {
               hackathons={hackathons}
               onUpdate={setHackathons}
               onSave={handleSaveAll}
+              isSaving={isSaving}
             />
           )}
 
           {activeTab === "profile" && (
-            <ProfileEditor profile={profile} onUpdate={setProfile} />
+            <ProfileEditor
+              profile={profile}
+              onUpdate={setProfile}
+              onSave={handleSaveAll}
+              isSaving={isSaving}
+            />
           )}
 
           {activeTab === "about" && (
-            <AboutEditor stats={aboutStats} onUpdateStats={setAboutStats} />
+            <AboutEditor
+              stats={aboutStats}
+              onUpdateStats={setAboutStats}
+              onSave={handleSaveAll}
+              isSaving={isSaving}
+            />
           )}
 
           {activeTab === "skills" && (
-            <SkillsEditor techCategories={techCategories} onUpdate={setTechCategories} />
+            <SkillsEditor
+              techCategories={techCategories}
+              onUpdate={setTechCategories}
+              onSave={handleSaveAll}
+              isSaving={isSaving}
+            />
           )}
 
           {activeTab === "projects" && (
-            <ProjectsEditor projects={projects} onUpdate={setProjects} />
+            <ProjectsEditor
+              projects={projects}
+              onUpdate={setProjects}
+              onSave={handleSaveAll}
+              isSaving={isSaving}
+            />
           )}
 
           {activeTab === "achievements" && (
-            <AchievementsEditor achievements={achievements} onUpdate={setAchievements} />
+            <AchievementsEditor
+              achievements={achievements}
+              onUpdate={setAchievements}
+              onSave={handleSaveAll}
+              isSaving={isSaving}
+            />
           )}
 
           {activeTab === "certifications" && (
-            <CertificationsEditor certifications={certifications} onUpdate={setCertifications} />
+            <CertificationsEditor
+              certifications={certifications}
+              onUpdate={setCertifications}
+              onSave={handleSaveAll}
+              isSaving={isSaving}
+            />
           )}
 
           {activeTab === "dsa" && (
-            <DSAEditor dsaStats={dsaStats} onUpdate={setDsaStats} />
+            <DSAEditor
+              dsaStats={dsaStats}
+              onUpdate={setDsaStats}
+              onSave={handleSaveAll}
+              isSaving={isSaving}
+            />
           )}
 
           {activeTab === "education" && (
-            <EducationEditor education={education} onUpdate={setEducation} />
+            <EducationEditor
+              education={education}
+              onUpdate={setEducation}
+              onSave={handleSaveAll}
+              isSaving={isSaving}
+            />
           )}
 
           {activeTab === "timeline" && (
-            <TimelineEditor timeline={timeline} onUpdate={setTimeline} />
+            <TimelineEditor
+              timeline={timeline}
+              onUpdate={setTimeline}
+              onSave={handleSaveAll}
+              isSaving={isSaving}
+            />
           )}
 
           {activeTab === "leadership" && (
-            <LeadershipEditor leadership={leadership} onUpdate={setLeadership} />
+            <LeadershipEditor
+              leadership={leadership}
+              onUpdate={setLeadership}
+              onSave={handleSaveAll}
+              isSaving={isSaving}
+            />
           )}
 
           {activeTab === "social" && (
-            <SocialEditor socialLinks={socialLinks} onUpdate={setSocialLinks} />
+            <SocialEditor
+              socialLinks={socialLinks}
+              onUpdate={setSocialLinks}
+              onSave={handleSaveAll}
+              isSaving={isSaving}
+            />
           )}
 
           {activeTab === "resume" && (
-            <ResumeEditor resumeUrl={resumeUrl} onUpdate={setResumeUrl} />
+            <ResumeEditor
+              resumeUrl={resumeUrl}
+              onUpdate={setResumeUrl}
+              onSave={handleSaveAll}
+              isSaving={isSaving}
+            />
           )}
 
           {activeTab === "media" && (
@@ -371,6 +549,63 @@ export default function AdminApp() {
           )}
         </main>
       </div>
+
+      {/* Floating Toast Notification */}
+      {toast && (
+        <div className="fixed bottom-6 right-6 z-[100] max-w-md w-full p-4 rounded-2xl bg-[#0f0f18]/95 backdrop-blur-xl border border-[#2a2a3e] shadow-2xl shadow-black/80 flex items-start gap-3 animate-fade-in">
+          {toast.type === "saving" && (
+            <div className="w-8 h-8 rounded-xl bg-accent-indigo/20 border border-accent-indigo/40 text-accent-indigo flex items-center justify-center shrink-0 mt-0.5">
+              <RefreshCw size={16} className="animate-spin" />
+            </div>
+          )}
+          {toast.type === "success" && (
+            <div className="w-8 h-8 rounded-xl bg-emerald-500/20 border border-emerald-500/40 text-emerald-400 flex items-center justify-center shrink-0 mt-0.5">
+              <CheckCircle2 size={16} />
+            </div>
+          )}
+          {toast.type === "error" && (
+            <div className="w-8 h-8 rounded-xl bg-rose-500/20 border border-rose-500/40 text-rose-400 flex items-center justify-center shrink-0 mt-0.5">
+              <AlertCircle size={16} />
+            </div>
+          )}
+          <div className="flex-1 min-w-0">
+            <div className="font-semibold text-xs text-white flex items-center justify-between">
+              <span>{toast.title || (toast.type === "saving" ? "Saving Data..." : toast.type === "success" ? "Changes Saved!" : "Save Failed")}</span>
+              {toast.timestamp && <span className="text-[10px] font-mono text-text-muted">{toast.timestamp}</span>}
+            </div>
+            <p className="text-xs text-text-secondary mt-0.5 leading-relaxed break-words">
+              {toast.message}
+            </p>
+            {toast.type === "success" && (
+              <div className="mt-2.5 flex items-center gap-2">
+                <button
+                  onClick={() => window.open("/", "_blank")}
+                  className="px-2.5 py-1 rounded-lg bg-emerald-500/10 hover:bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 text-[11px] font-semibold flex items-center gap-1 transition-colors"
+                >
+                  <Eye size={12} /> Preview Portfolio
+                </button>
+              </div>
+            )}
+            {toast.type === "error" && (
+              <div className="mt-2.5 flex items-center gap-2">
+                <button
+                  onClick={handleSaveAll}
+                  className="px-2.5 py-1 rounded-lg bg-rose-500/10 hover:bg-rose-500/20 text-rose-400 border border-rose-500/30 text-[11px] font-semibold flex items-center gap-1 transition-colors"
+                >
+                  <RefreshCw size={12} /> Retry Now
+                </button>
+              </div>
+            )}
+          </div>
+          <button
+            onClick={() => setToast(null)}
+            className="text-text-muted hover:text-white p-1 rounded-lg hover:bg-white/5 transition-colors cursor-pointer"
+            title="Dismiss"
+          >
+            ✕
+          </button>
+        </div>
+      )}
 
       {/* Modals */}
       <BuildCheckModal

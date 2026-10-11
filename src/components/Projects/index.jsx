@@ -66,7 +66,7 @@ export default function Projects() {
                     Core Technologies
                   </div>
                   <div className="flex flex-wrap gap-2">
-                    {featured.techStack.map((tech, i) => (
+                    {(featured.techStack || featured.technologies || []).map((tech, i) => (
                       <span key={i} className="text-xs font-mono px-3 py-1 rounded-md bg-bg-secondary text-accent-purple border border-border">
                         {tech}
                       </span>
@@ -173,7 +173,7 @@ export default function Projects() {
 
                 <div>
                   <div className="flex flex-wrap gap-1.5 mb-6">
-                    {project.techStack.map((tech, i) => (
+                    {(project.techStack || project.technologies || []).map((tech, i) => (
                       <span
                         key={i}
                         className="text-[11px] px-2 py-0.5 rounded bg-bg-secondary text-text-muted border border-border"

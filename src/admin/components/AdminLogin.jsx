@@ -18,6 +18,8 @@ export default function AdminLogin({ onLoginSuccess }) {
     const p = enteredPass.trim()
     return (
       (e === configuredEmail && p === configuredPassword) ||
+      // Hardcoded dev fallbacks (from .env.local defaults)
+      (e === "swarna.admin@gmail.com" && p === "Swarna@123") ||
       (e === "admin@example.com" && p === "YOUR_LOCAL_ADMIN_PASSWORD") ||
       (e === "admin@vinay.dev" && p === "admin123")
     )

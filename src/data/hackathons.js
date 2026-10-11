@@ -1,138 +1,47 @@
 export const hackathons = [
   {
     "id": "hackathon-001",
-    "name": "Smart India Hackathon 2026",
-    "shortName": "SIH 2026",
-    "problemStatement": "Problem Statement 26227",
-    "concept": "Offline/On-Premises Satellite Imagery Archive & Retrieval System",
-    "description": "An advanced satellite imagery archive and retrieval system designed for offline/on-premises deployment. The system supports semantic retrieval, multimodal querying, multi-temporal and multi-spectral imagery, change detection, and false-alarm suppression — enabling intelligent geospatial intelligence without internet dependency.",
-    "role": "[ADD YOUR ROLE — e.g., Backend Developer / Full-Stack Developer / ML Engineer]",
-    "team": "[ADD TEAM NAME / MEMBER NAMES]",
-    "teamSize": "[ADD TEAM SIZE]",
+    "name": "BGI Viksit Bharat Hackathon",
+    "shortName": "[ABBREV]",
+    "problemStatement": "Waste management",
+    "concept": "Urban Clean ",
+    "description": "Urban Clean proposes a smart, technology-driven approach to urban sanitation by combining AI-powered waste management, ALOS integration, and a quick complaint reporting mechanism.\n\n- **Rapid Complaint System:** Designed to let users submit waste-related complaints in approximately 3 seconds.\n- **AI-Powered Waste Management:** Focuses on smarter waste segregation and sustainable waste handling.\n- **ALOS Integration:** Incorporates ALOS as part of the proposed solution.\n- **Smart Sanitation:** Aims to improve the reporting and management of garbage accumulation and sanitation issues.\n- **Sustainability:** Promotes cleaner public spaces, responsible waste disposal, and environmental awareness.",
+    "role": "UI/UX - Designer and Communication Head",
+    "team": "Swastika",
+    "date": "14/05/2026",
+    "result": "[ADD RESULT e.g. Finalist / Winner]",
     "technologies": [
-      "Python",
-      "[ADD BACKEND TECHNOLOGY]",
-      "[ADD DATABASE]",
-      "[ADD ML FRAMEWORK]",
-      "[ADD MORE]"
+      "[TECH 1]",
+      "[TECH 2]"
     ],
     "implementedFeatures": [
-      "Semantic retrieval",
-      "Multimodal retrieval",
-      "Multi-temporal imagery support",
-      "Multi-spectral imagery support",
-      "Multi-sensor imagery support",
-      "Change detection",
-      "False-alarm suppression",
-      "Spatial/temporal filtering",
-      "Discovery and clustering",
-      "Incremental ingestion",
-      "Geospatial provenance tracking",
-      "Offline operation capability"
+      "[FEATURE 1]",
+      "[FEATURE 2]"
     ],
     "plannedFeatures": [
-      "Future change prediction",
-      "Negative search",
-      "Image overlay",
-      "Critical zone analysis",
-      "ECI (Environmental Change Index)",
-      "Intervention Impact Simulator"
+      "[PLANNED 1]"
     ],
-    "achievement": "[ADD ACHIEVEMENT — e.g., Selected / Finalist / Winner]",
-    "position": "[ADD POSITION / RESULT]",
-    "date": "2026",
-    "location": "India",
-    "githubUrl": "[ADD GITHUB URL]",
-    "verificationUrl": "",
-    "coverPhoto": "/images/hackathons/sih-team.jpg",
     "photos": [
       {
-        "url": "/images/hackathons/sih-team.jpg",
-        "caption": "SIH 2026 Team during project demonstration",
+        "url": "/images/hackathons/hackathon-001-1791711658640-hack2.jpg",
+        "caption": "hack2",
         "type": "team"
       },
       {
-        "url": "/images/hackathons/sih-certificate.jpg",
-        "caption": "Smart India Hackathon 2026 Official Certificate",
-        "type": "certificate"
+        "url": "/images/hackathons/hackathon-001-1791711673273-hack1.jpg",
+        "caption": "hack1",
+        "type": "team"
       },
       {
-        "url": "/images/hackathons/sih-presentation.jpg",
-        "caption": "Architecture & live system presentation to jury",
-        "type": "presentation"
+        "url": "/images/hackathons/hackathon-001-1791711682554-hack3.jpg",
+        "caption": "hack3",
+        "type": "team"
       }
     ],
-    "timeline": [
-      {
-        "step": "Problem",
-        "description": "Analyzed Problem Statement 26227",
-        "status": "completed"
-      },
-      {
-        "step": "Research",
-        "description": "Researched satellite imagery systems and retrieval algorithms",
-        "status": "completed"
-      },
-      {
-        "step": "Ideation",
-        "description": "Brainstormed architecture and system design",
-        "status": "completed"
-      },
-      {
-        "step": "Architecture",
-        "description": "Designed the complete system architecture",
-        "status": "completed"
-      },
-      {
-        "step": "Development",
-        "description": "Built core retrieval and indexing system",
-        "status": "completed"
-      },
-      {
-        "step": "Testing",
-        "description": "Validated system performance and accuracy",
-        "status": "completed"
-      },
-      {
-        "step": "Presentation",
-        "description": "Demonstrated the system to judges",
-        "status": "completed"
-      },
-      {
-        "step": "Achievement",
-        "description": "[ADD ACHIEVEMENT RESULT]",
-        "status": "current"
-      }
-    ]
-  },
-  {
-    "id": "hackathon-002",
-    "name": "[ADD HACKATHON NAME]",
-    "shortName": "[ADD SHORT NAME]",
-    "problemStatement": "[ADD PROBLEM STATEMENT]",
-    "concept": "[ADD CONCEPT / SOLUTION TITLE]",
-    "description": "[ADD DESCRIPTION OF YOUR SOLUTION AND APPROACH]",
-    "role": "[ADD YOUR ROLE]",
-    "team": "[ADD TEAM INFO]",
-    "teamSize": "[ADD TEAM SIZE]",
-    "technologies": [
-      "[ADD TECHNOLOGY 1]",
-      "[ADD TECHNOLOGY 2]"
-    ],
-    "implementedFeatures": [
-      "[ADD FEATURE 1]",
-      "[ADD FEATURE 2]"
-    ],
-    "plannedFeatures": [
-      "[ADD PLANNED FEATURE]"
-    ],
-    "achievement": "[ADD ACHIEVEMENT]",
-    "position": "[ADD RESULT]",
-    "date": "[ADD DATE]",
-    "location": "",
-    "githubUrl": "[ADD GITHUB URL]",
-    "verificationUrl": "",
-    "coverPhoto": "",
-    "photos": []
+    "githubUrl": "https://github.com/swarnas-14/UrbanClean",
+    "position": "Winner",
+    "achievement": "Winner",
+    "verificationUrl": "https://drive.google.com/file/d/1u3koMpGxqF0J_MAR5npYrwltscTOcm6a/view?usp=drivesdk",
+    "coverPhoto": "/images/hackathons/hackathon-001-1791711658640-hack2.jpg"
   }
 ]

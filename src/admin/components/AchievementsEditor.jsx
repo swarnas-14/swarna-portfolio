@@ -1,7 +1,8 @@
 import { useState } from "react"
-import { Plus, Trash2, Trophy, ExternalLink } from "lucide-react"
+import { Plus, Trash2, Trophy, ExternalLink, Save, RefreshCw } from "lucide-react"
+import EditorActionBar from "./EditorActionBar"
 
-export default function AchievementsEditor({ achievements, onUpdate }) {
+export default function AchievementsEditor({ achievements, onUpdate, onSave, isSaving }) {
   const addAchievement = () => {
     const newId = Date.now()
     const item = {
@@ -23,14 +24,24 @@ export default function AchievementsEditor({ achievements, onUpdate }) {
 
   return (
     <div className="space-y-6">
-      <div className="flex items-center justify-between p-6 rounded-2xl bg-[#0d0d14] border border-[#1e1e2e]">
+      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 p-6 rounded-2xl bg-[#0d0d14] border border-[#1e1e2e]">
         <div>
           <h2 className="font-display font-bold text-2xl text-white">Achievements & Awards</h2>
           <p className="text-xs text-text-muted mt-1">Manage milestone evidence, competition achievements, and academic awards.</p>
         </div>
-        <button onClick={addAchievement} className="btn-primary text-xs flex items-center gap-1.5">
-          <Plus size={14} /> Add Achievement
-        </button>
+        <div className="flex items-center gap-3">
+          <button onClick={addAchievement} className="btn-secondary text-xs flex items-center gap-1.5 py-2 px-3">
+            <Plus size={14} /> Add Achievement
+          </button>
+          <button
+            onClick={onSave}
+            disabled={isSaving}
+            className="btn-primary text-xs flex items-center gap-1.5 py-2 px-4 font-semibold"
+          >
+            {isSaving ? <RefreshCw size={13} className="animate-spin" /> : <Save size={13} />}
+            {isSaving ? "Saving..." : "Save Achievements"}
+          </button>
+        </div>
       </div>
 
       <div className="grid md:grid-cols-2 gap-4">
@@ -129,6 +140,15 @@ export default function AchievementsEditor({ achievements, onUpdate }) {
             </div>
           </div>
         ))}
+      </div>
+
+      <div className="p-6 rounded-2xl bg-[#0d0d14] border border-[#1e1e2e]">
+        <EditorActionBar
+          onSave={onSave}
+          isSaving={isSaving}
+          label="Save Achievements"
+          helperText="Updates your verified awards, competition results & credentials"
+        />
       </div>
     </div>
   )

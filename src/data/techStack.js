@@ -37,24 +37,9 @@ export const techCategories = [
     "color": "#22d3ee",
     "techs": [
       {
-        "name": "Spring Boot",
-        "description": "Java framework for building production-grade web applications",
-        "color": "#6db33f"
-      },
-      {
         "name": "Spring Security",
         "description": "Authentication and authorization for Spring applications",
         "color": "#6db33f"
-      },
-      {
-        "name": "REST APIs",
-        "description": "Designing and building RESTful web services",
-        "color": "#22d3ee"
-      },
-      {
-        "name": "Hibernate/JPA",
-        "description": "Object-relational mapping for database persistence",
-        "color": "#59666c"
       }
     ]
   },
@@ -64,19 +49,9 @@ export const techCategories = [
     "color": "#a78bfa",
     "techs": [
       {
-        "name": "MySQL",
-        "description": "Relational database for structured data",
-        "color": "#4479a1"
-      },
-      {
         "name": "MongoDB",
         "description": "NoSQL document database for flexible schemas",
         "color": "#47a248"
-      },
-      {
-        "name": "Redis",
-        "description": "In-memory data store for caching and sessions",
-        "color": "#dc382d"
       }
     ]
   },
@@ -84,18 +59,7 @@ export const techCategories = [
     "id": "infra",
     "label": "Messaging / Infra",
     "color": "#fb923c",
-    "techs": [
-      {
-        "name": "Kafka",
-        "description": "Distributed event streaming platform",
-        "color": "#000000"
-      },
-      {
-        "name": "Docker",
-        "description": "Containerization for consistent deployment environments",
-        "color": "#2496ed"
-      }
-    ]
+    "techs": []
   },
   {
     "id": "aiml",
@@ -116,11 +80,6 @@ export const techCategories = [
         "name": "Pandas",
         "description": "Data manipulation and analysis",
         "color": "#150458"
-      },
-      {
-        "name": "Machine Learning",
-        "description": "Supervised/unsupervised learning concepts and implementation",
-        "color": "#34d399"
       }
     ]
   },
@@ -153,11 +112,6 @@ export const techCategories = [
         "name": "Postman",
         "description": "API testing and documentation",
         "color": "#ff6c37"
-      },
-      {
-        "name": "Swagger",
-        "description": "API documentation and exploration",
-        "color": "#85ea2d"
       }
     ]
   }
