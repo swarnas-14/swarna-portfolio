@@ -104,7 +104,7 @@ export default function App() {
 
   // ── Public Portfolio ───────────────────────────────────────────────
   return (
-    <div className="min-h-screen bg-bg-primary text-text-primary selection:bg-accent-indigo/30 selection:text-white relative">
+    <div className="min-h-screen bg-bg-primary text-text-primary selection:bg-accent-indigo/20 selection:text-text-primary relative">
       {/* Cinematic Kernel Bootloader Sequence */}
       <Loader />
 

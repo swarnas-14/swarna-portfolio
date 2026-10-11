@@ -1,307 +1,259 @@
-import { useRef, useState, useEffect, Suspense, Component } from "react"
-import { Canvas, useFrame, useThree } from "@react-three/fiber"
+import { useEffect } from "react"
 import { motion } from "framer-motion"
-import { ArrowDown, FileText, ChevronRight } from "lucide-react"
-import * as THREE from "three"
+import { ArrowDown, FileText } from "lucide-react"
 import { profile } from "../../data/profile"
 import { projects } from "../../data/projects"
 import { hackathons } from "../../data/hackathons"
 import { dsaStats } from "../../data/dsa"
 import { isRealValue } from "../../utils/hasContent"
-import ComputationalCore from "./ComputationalCore"
 
-// ── Error Boundary ──────────────────────────────────────────────────────────
-class CanvasErrorBoundary extends Component {
-  constructor(props) { super(props); this.state = { hasError: false } }
-  static getDerivedStateFromError() { return { hasError: true } }
-  render() {
-    if (this.state.hasError) return (
-      <div className="w-full h-full flex items-center justify-center text-text-muted text-sm">
-        <div className="text-center">
-          <div className="text-4xl mb-2">⬡</div>
-          <p>3D unavailable</p>
-        </div>
-      </div>
-    )
-    return this.props.children
-  }
-}
-
-// ── Tech Node Labels ─────────────────────────────────────────────────────────
-const TECH_NODES = [
-  { label: "Java",      pos: [1.8, 0.5, 0],    color: "#f89820" },
-  { label: "Python",    pos: [-1.6, 1.0, 0.5],  color: "#3776ab" },
-  { label: "Spring",    pos: [0.8, 1.8, -0.5],  color: "#6db33f" },
-  { label: "MySQL",     pos: [-0.9, -1.5, 0.3], color: "#4479a1" },
-  { label: "MongoDB",   pos: [2.0, -0.8, 0.2],  color: "#47a248" },
-  { label: "Redis",     pos: [-2.1, 0.1, -0.4], color: "#dc382d" },
-  { label: "Docker",    pos: [0.3, -2.0, 0.6],  color: "#2496ed" },
-  { label: "Kafka",     pos: [1.2, -1.2, -0.8], color: "#a78bfa" },
-  { label: "React",     pos: [-1.3, -0.8, 1.0], color: "#61dafb" },
-  { label: "Git",       pos: [-0.4, 2.0, -0.3], color: "#f05032" },
-  { label: "AI/ML",     pos: [1.5, 1.2, 0.9],   color: "#34d399" },
-  { label: "REST",      pos: [-1.8, 1.5, -0.6], color: "#22d3ee" },
-  { label: "NumPy",     pos: [0.6, -1.6, -1.0], color: "#013243" },
-  { label: "Pandas",    pos: [-0.7, 0.9, 1.5],  color: "#150458" },
-  { label: "DSA",       pos: [2.2, 0.2, -0.7],  color: "#6366f1" },
-  { label: "Security",  pos: [-2.0, -1.2, 0.8], color: "#f472b6" },
-  { label: "Hibernate", pos: [1.0, 0.0, -1.8],  color: "#59666c" },
-  { label: "JS",        pos: [-0.2, -0.5, 2.0], color: "#f7df1e" },
-  { label: "Swagger",   pos: [1.8, -1.8, 0.5],  color: "#85ea2d" },
-  { label: "Cloud",     pos: [-1.5, -0.2, -1.5],color: "#60a5fa" },
-]
-
-const CONNECTIONS = [
-  [0,2],[0,3],[0,14],[0,16],[1,10],[1,12],[1,13],[2,3],[2,16],[3,4],
-  [4,5],[5,8],[6,7],[7,14],[8,11],[9,0],[10,12],[11,1],[15,5],[17,8]
-]
-
-function Node({ position, color, label }) {
-  const mesh = useRef()
-  const [hovered, setHovered] = useState(false)
-  useFrame((state) => {
-    if (mesh.current) {
-      mesh.current.rotation.x = state.clock.elapsedTime * 0.3
-      mesh.current.rotation.y = state.clock.elapsedTime * 0.4
-      const s = hovered ? 1.5 : 1
-      mesh.current.scale.lerp(new THREE.Vector3(s, s, s), 0.1)
-    }
+const fadeUp = {
+  hidden: { opacity: 0, y: 40 },
+  visible: (delay = 0) => ({
+    opacity: 1,
+    y: 0,
+    transition: { duration: 0.8, ease: [0.25, 0.46, 0.45, 0.94], delay }
   })
-  return (
-    <mesh
-      ref={mesh}
-      position={position}
-      onPointerOver={() => setHovered(true)}
-      onPointerOut={() => setHovered(false)}
-    >
-      <sphereGeometry args={[0.1, 16, 16]} />
-      <meshStandardMaterial
-        color={color}
-        emissive={color}
-        emissiveIntensity={hovered ? 1.5 : 0.8}
-        roughness={0.1}
-        metalness={0.8}
-      />
-    </mesh>
-  )
 }
 
-function ConnectionLine({ from, to }) {
-  const ref = useRef()
-  const start = new THREE.Vector3(...from)
-  const end = new THREE.Vector3(...to)
-  const points = [start, end]
-  const geometry = new THREE.BufferGeometry().setFromPoints(points)
-  return (
-    <line geometry={geometry}>
-      <lineBasicMaterial color="#1e1e4e" transparent opacity={0.5} />
-    </line>
-  )
-}
-
-function Particles() {
-  const ref = useRef()
-  const count = 200
-  const positions = new Float32Array(count * 3)
-  for (let i = 0; i < count; i++) {
-    positions[i * 3] = (Math.random() - 0.5) * 8
-    positions[i * 3 + 1] = (Math.random() - 0.5) * 8
-    positions[i * 3 + 2] = (Math.random() - 0.5) * 8
-  }
-  useFrame((state) => {
-    if (ref.current) ref.current.rotation.y = state.clock.elapsedTime * 0.02
-  })
-  return (
-    <points ref={ref}>
-      <bufferGeometry>
-        <bufferAttribute
-          attach="attributes-position"
-          args={[positions, 3]}
-        />
-      </bufferGeometry>
-      <pointsMaterial size={0.015} color="#6366f1" transparent opacity={0.6} />
-    </points>
-  )
-}
-
-function SceneCamera({ mouse }) {
-  const { camera } = useThree()
-  useFrame(() => {
-    camera.position.x += (mouse.current.x * 0.6 - camera.position.x) * 0.04
-    camera.position.y += (mouse.current.y * 0.4 - camera.position.y) * 0.04
-    camera.lookAt(0, 0, 0)
-  })
-  return null
-}
-
-function NodeNetwork({ mouse }) {
-  return (
-    <>
-      <ambientLight intensity={0.4} />
-      <pointLight position={[5, 5, 5]} color="#6366f1" intensity={2.5} />
-      <pointLight position={[-5, -5, -5]} color="#22d3ee" intensity={2} />
-      <SceneCamera mouse={mouse} />
-      <ComputationalCore />
-      {TECH_NODES.map((node, i) => (
-        <Node key={i} position={node.pos} color={node.color} label={node.label} />
-      ))}
-      {CONNECTIONS.map(([a, b], i) => (
-        <ConnectionLine key={i} from={TECH_NODES[a].pos} to={TECH_NODES[b].pos} />
-      ))}
-    </>
-  )
-}
-
-// ── Animation Variants ───────────────────────────────────────────────────────
-const container = {
-  hidden: {},
-  visible: { transition: { staggerChildren: 0.1 } }
-}
-const item = {
-  hidden: { opacity: 0, y: 30 },
-  visible: { opacity: 1, y: 0, transition: { duration: 0.8, ease: [0.25, 0.46, 0.45, 0.94] } }
-}
-
-// ── Hero Component ───────────────────────────────────────────────────────────
 export default function Hero() {
-  const mouse = useRef({ x: 0, y: 0 })
+  const scrollToProjects = () =>
+    document.getElementById("projects")?.scrollIntoView({ behavior: "smooth" })
+
+  const nameParts = (profile.name || "Swarna Sahu").split(" ")
+  const firstName = (nameParts[0] || "SWARNA").toUpperCase()
+  const lastName = (nameParts.slice(1).join(" ") || "SAHU").toUpperCase()
 
   useEffect(() => {
-    const onMove = (e) => {
-      mouse.current.x = (e.clientX / window.innerWidth - 0.5) * 2
-      mouse.current.y = -(e.clientY / window.innerHeight - 0.5) * 2
-    }
-    window.addEventListener("mousemove", onMove)
-    return () => window.removeEventListener("mousemove", onMove)
+    const link = document.createElement("link")
+    link.rel  = "stylesheet"
+    link.href = "https://fonts.googleapis.com/css2?family=Dancing+Script:wght@600&display=swap"
+    document.head.appendChild(link)
+    return () => { if (document.head.contains(link)) document.head.removeChild(link) }
   }, [])
 
-  const scrollToProjects = () => document.getElementById("projects")?.scrollIntoView({ behavior: "smooth" })
-
   return (
-    <section id="home" className="relative min-h-screen flex items-center grid-bg overflow-hidden">
-      {/* Background gradient blobs */}
-      <div className="absolute inset-0 pointer-events-none">
-        <div className="absolute top-1/4 left-1/4 w-96 h-96 rounded-full opacity-10 blur-3xl" style={{ background: "radial-gradient(circle, #e879a0, transparent)" }} />
-        <div className="absolute bottom-1/4 right-1/4 w-72 h-72 rounded-full opacity-8 blur-3xl" style={{ background: "radial-gradient(circle, #f59e42, transparent)" }} />
+    <section
+      id="home"
+      className="relative min-h-screen flex items-center overflow-hidden"
+      style={{ background: "linear-gradient(135deg,#FFFFFF 0%,#FAFAFA 50%,#F5F7FF 100%)" }}
+    >
+      {/* ── Ambient glows ── */}
+      <div className="absolute inset-0 pointer-events-none select-none">
+        <div className="absolute top-1/4 left-1/3 w-[500px] h-[500px] rounded-full opacity-10 blur-[120px]"
+          style={{ background: "radial-gradient(circle,#0866E8,transparent)" }} />
+        <div className="absolute bottom-1/4 right-1/4 w-72 h-72 rounded-full opacity-10 blur-3xl"
+          style={{ background: "radial-gradient(circle,#18C5E8,transparent)" }} />
+        <div className="absolute top-3/4 left-1/4 w-48 h-48 rounded-full opacity-08 blur-3xl"
+          style={{ background: "radial-gradient(circle,#7434C5,transparent)" }} />
       </div>
 
-      <div className="relative max-w-7xl mx-auto px-6 w-full py-24 grid lg:grid-cols-2 gap-16 items-center">
-        {/* ─ Left: Text ─ */}
-        <motion.div
-          variants={container}
-          initial="hidden"
-          animate="visible"
-          className="space-y-8"
-        >
-          {/* Availability badge with Spider-Sense wave & radar ping */}
-          <motion.div variants={item} className="inline-flex items-center gap-2">
-            <span
-              className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full text-xs font-medium spider-sense"
-              style={{ background: "rgba(34,197,94,0.1)", border: "1px solid rgba(34,197,94,0.3)", color: "#4ade80" }}
-            >
-              <span className="w-2 h-2 rounded-full bg-emerald-400 radar-ring animate-pulse" />
-              {profile.availableForInternships ? `Available for Opportunities · ${profile.city || "India"}` : profile.city || "India"}
-            </span>
-          </motion.div>
+      {/* ── Subtle grid ── */}
+      <div className="absolute inset-0 pointer-events-none opacity-[0.03]"
+        style={{
+          backgroundImage:
+            "linear-gradient(rgba(8,102,232,.5) 1px,transparent 1px),linear-gradient(90deg,rgba(8,102,232,.5) 1px,transparent 1px)",
+          backgroundSize: "60px 60px"
+        }} />
 
-          {/* Name with Spider-Verse Chromatic Glitch */}
-          <motion.div variants={item}>
-            <h1 className="font-display font-black leading-none tracking-tighter" style={{ fontSize: "clamp(4rem, 10vw, 7rem)" }}>
-              {(() => {
-                const nameParts = (profile.name || "Swarna Sahu").split(" ")
-                const first = nameParts[0] || "SWARNA"
-                const rest = nameParts.slice(1).join(" ") || "SAHU"
-                return (
-                  <div className="spider-glitch" data-text={`${first} ${rest}`}>
-                    <span className="block text-text-primary uppercase tracking-tight">{first}</span>
-                    <span className="block gradient-text uppercase tracking-tight">{rest}</span>
+      {/* ── Content wrapper ── */}
+      <div className="relative w-full max-w-7xl mx-auto px-6 py-24 min-h-screen flex items-center">
+
+        {/* ══ Two-column grid ══ */}
+        <div className="relative z-10 w-full grid lg:grid-cols-2 gap-12 items-center">
+
+          {/* ── Left: text content ── */}
+          <div className="space-y-7 lg:pr-8">
+
+            {/* Availability badge */}
+            <motion.div custom={0} variants={fadeUp} initial="hidden" animate="visible"
+              className="inline-flex items-center gap-2">
+              <span className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full text-xs font-semibold"
+                style={{ background: "rgba(16, 185, 129, 0.08)", border: "1px solid rgba(16, 185, 129, 0.25)", color: "#059669" }}>
+                <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
+                {profile.availableForInternships
+                  ? `Available for Opportunities · ${profile.city || "India"}`
+                  : profile.city || "India"}
+              </span>
+            </motion.div>
+
+            {/* Degree line */}
+            <motion.p custom={0.15} variants={fadeUp} initial="hidden" animate="visible"
+              className="text-accent-indigo font-mono text-xs sm:text-sm font-semibold tracking-widest uppercase">
+              {[profile.degree, profile.branch, profile.semester].filter(isRealValue).join(" · ")
+                || "Computer Science & Engineering"}
+            </motion.p>
+
+            {/* Main Headline */}
+            <motion.h1 custom={0.25} variants={fadeUp} initial="hidden" animate="visible"
+              className="text-4xl sm:text-5xl lg:text-6xl font-display font-black text-text-primary tracking-tight leading-[1.12]">
+              Building elegant solutions to{" "}
+              <span className="gradient-text">complex problems.</span>
+            </motion.h1>
+
+            {/* Introduction */}
+            <motion.p custom={0.35} variants={fadeUp} initial="hidden" animate="visible"
+              className="text-text-secondary text-base sm:text-lg leading-relaxed max-w-lg">
+              {profile.introduction ||
+                "Computer Science undergraduate passionate about building clean, impactful software across the full stack."}
+            </motion.p>
+
+            {/* CTA buttons */}
+            <motion.div custom={0.45} variants={fadeUp} initial="hidden" animate="visible"
+              className="flex flex-wrap gap-4">
+              <button onClick={scrollToProjects} className="btn-primary" data-cursor="EXPLORE">
+                Explore My Work <ArrowDown size={16} />
+              </button>
+              {isRealValue(profile.resumeUrl) ? (
+                <a href={profile.resumeUrl} target="_blank" rel="noopener noreferrer"
+                  className="btn-secondary" data-cursor="RESUME">
+                  <FileText size={16} /> View Resume
+                </a>
+              ) : (
+                <a href="#contact" className="btn-secondary" data-cursor="CONTACT">
+                  <FileText size={16} /> Get In Touch
+                </a>
+              )}
+            </motion.div>
+
+            {/* Stats */}
+            <motion.div custom={0.55} variants={fadeUp} initial="hidden" animate="visible"
+              className="flex flex-wrap items-center gap-6 pt-2">
+              {[
+                { value: dsaStats?.solvedCount || "100+", label: "LeetCode" },
+                { value: `${projects.length}+`,           label: "Projects"  },
+                { value: `${hackathons.length}+`,         label: "Hackathons"}
+              ].map((stat, i) => (
+                <div key={i} className="flex items-center gap-4">
+                  {i > 0 && <div className="w-px h-8 bg-border" />}
+                  <div>
+                    <div className="font-display font-bold text-text-primary text-xl gradient-text">{stat.value}</div>
+                    <div className="text-text-secondary text-xs uppercase tracking-wider font-medium">{stat.label}</div>
                   </div>
-                )
-              })()}
-            </h1>
-          </motion.div>
+                </div>
+              ))}
+            </motion.div>
+          </div>
 
-          {/* Subtitle */}
-          <motion.p variants={item} className="text-text-muted font-mono text-sm tracking-widest uppercase">
-            {[profile.degree, profile.branch, profile.semester].filter(isRealValue).join(" · ") || "Computer Science & Engineering"}
-          </motion.p>
+          {/* ── Right: Portrait with Oversized Name Behind ── */}
+          <motion.div
+            initial={{ opacity: 0, y: 50 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 1, ease: [0.25, 0.46, 0.45, 0.94], delay: 0.2 }}
+            className="relative flex items-center justify-center"
+          >
+            <div className="relative">
 
-          {/* Tagline */}
-          <motion.p variants={item} className="text-text-secondary text-xl leading-relaxed max-w-lg">
-            {profile.tagline || "I build scalable software, intelligent systems, and interactive digital experiences."}
-          </motion.p>
-
-          {/* Bio */}
-          <motion.p variants={item} className="text-text-muted text-base leading-relaxed max-w-lg">
-            {profile.introduction || "Computer Science undergraduate focused on software development, backend engineering, problem solving, and emerging technologies."}
-          </motion.p>
-
-          {/* CTAs */}
-          <motion.div variants={item} className="flex flex-wrap gap-4">
-            <button onClick={scrollToProjects} className="btn-primary" data-cursor="EXPLORE">
-              Explore My Work <ArrowDown size={16} />
-            </button>
-            {isRealValue(profile.resumeUrl) ? (
-              <a href={profile.resumeUrl} target="_blank" rel="noopener noreferrer" className="btn-secondary" data-cursor="RESUME">
-                <FileText size={16} /> View Resume
-              </a>
-            ) : (
-              <a href="#contact" className="btn-secondary" data-cursor="CONTACT">
-                <FileText size={16} /> Get In Touch
-              </a>
-            )}
-          </motion.div>
-
-          {/* Stats row */}
-          <motion.div variants={item} className="flex flex-wrap items-center gap-6 pt-2">
-            {[
-              { value: dsaStats?.solvedCount || "100+", label: "LeetCode" },
-              { value: `${projects.length}+`, label: "Projects" },
-              { value: `${hackathons.length}+`, label: "Hackathons" },
-            ].map((stat, i) => (
-              <div key={i} className="flex items-center gap-4">
-                {i > 0 && <div className="w-px h-8 bg-border" />}
-                <div>
-                  <div className="font-display font-bold text-text-primary text-lg gradient-text">{stat.value}</div>
-                  <div className="text-text-muted text-xs uppercase tracking-widest">{stat.label}</div>
+              {/* ══ OVERSIZED NAME ══ */}
+              <div
+                className="relative select-none z-10 text-center whitespace-nowrap py-14 px-8"
+                aria-hidden="true"
+              >
+                <div style={{
+                  fontFamily: "'Space Grotesk',sans-serif",
+                  fontSize: "clamp(4.5rem, 10vw, 10rem)",
+                  fontWeight: 900,
+                  lineHeight: 0.88,
+                  letterSpacing: "-0.02em",
+                  color: "rgba(16,24,45,0.07)",
+                  textShadow: "none"
+                }}>
+                  {firstName}
+                </div>
+                <div style={{
+                  fontFamily: "'Space Grotesk',sans-serif",
+                  fontSize: "clamp(4.5rem, 10vw, 10rem)",
+                  fontWeight: 900,
+                  lineHeight: 0.88,
+                  letterSpacing: "0.15em",
+                  background: "linear-gradient(90deg,#0866E8 0%,#7434C5 50%,#D96CE8 100%)",
+                  WebkitBackgroundClip: "text",
+                  WebkitTextFillColor: "transparent",
+                  backgroundClip: "text",
+                  filter: "drop-shadow(0 0 35px rgba(8,102,232,.25))"
+                }}>
+                  {lastName}
                 </div>
               </div>
-            ))}
+
+              {/* "Hello, I'm" handwritten label */}
+              <motion.div
+                initial={{ opacity: 0, x: -20, rotate: -5 }}
+                animate={{ opacity: 1, x: 0,  rotate: -8 }}
+                transition={{ duration: 0.9, ease: "easeOut", delay: 0.7 }}
+                className="absolute -top-8 left-2 z-20 pointer-events-none"
+                style={{
+                  fontFamily: "'Dancing Script',cursive",
+                  fontSize: "clamp(1rem,2.5vw,1.4rem)",
+                  color: "#0866E8",
+                  textShadow: "0 0 20px rgba(8,102,232,.3)",
+                  whiteSpace: "nowrap"
+                }}
+              >
+                Hello, I'm
+              </motion.div>
+
+              {/* Decorative glow ring */}
+              <motion.div
+                initial={{ opacity: 0, scale: 0.8 }}
+                animate={{ opacity: 1, scale: 1 }}
+                transition={{ duration: 1.2, delay: 0.3 }}
+                className="absolute -inset-4 rounded-2xl pointer-events-none"
+                style={{
+                  border: "1px solid rgba(8,102,232,.15)",
+                  background: "linear-gradient(135deg,rgba(8,102,232,.04),rgba(116,52,197,.04))"
+                }}
+              />
+
+              {/* Corner accent dots */}
+              <div className="absolute -top-2 -right-2 w-4 h-4 rounded-full z-20"
+                style={{ background: "linear-gradient(135deg,#0866E8,#18C5E8)" }} />
+              <div className="absolute -bottom-2 -left-2 w-3 h-3 rounded-full z-20"
+                style={{ background: "linear-gradient(135deg,#7434C5,#D96CE8)" }} />
+
+              {/* Floating: role badge */}
+              <motion.div
+                initial={{ opacity: 0, x: 20 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ duration: 0.8, delay: 1.0 }}
+                className="absolute -right-5 top-1/3 z-20 hidden lg:block"
+              >
+                <div className="px-3 py-2 rounded-xl text-xs font-mono font-semibold"
+                  style={{
+                    background:"rgba(255,255,255,.95)",
+                    border:"1px solid rgba(8,102,232,.3)",
+                    color:"#0866E8",
+                    backdropFilter:"blur(12px)",
+                    boxShadow:"0 8px 24px rgba(8,102,232,.12)"
+                  }}>
+                  Full-Stack Dev 🚀
+                </div>
+              </motion.div>
+
+              {/* Floating: location badge */}
+              <motion.div
+                initial={{ opacity: 0, x: -20 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ duration: 0.8, delay: 1.1 }}
+                className="absolute -left-5 bottom-1/4 z-20 hidden lg:block"
+              >
+                <div className="px-3 py-2 rounded-xl text-xs font-mono font-semibold"
+                  style={{
+                    background:"rgba(255,255,255,.95)",
+                    border:"1px solid rgba(116,52,197,.3)",
+                    color:"#7434C5",
+                    backdropFilter:"blur(12px)",
+                    boxShadow:"0 8px 24px rgba(116,52,197,.12)"
+                  }}>
+                  📍 {profile.city || "Bhopal, India"}
+                </div>
+              </motion.div>
+            </div>
           </motion.div>
-        </motion.div>
-
-        {/* ─ Right: 3D Scene ─ */}
-        <motion.div
-          initial={{ opacity: 0, scale: 0.9 }}
-          animate={{ opacity: 1, scale: 1 }}
-          transition={{ duration: 1.2, ease: [0.25, 0.46, 0.45, 0.94], delay: 0.3 }}
-          className="relative w-full aspect-square lg:aspect-auto lg:h-[600px]"
-        >
-          <CanvasErrorBoundary>
-            <Canvas
-              dpr={[1, 2]}
-              camera={{ position: [0, 0, 5], fov: 60 }}
-              style={{ background: "transparent" }}
-            >
-              <Suspense fallback={null}>
-                <NodeNetwork mouse={mouse} />
-              </Suspense>
-            </Canvas>
-          </CanvasErrorBoundary>
-
-          {/* Decorative ring */}
-          <div
-            className="absolute inset-4 rounded-full pointer-events-none"
-            style={{ border: "1px solid rgba(99,102,241,0.1)", animation: "spin 30s linear infinite" }}
-          />
-          <div
-            className="absolute inset-12 rounded-full pointer-events-none"
-            style={{ border: "1px dashed rgba(34,211,238,0.08)", animation: "spin 20s linear infinite reverse" }}
-          />
-        </motion.div>
+        </div>
       </div>
 
-      {/* Scroll indicator */}
+      {/* ── Scroll indicator ── */}
       <motion.div
         className="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2"
         initial={{ opacity: 0 }}
@@ -311,16 +263,23 @@ export default function Hero() {
         <span className="text-text-muted text-xs font-mono tracking-widest uppercase">Scroll</span>
         <motion.div
           className="w-5 h-8 rounded-full flex items-start justify-center pt-1.5"
-          style={{ border: "1px solid rgba(99,102,241,0.4)" }}
+          style={{ border: "1px solid rgba(8,102,232,.4)" }}
         >
           <motion.div
             className="w-1 h-2 rounded-full"
-            style={{ background: "#6366f1" }}
+            style={{ background: "#0866E8" }}
             animate={{ y: [0, 12, 0] }}
             transition={{ repeat: Infinity, duration: 1.5, ease: "easeInOut" }}
           />
         </motion.div>
       </motion.div>
+
+      {/* Reduced-motion override */}
+      <style>{`
+        @media (prefers-reduced-motion: reduce) {
+          * { animation-duration:.01ms!important; transition-duration:.01ms!important; }
+        }
+      `}</style>
     </section>
   )
 }

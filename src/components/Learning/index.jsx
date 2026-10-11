@@ -1,4 +1,4 @@
-﻿import { motion } from "framer-motion"
+import { motion } from "framer-motion"
 import SectionHeader from "../ui/SectionHeader"
 import { Server, Cpu, BrainCircuit, Sparkles, ArrowRight } from "lucide-react"
 
@@ -6,7 +6,7 @@ const tracks = [
   {
     icon: Server,
     title: "Advanced Backend & Distributed Systems",
-    color: "#6366f1",
+    color: "#0866E8",
     status: "Active Exploration",
     topics: [
       "Microservices Architecture & API Gateway patterns",
@@ -18,7 +18,7 @@ const tracks = [
   {
     icon: Cpu,
     title: "Applied AI & Intelligent Workflows",
-    color: "#22d3ee",
+    color: "#18C5E8",
     status: "In Progress",
     topics: [
       "Multimodal Satellite Image Retrieval & Vector Embeddings",
@@ -30,7 +30,7 @@ const tracks = [
   {
     icon: BrainCircuit,
     title: "System Design & Competitive DSA",
-    color: "#a78bfa",
+    color: "#7434C5",
     status: "Continuous Growth",
     topics: [
       "Low-Level & High-Level Object-Oriented System Design",

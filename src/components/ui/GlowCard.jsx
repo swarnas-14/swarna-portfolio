@@ -4,7 +4,7 @@ import { motion } from "framer-motion"
 export default function GlowCard({
   children,
   className = "",
-  glowColor = "rgba(99, 102, 241, 0.15)",
+  glowColor = "rgba(8, 102, 232, 0.12)",
   tiltIntensity = 0.035,
   ...props
 }) {

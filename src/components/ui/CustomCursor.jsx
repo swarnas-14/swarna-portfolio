@@ -57,7 +57,7 @@ export default function CustomCursor() {
     <>
       {/* Instant Center Pointer Dot */}
       <motion.div
-        className="fixed top-0 left-0 w-1.5 h-1.5 rounded-full bg-accent-cyan pointer-events-none z-[99999]"
+        className="fixed top-0 left-0 w-2 h-2 rounded-full bg-accent-indigo pointer-events-none z-[99999]"
         style={{
           x: mouseX,
           y: mouseY,
@@ -80,15 +80,15 @@ export default function CustomCursor() {
           height: label ? 28 : isHovering ? 46 : 30,
           borderRadius: label ? "14px" : "50%",
           backgroundColor: label
-            ? "rgba(10, 10, 20, 0.85)"
+            ? "rgba(255, 255, 255, 0.92)"
             : isHovering
-            ? "rgba(99, 102, 241, 0.12)"
-            : "rgba(34, 211, 238, 0.05)",
+            ? "rgba(8, 102, 232, 0.08)"
+            : "rgba(24, 197, 232, 0.05)",
           borderColor: label
-            ? "#22d3ee"
+            ? "#0866E8"
             : isHovering
-            ? "rgba(99, 102, 241, 0.7)"
-            : "rgba(34, 211, 238, 0.4)",
+            ? "rgba(8, 102, 232, 0.6)"
+            : "rgba(24, 197, 232, 0.4)",
           borderWidth: "1.5px"
         }}
         transition={{ type: "spring", stiffness: 350, damping: 25 }}
@@ -97,7 +97,7 @@ export default function CustomCursor() {
           <motion.span
             initial={{ opacity: 0, scale: 0.8 }}
             animate={{ opacity: 1, scale: 1 }}
-            className="text-accent-cyan select-none"
+            className="text-accent-indigo select-none"
           >
             {label}
           </motion.span>

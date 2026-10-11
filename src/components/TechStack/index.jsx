@@ -1,4 +1,4 @@
-﻿import { useState } from "react"
+import { useState } from "react"
 import { motion, AnimatePresence } from "framer-motion"
 import { techCategories } from "../../data/techStack"
 import SectionHeader from "../ui/SectionHeader"
@@ -63,7 +63,7 @@ export default function TechStack() {
                     <div className="flex items-center gap-3">
                       <div
                         className="w-3.5 h-3.5 rounded-full ring-2 ring-offset-2 ring-offset-bg-card"
-                        style={{ backgroundColor: tech.color || "#6366f1", ringColor: tech.color || "#6366f1" }}
+                        style={{ backgroundColor: tech.color || "#0866E8", ringColor: tech.color || "#0866E8" }}
                       />
                       <span className="font-display font-bold text-text-primary text-base">
                         {tech.name}

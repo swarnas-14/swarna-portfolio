@@ -49,9 +49,10 @@ export default function Navbar() {
       <motion.header
         className="fixed top-0 left-0 right-0 z-50 transition-all duration-300"
         style={{
-          background: scrolled ? "rgba(13,13,20,0.85)" : "transparent",
+          background: scrolled ? "rgba(255,255,255,0.9)" : "transparent",
           backdropFilter: scrolled ? "blur(20px)" : "none",
-          borderBottom: scrolled ? "1px solid rgba(30,30,46,0.8)" : "1px solid transparent",
+          borderBottom: scrolled ? "1px solid rgba(212,212,212,0.8)" : "1px solid transparent",
+          boxShadow: scrolled ? "0 4px 20px rgba(0,0,0,0.06)" : "none",
         }}
         initial={{ y: -80 }}
         animate={{ y: 0 }}
@@ -62,7 +63,7 @@ export default function Navbar() {
           <button onClick={() => scrollTo("home")} className="flex items-center gap-3 group">
             <div
               className="w-9 h-9 rounded-lg flex items-center justify-center font-display font-bold text-sm"
-              style={{ background: "linear-gradient(135deg, #e879a0, #f59e42)" }}
+              style={{ background: "linear-gradient(135deg, #0866E8, #7434C5)" }}
             >
               SS
             </div>
@@ -76,7 +77,7 @@ export default function Navbar() {
                 key={link.id}
                 onClick={() => scrollTo(link.id)}
                 className="relative px-4 py-2 text-sm font-medium transition-colors duration-200 rounded-lg"
-                style={{ color: activeSection === link.id ? "#f1f5f9" : "#64748b" }}
+                style={{ color: activeSection === link.id ? "#171717" : "#737373" }}
               >
                 {activeSection === link.id && (
                   <motion.div
@@ -120,7 +121,7 @@ export default function Navbar() {
         {mobileOpen && (
           <motion.div
             className="fixed inset-0 z-40 flex flex-col items-center justify-center"
-            style={{ background: "rgba(5,5,8,0.98)", backdropFilter: "blur(30px)" }}
+            style={{ background: "rgba(255,255,255,0.98)", backdropFilter: "blur(30px)" }}
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
@@ -132,7 +133,7 @@ export default function Navbar() {
                   key={link.id}
                   onClick={() => scrollTo(link.id)}
                   className="font-display text-3xl font-bold transition-colors duration-200"
-                  style={{ color: activeSection === link.id ? "#6366f1" : "#94a3b8" }}
+                  style={{ color: activeSection === link.id ? "#0866E8" : "#737373" }}
                   initial={{ opacity: 0, y: 30 }}
                   animate={{ opacity: 1, y: 0 }}
                   exit={{ opacity: 0, y: 30 }}

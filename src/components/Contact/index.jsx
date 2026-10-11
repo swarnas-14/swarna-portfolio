@@ -197,17 +197,17 @@ export default function Contact() {
                 title="View GitHub profile"
               >
                 <div className="flex items-center gap-4">
-                  <div className="w-11 h-11 rounded-xl glass flex items-center justify-center text-accent-cyan group-hover:scale-110 transition-transform">
+                  <div className="w-11 h-11 rounded-xl glass flex items-center justify-center text-accent-indigo group-hover:scale-110 transition-transform">
                     <Github size={20} />
                   </div>
                   <div>
                     <div className="text-xs text-text-muted font-mono uppercase tracking-wider">GitHub Profile</div>
-                    <div className="text-sm font-medium text-text-primary group-hover:text-accent-cyan transition-colors">
+                    <div className="text-sm font-medium text-text-primary group-hover:text-accent-indigo transition-colors">
                       {githubDisplay}
                     </div>
                   </div>
                 </div>
-                <ArrowUpRight size={16} className="text-text-muted group-hover:text-accent-cyan transition-colors" />
+                <ArrowUpRight size={16} className="text-text-muted group-hover:text-accent-indigo transition-colors" />
               </a>
 
               {/* LinkedIn */}
@@ -224,12 +224,12 @@ export default function Contact() {
                   </div>
                   <div>
                     <div className="text-xs text-text-muted font-mono uppercase tracking-wider">LinkedIn Network</div>
-                    <div className="text-sm font-medium text-text-primary group-hover:text-accent-cyan transition-colors">
+                    <div className="text-sm font-medium text-text-primary group-hover:text-accent-indigo transition-colors">
                       {linkedinDisplay}
                     </div>
                   </div>
                 </div>
-                <ArrowUpRight size={16} className="text-text-muted group-hover:text-accent-cyan transition-colors" />
+                <ArrowUpRight size={16} className="text-text-muted group-hover:text-accent-indigo transition-colors" />
               </a>
 
               {/* Resume */}
@@ -242,17 +242,17 @@ export default function Contact() {
                   title="View Resume"
                 >
                   <div className="flex items-center gap-4">
-                    <div className="w-11 h-11 rounded-xl glass flex items-center justify-center text-amber-400 group-hover:scale-110 transition-transform">
+                    <div className="w-11 h-11 rounded-xl glass flex items-center justify-center text-accent-indigo group-hover:scale-110 transition-transform">
                       <FileText size={20} />
                     </div>
                     <div>
                       <div className="text-xs text-text-muted font-mono uppercase tracking-wider">Resume / CV</div>
-                      <div className="text-sm font-medium text-text-primary group-hover:text-accent-cyan transition-colors">
+                      <div className="text-sm font-medium text-text-primary group-hover:text-accent-indigo transition-colors">
                         View Curriculum Vitae
                       </div>
                     </div>
                   </div>
-                  <ArrowUpRight size={16} className="text-text-muted group-hover:text-accent-cyan transition-colors" />
+                  <ArrowUpRight size={16} className="text-text-muted group-hover:text-accent-indigo transition-colors" />
                 </a>
               )}
 
@@ -440,10 +440,10 @@ export default function Contact() {
                 <motion.div
                   initial={{ opacity: 0, y: 10 }}
                   animate={{ opacity: 1, y: 0 }}
-                  className="p-4 rounded-xl bg-emerald-500/10 border border-emerald-500/30 flex items-center gap-3 text-emerald-400 text-xs"
+                  className="p-4 rounded-xl bg-emerald-50 border border-emerald-300 flex items-center gap-3 text-emerald-700 text-xs font-medium"
                 >
-                  <CheckCircle2 size={18} className="shrink-0 text-emerald-400" />
-                  <span className="font-medium">{statusMessage}</span>
+                  <CheckCircle2 size={18} className="shrink-0 text-emerald-600" />
+                  <span>{statusMessage}</span>
                 </motion.div>
               )}
 
@@ -451,16 +451,16 @@ export default function Contact() {
                 <motion.div
                   initial={{ opacity: 0, y: 10 }}
                   animate={{ opacity: 1, y: 0 }}
-                  className="p-4 rounded-xl bg-rose-500/10 border border-rose-500/30 flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-rose-400 text-xs"
+                  className="p-4 rounded-xl bg-rose-50 border border-rose-300 flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-rose-700 text-xs font-medium"
                 >
                   <div className="flex items-center gap-2.5">
-                    <AlertCircle size={18} className="shrink-0 text-rose-400" />
+                    <AlertCircle size={18} className="shrink-0 text-rose-600" />
                     <span>{statusMessage}</span>
                   </div>
                   <button
                     type="button"
                     onClick={() => triggerMailtoFallback(watch())}
-                    className="underline hover:text-rose-300 font-mono text-[11px] shrink-0"
+                    className="underline hover:text-rose-900 font-mono text-[11px] shrink-0 font-semibold"
                   >
                     Open Mail App Instead →
                   </button>

@@ -2,7 +2,7 @@ export const techCategories = [
   {
     "id": "programming",
     "label": "Programming",
-    "color": "#6366f1",
+    "color": "#0866E8",
     "techs": [
       {
         "name": "Java",
@@ -34,7 +34,7 @@ export const techCategories = [
   {
     "id": "backend",
     "label": "Backend",
-    "color": "#22d3ee",
+    "color": "#18C5E8",
     "techs": [
       {
         "name": "Spring Security",
@@ -46,7 +46,7 @@ export const techCategories = [
   {
     "id": "databases",
     "label": "Databases",
-    "color": "#a78bfa",
+    "color": "#7434C5",
     "techs": [
       {
         "name": "MongoDB",

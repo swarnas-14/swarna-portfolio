@@ -50,7 +50,7 @@ export default function Journey() {
                         <span className="font-mono text-xs text-text-muted">{item.year}</span>
                       </div>
 
-                      <h3 className="font-display font-bold text-xl text-text-primary mb-3 group-hover:text-accent-cyan transition-colors">
+                      <h3 className="font-display font-bold text-xl text-text-primary mb-3 group-hover:text-accent-indigo transition-colors">
                         {item.title}
                       </h3>
 
@@ -62,7 +62,7 @@ export default function Journey() {
                         {item.technologies.map((tech, i) => (
                           <span
                             key={i}
-                            className="text-xs px-2.5 py-1 rounded bg-bg-secondary text-text-muted border border-border"
+                            className="text-xs px-2.5 py-1 rounded bg-bg-secondary text-text-secondary font-medium border border-border"
                           >
                             {tech}
                           </span>

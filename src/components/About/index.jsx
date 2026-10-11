@@ -9,37 +9,37 @@ const interests = [
     icon: Code2,
     title: "Backend Development",
     desc: "Architecting resilient APIs, microservices, and database layers with Java & Spring Boot.",
-    color: "#6366f1"
+    color: "#0866E8"
   },
   {
     icon: Brain,
     title: "Problem Solving & DSA",
     desc: "Refining algorithmic thinking and efficiency through continuous competitive coding on LeetCode.",
-    color: "#22d3ee"
+    color: "#18C5E8"
   },
   {
     icon: Cpu,
     title: "AI & Machine Learning",
     desc: "Exploring data analytics, numerical computation, and machine learning models in Python.",
-    color: "#a78bfa"
+    color: "#7434C5"
   },
   {
     icon: Trophy,
     title: "Hackathons & Innovation",
     desc: "Building high-impact, real-world solutions under tight timeframes in collaborative environments.",
-    color: "#34d399"
+    color: "#10B981"
   },
   {
     icon: BookOpen,
     title: "Continuous Learning",
     desc: "Staying curious with cutting-edge tools, system architecture patterns, and emerging technologies.",
-    color: "#fb923c"
+    color: "#0866E8"
   },
   {
     icon: Rocket,
     title: "Product-Oriented Mindset",
     desc: "Transforming engineering requirements into scalable, practical, end-user-ready applications.",
-    color: "#f472b6"
+    color: "#D96CE8"
   }
 ]
 

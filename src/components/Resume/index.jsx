@@ -66,14 +66,14 @@ export default function Resume() {
           <div className="grid sm:grid-cols-2 gap-8 my-8">
             {/* Education */}
             <div className="space-y-3">
-              <div className="flex items-center gap-2 text-accent-cyan font-display font-semibold text-sm">
+              <div className="flex items-center gap-2 text-accent-indigo font-display font-semibold text-sm">
                 <GraduationCap size={16} /> Education
               </div>
               <div className="card-base p-4 border-border/60">
                 <div className="font-display font-bold text-text-primary text-sm">
                   B.Tech in Computer Science & Engineering
                 </div>
-                <div className="text-xs text-text-muted mt-0.5">5th Semester · India</div>
+                <div className="text-xs text-text-secondary font-medium mt-0.5">5th Semester · India</div>
                 <div className="text-xs text-text-secondary mt-2">
                   Focus: Software Architecture, Algorithms, Database Systems, Computer Networks & AI.
                 </div>
@@ -82,14 +82,14 @@ export default function Resume() {
 
             {/* Core Competencies */}
             <div className="space-y-3">
-              <div className="flex items-center gap-2 text-accent-indigo font-display font-semibold text-sm">
+              <div className="flex items-center gap-2 text-accent-purple font-display font-semibold text-sm">
                 <Code size={16} /> Core Technical Pillars
               </div>
               <div className="card-base p-4 border-border/60">
                 <div className="font-display font-bold text-text-primary text-sm">
                   Backend & Distributed Computing
                 </div>
-                <div className="text-xs text-text-muted mt-0.5">Java · Spring Boot · MySQL · Redis</div>
+                <div className="text-xs text-text-secondary font-medium mt-0.5">Java · Spring Boot · MySQL · Redis</div>
                 <div className="text-xs text-text-secondary mt-2">
                   REST APIs, microservice patterns, relational modeling, and caching architectures.
                 </div>

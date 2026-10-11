@@ -7,7 +7,7 @@ export default function SkillsEditor({ techCategories, onUpdate, onSave, isSavin
     copy[catIndex].techs.push({
       name: "New Tech",
       description: "Technology description",
-      color: copy[catIndex].color || "#6366f1"
+      color: copy[catIndex].color || "#0866E8"
     })
     onUpdate(copy)
   }

@@ -78,7 +78,7 @@ export default function Achievements() {
                     </span>
                   </div>
 
-                  <h4 className="font-display font-bold text-lg text-text-primary mb-1 group-hover:text-accent-cyan transition-colors">
+                  <h4 className="font-display font-bold text-lg text-text-primary mb-1 group-hover:text-accent-indigo transition-colors">
                     {item.title}
                   </h4>
 
@@ -94,7 +94,7 @@ export default function Achievements() {
                 <div className="pt-4 border-t border-border/40 flex items-center justify-between">
                   <button
                     onClick={() => openGallery(item)}
-                    className="text-xs font-mono text-accent-indigo hover:text-accent-cyan transition-colors flex items-center gap-1.5"
+                    className="text-xs font-mono text-accent-indigo hover:text-accent-purple transition-colors flex items-center gap-1.5 font-medium"
                   >
                     <ImageIcon size={14} /> View Evidence
                   </button>

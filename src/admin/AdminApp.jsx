@@ -58,7 +58,7 @@ const TABS = [
 
 export default function AdminApp() {
   const [isAuthenticated, setIsAuthenticated] = useState(() => {
-    return sessionStorage.getItem("vinay_admin_authenticated") === "true"
+    return sessionStorage.getItem("swarna_admin_authenticated") === "true"
   })
 
   const [activeTab, setActiveTab] = useState("hackathon-wins")
@@ -91,7 +91,7 @@ export default function AdminApp() {
   ])
 
   const handleLogout = () => {
-    sessionStorage.removeItem("vinay_admin_authenticated")
+    sessionStorage.removeItem("swarna_admin_authenticated")
     setIsAuthenticated(false)
   }
 
@@ -302,7 +302,7 @@ export default function AdminApp() {
           {/* Logo & Local Status */}
           <div className="flex items-center gap-3">
             <div className="w-8 h-8 rounded-lg bg-gradient-to-tr from-accent-indigo to-accent-cyan flex items-center justify-center font-display font-bold text-xs text-white">
-              VS
+              SS
             </div>
             <div>
               <div className="font-display font-bold text-sm text-white flex items-center gap-2">

@@ -54,7 +54,7 @@ export default function Certifications() {
                   <span className="font-mono text-xs text-text-muted">{cert.date}</span>
                 </div>
 
-                <h4 className="font-display font-bold text-lg text-text-primary mb-1 group-hover:text-accent-cyan transition-colors">
+                <h4 className="font-display font-bold text-lg text-text-primary mb-1 group-hover:text-accent-indigo transition-colors">
                   {cert.title}
                 </h4>
 
@@ -77,7 +77,7 @@ export default function Certifications() {
                 <div className="pt-4 border-t border-border/40 flex items-center justify-between">
                   <button
                     onClick={() => openCert(index)}
-                    className="text-xs font-mono text-text-primary hover:text-accent-indigo transition-colors flex items-center gap-1.5"
+                    className="text-xs font-mono text-text-primary hover:text-accent-indigo transition-colors flex items-center gap-1.5 font-medium"
                   >
                     <Eye size={14} /> Inspect Certificate
                   </button>
@@ -87,7 +87,7 @@ export default function Certifications() {
                       href={cert.verificationUrl}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="text-xs text-accent-cyan hover:underline flex items-center gap-1"
+                      className="text-xs text-accent-indigo hover:text-accent-purple font-medium flex items-center gap-1"
                     >
                       <ShieldCheck size={14} /> Verify
                     </a>

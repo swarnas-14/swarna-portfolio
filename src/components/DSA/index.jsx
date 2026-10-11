@@ -102,15 +102,15 @@ export default function DSA() {
                   <div className="flex items-center gap-3">
                     <span className="w-2 h-2 rounded-full bg-accent-indigo group-hover:bg-accent-cyan transition-colors" />
                     <div>
-                      <div className="font-display font-semibold text-xs text-text-primary group-hover:text-accent-cyan transition-colors">
+                      <div className="font-display font-semibold text-xs text-text-primary group-hover:text-accent-indigo transition-colors">
                         {topic.name}
                       </div>
-                      <div className="text-[11px] text-text-muted">
+                      <div className="text-[11px] text-text-secondary">
                         {topic.status}
                       </div>
                     </div>
                   </div>
-                  <span className="font-mono text-xs px-2 py-0.5 rounded bg-bg-secondary text-text-muted border border-border">
+                  <span className="font-mono text-xs px-2 py-0.5 rounded bg-bg-secondary text-text-secondary font-medium border border-border">
                     {topic.count}
                   </span>
                 </motion.div>

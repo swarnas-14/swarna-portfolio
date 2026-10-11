@@ -18,7 +18,7 @@ export default function Loader({ onComplete }) {
 
   useEffect(() => {
     // Check if user already saw the bootloader in this session
-    const hasLoaded = sessionStorage.getItem("vinay_portfolio_booted")
+    const hasLoaded = sessionStorage.getItem("swarna_portfolio_booted")
     if (hasLoaded) {
       setIsFinished(true)
       onComplete?.()
@@ -30,7 +30,7 @@ export default function Loader({ onComplete }) {
         if (prev >= 100) {
           clearInterval(interval)
           setTimeout(() => {
-            sessionStorage.setItem("vinay_portfolio_booted", "true")
+            sessionStorage.setItem("swarna_portfolio_booted", "true")
             setIsFinished(true)
             onComplete?.()
           }, 400)
@@ -63,58 +63,58 @@ export default function Loader({ onComplete }) {
             opacity: 0,
             transition: { duration: 0.8, ease: [0.76, 0, 0.24, 1] }
           }}
-          className="fixed inset-0 z-[10000] bg-[#050508] flex flex-col items-center justify-center p-6 select-none font-mono text-white"
+          className="fixed inset-0 z-[10000] bg-white flex flex-col items-center justify-center p-6 select-none font-mono text-text-primary"
         >
           {/* Subtle background grid pattern */}
-          <div className="absolute inset-0 bg-[radial-gradient(#1e1e38_1px,transparent_1px)] [background-size:24px_24px] opacity-40 pointer-events-none" />
+          <div className="absolute inset-0 bg-[radial-gradient(#D4D4D4_1px,transparent_1px)] [background-size:24px_24px] opacity-60 pointer-events-none" />
 
           {/* Glowing central orb */}
-          <div className="absolute w-72 h-72 rounded-full bg-gradient-to-tr from-accent-indigo/20 via-accent-cyan/15 to-transparent blur-3xl pointer-events-none" />
+          <div className="absolute w-72 h-72 rounded-full bg-gradient-to-tr from-[#0866E8]/10 via-[#18C5E8]/10 to-transparent blur-3xl pointer-events-none" />
 
-          <div className="relative w-full max-w-md space-y-6 text-center">
+          <div className="relative w-full max-w-md space-y-6 text-center p-8 rounded-2xl bg-white/90 border border-border shadow-xl backdrop-blur-md">
             {/* Header Icon & Title */}
             <div className="flex items-center justify-center gap-3">
-              <div className="w-10 h-10 rounded-xl bg-[#0f0f18] border border-accent-indigo/40 flex items-center justify-center text-accent-cyan shadow-lg shadow-accent-indigo/20">
+              <div className="w-10 h-10 rounded-xl bg-bg-secondary border border-accent-indigo/20 flex items-center justify-center text-accent-indigo shadow-sm">
                 <Cpu size={22} className="animate-pulse" />
               </div>
               <div className="text-left">
                 <div className="text-xs font-bold tracking-widest text-text-primary uppercase flex items-center gap-2">
-                  VINAY SHARMA <span className="text-[10px] text-emerald-400 font-normal">v2.6</span>
+                  SWARNA SAHU <span className="text-[10px] text-emerald-600 font-semibold bg-emerald-50 px-1.5 py-0.5 rounded border border-emerald-200">v1.0</span>
                 </div>
-                <div className="text-[10px] text-text-muted tracking-wider">
+                <div className="text-[10px] text-text-secondary tracking-wider">
                   KERNEL BOOT SEQUENCE
                 </div>
               </div>
             </div>
 
             {/* Simulated Terminal Log Stream */}
-            <div className="h-14 flex items-center justify-center px-4 py-2 rounded-xl bg-[#0d0d16]/80 border border-white/5 backdrop-blur-md">
-              <div className="text-xs text-accent-cyan font-mono flex items-center gap-2 truncate">
-                <span className="text-accent-indigo">&gt;</span>
-                <span className="truncate">{BOOT_LOGS[logIndex]}</span>
-                <span className="w-1.5 h-3.5 bg-accent-cyan inline-block animate-pulse" />
+            <div className="h-14 flex items-center justify-center px-4 py-2 rounded-xl bg-bg-secondary border border-border">
+              <div className="text-xs text-accent-indigo font-mono flex items-center gap-2 truncate font-medium">
+                <span className="text-accent-purple font-bold">&gt;</span>
+                <span className="truncate text-text-primary">{BOOT_LOGS[logIndex]}</span>
+                <span className="w-1.5 h-3.5 bg-accent-indigo inline-block animate-pulse" />
               </div>
             </div>
 
             {/* Progress Bar & Numerical Counter */}
             <div className="space-y-2">
-              <div className="flex justify-between items-center text-xs text-text-muted">
+              <div className="flex justify-between items-center text-xs text-text-secondary">
                 <span className="flex items-center gap-1.5">
-                  <Terminal size={12} className="text-text-muted" /> INITIALIZING
+                  <Terminal size={12} className="text-accent-indigo" /> INITIALIZING
                 </span>
-                <span className="font-bold text-white font-mono">{progress}%</span>
+                <span className="font-bold text-text-primary font-mono">{progress}%</span>
               </div>
-              <div className="w-full h-1.5 bg-[#12121e] rounded-full overflow-hidden border border-white/5">
+              <div className="w-full h-2 bg-[#E5E5E5] rounded-full overflow-hidden border border-border/50">
                 <motion.div
-                  className="h-full bg-gradient-to-r from-accent-indigo via-accent-cyan to-accent-indigo rounded-full"
+                  className="h-full bg-gradient-to-r from-accent-indigo via-accent-cyan to-accent-purple rounded-full"
                   style={{ width: `${progress}%` }}
                   transition={{ ease: "easeOut", duration: 0.1 }}
                 />
               </div>
             </div>
 
-            <div className="text-[10px] text-text-muted tracking-widest uppercase flex items-center justify-center gap-1.5">
-              <ShieldCheck size={11} className="text-emerald-400" /> WebGL · Particle Core · Lenis Physics
+            <div className="text-[10px] text-text-secondary tracking-widest uppercase flex items-center justify-center gap-1.5">
+              <ShieldCheck size={12} className="text-emerald-600" /> WebGL · Particle Core · Modern CSS
             </div>
           </div>
         </motion.div>

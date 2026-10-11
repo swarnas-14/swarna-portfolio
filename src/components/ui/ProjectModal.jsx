@@ -26,12 +26,12 @@ export default function ProjectModal({ project, isOpen, onClose }) {
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
-          style={{ background: "rgba(5,5,8,0.95)", backdropFilter: "blur(20px)" }}
+          style={{ background: "rgba(250,250,250,0.97)", backdropFilter: "blur(20px)" }}
           onClick={onClose}
         >
           <motion.div
             className="relative w-full max-w-4xl rounded-2xl overflow-hidden my-auto"
-            style={{ background: "#0d0d14", border: "1px solid #1e1e2e" }}
+            style={{ background: "#FFFFFF", border: "1px solid #D4D4D4" }}
             initial={{ scale: 0.95, opacity: 0, y: 20 }}
             animate={{ scale: 1, opacity: 1, y: 0 }}
             exit={{ scale: 0.95, opacity: 0, y: 20 }}
@@ -39,8 +39,8 @@ export default function ProjectModal({ project, isOpen, onClose }) {
             onClick={(e) => e.stopPropagation()}
           >
             {/* Header */}
-            <div className="relative h-44 flex items-end p-8" style={{ background: "linear-gradient(135deg, #12121c, #0d0d14)" }}>
-              <div className="absolute inset-0 opacity-30" style={{ background: "radial-gradient(circle at 30% 50%, rgba(99,102,241,0.3), transparent 60%)" }} />
+            <div className="relative h-44 flex items-end p-8" style={{ background: "linear-gradient(135deg, #F5F7FF, #FAFAFA)" }}>
+              <div className="absolute inset-0 opacity-20" style={{ background: "radial-gradient(circle at 30% 50%, rgba(8,102,232,0.25), transparent 60%)" }} />
               <div className="relative z-10">
                 <span className="badge mb-3 inline-block">{project.category}</span>
                 <h2 className="font-display text-2xl sm:text-3xl font-bold text-text-primary">{project.title}</h2>
@@ -78,7 +78,7 @@ export default function ProjectModal({ project, isOpen, onClose }) {
                   <h3 className="text-xs font-mono text-accent-indigo uppercase tracking-widest mb-2 flex items-center gap-2">
                     <Layers size={14} /> System Architecture
                   </h3>
-                  <div className="rounded-xl p-4 text-text-secondary text-xs leading-relaxed" style={{ background: "#12121c", border: "1px solid #1e1e2e" }}>
+                  <div className="rounded-xl p-4 text-text-secondary text-xs leading-relaxed" style={{ background: "#F5F7FF", border: "1px solid #D4D4D4" }}>
                     {project.architecture}
                   </div>
                 </div>
@@ -110,7 +110,7 @@ export default function ProjectModal({ project, isOpen, onClose }) {
               )}
 
               {/* Links */}
-              <div className="flex gap-4 pt-4 border-t" style={{ borderColor: "#1e1e2e" }}>
+              <div className="flex gap-4 pt-4 border-t" style={{ borderColor: "#D4D4D4" }}>
                 {project.githubUrl && (
                   <a href={project.githubUrl} target="_blank" rel="noopener noreferrer" className="btn-secondary flex items-center gap-2 text-xs">
                     <Github size={14} /> Source Repository

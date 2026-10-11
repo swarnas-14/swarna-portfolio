@@ -21,7 +21,7 @@ export default function AdminLogin({ onLoginSuccess }) {
       // Hardcoded dev fallbacks (from .env.local defaults)
       (e === "swarna.admin@gmail.com" && p === "Swarna@123") ||
       (e === "admin@example.com" && p === "YOUR_LOCAL_ADMIN_PASSWORD") ||
-      (e === "admin@vinay.dev" && p === "admin123")
+      (e === "admin@swarna.dev" && p === "admin123")
     )
   }
 
@@ -32,7 +32,7 @@ export default function AdminLogin({ onLoginSuccess }) {
 
     setTimeout(() => {
       if (isDefaultDevAllowed(email, password)) {
-        sessionStorage.setItem("vinay_admin_authenticated", "true")
+        sessionStorage.setItem("swarna_admin_authenticated", "true")
         onLoginSuccess()
       } else {
         setErrorMessage("Invalid email or password.")
@@ -51,7 +51,7 @@ export default function AdminLogin({ onLoginSuccess }) {
         {/* Branding */}
         <div className="text-center mb-8">
           <div className="inline-flex items-center justify-center w-14 h-14 rounded-2xl bg-gradient-to-tr from-accent-indigo to-accent-cyan text-white font-display font-black text-xl shadow-lg shadow-accent-indigo/25 mb-4">
-            VS
+            SS
           </div>
           <h1 className="font-display font-bold text-2xl text-white tracking-tight">
             Portfolio Studio

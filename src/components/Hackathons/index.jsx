@@ -98,14 +98,14 @@ export default function Hackathons() {
             {/* Implemented vs Planned Grid */}
             <div className="grid md:grid-cols-2 gap-8 my-8">
               {/* Implemented Features */}
-              <div className="p-6 rounded-2xl bg-bg-secondary border border-emerald-500/20">
-                <div className="flex items-center gap-2 mb-4 text-emerald-400 font-display font-bold text-base">
+              <div className="p-6 rounded-2xl bg-bg-secondary border border-emerald-500/30">
+                <div className="flex items-center gap-2 mb-4 text-emerald-600 font-display font-bold text-base">
                   <CheckCircle2 size={18} /> Implemented Capabilities
                 </div>
                 <ul className="space-y-2.5">
                   {sih.implementedFeatures.map((feat, i) => (
-                    <li key={i} className="flex items-start gap-2.5 text-xs sm:text-sm text-text-secondary">
-                      <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 mt-2 shrink-0" />
+                    <li key={i} className="flex items-start gap-2.5 text-xs sm:text-sm text-text-primary">
+                      <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 mt-2 shrink-0" />
                       <span>{feat}</span>
                     </li>
                   ))}
@@ -113,14 +113,14 @@ export default function Hackathons() {
               </div>
 
               {/* Planned / Future Scope */}
-              <div className="p-6 rounded-2xl bg-bg-secondary border border-amber-500/20">
-                <div className="flex items-center gap-2 mb-4 text-amber-400 font-display font-bold text-base">
+              <div className="p-6 rounded-2xl bg-bg-secondary border border-amber-500/30">
+                <div className="flex items-center gap-2 mb-4 text-amber-600 font-display font-bold text-base">
                   <Clock size={18} /> Planned / Future Roadmap
                 </div>
                 <ul className="space-y-2.5">
                   {sih.plannedFeatures.map((feat, i) => (
-                    <li key={i} className="flex items-start gap-2.5 text-xs sm:text-sm text-text-muted">
-                      <span className="w-1.5 h-1.5 rounded-full bg-amber-400 mt-2 shrink-0" />
+                    <li key={i} className="flex items-start gap-2.5 text-xs sm:text-sm text-text-secondary">
+                      <span className="w-1.5 h-1.5 rounded-full bg-amber-500 mt-2 shrink-0" />
                       <span>{feat}</span>
                     </li>
                   ))}
@@ -200,7 +200,7 @@ export default function Hackathons() {
         {otherHackathons.length > 0 && (
           <div className="grid md:grid-cols-2 gap-6">
             {otherHackathons.map((hackathon) => (
-              <GlowCard key={hackathon.id} className="card-base p-6 border-border flex flex-col justify-between h-full" glowColor="rgba(34, 211, 238, 0.15)">
+              <GlowCard key={hackathon.id} className="card-base p-6 border-border flex flex-col justify-between h-full" glowColor="rgba(24, 197, 232, 0.12)">
                 <div>
                   <div className="flex items-center justify-between mb-3">
                     <span className="badge">{hackathon.shortName || hackathon.name}</span>

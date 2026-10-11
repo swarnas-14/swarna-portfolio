@@ -26,8 +26,8 @@ function QuantumCore() {
       <mesh>
         <icosahedronGeometry args={[1.1, 1]} />
         <meshStandardMaterial
-          color="#6366f1"
-          emissive="#4338ca"
+          color="#0866E8"
+          emissive="#0554c0"
           emissiveIntensity={0.6}
           wireframe
           transparent
@@ -39,8 +39,8 @@ function QuantumCore() {
       <mesh ref={innerRef}>
         <dodecahedronGeometry args={[0.7, 0]} />
         <meshStandardMaterial
-          color="#22d3ee"
-          emissive="#06b6d4"
+          color="#18C5E8"
+          emissive="#0da8c8"
           emissiveIntensity={1.2}
           roughness={0.2}
           metalness={0.8}
@@ -84,8 +84,8 @@ function GimbalRings() {
       <mesh ref={ring1Ref}>
         <torusGeometry args={[1.7, 0.022, 16, 64]} />
         <meshStandardMaterial
-          color="#22d3ee"
-          emissive="#06b6d4"
+          color="#18C5E8"
+          emissive="#0da8c8"
           emissiveIntensity={0.8}
           roughness={0.1}
           metalness={0.9}
@@ -96,8 +96,8 @@ function GimbalRings() {
       <mesh ref={ring2Ref}>
         <torusGeometry args={[2.0, 0.02, 16, 64]} />
         <meshStandardMaterial
-          color="#818cf8"
-          emissive="#6366f1"
+          color="#0866E8"
+          emissive="#0554c0"
           emissiveIntensity={0.7}
           roughness={0.1}
           metalness={0.9}
@@ -108,8 +108,8 @@ function GimbalRings() {
       <mesh ref={ring3Ref}>
         <torusGeometry args={[2.3, 0.018, 16, 64]} />
         <meshStandardMaterial
-          color="#c084fc"
-          emissive="#a855f7"
+          color="#7434C5"
+          emissive="#5c29a0"
           emissiveIntensity={0.6}
           roughness={0.2}
           metalness={0.8}
@@ -129,10 +129,10 @@ function NeuralParticleStream() {
     const pos = new Float32Array(count * 3)
     const col = new Float32Array(count * 3)
     const colorPalette = [
-      new THREE.Color("#6366f1"),
-      new THREE.Color("#22d3ee"),
-      new THREE.Color("#a855f7"),
-      new THREE.Color("#38bdf8")
+      new THREE.Color("#0866E8"),
+      new THREE.Color("#18C5E8"),
+      new THREE.Color("#7434C5"),
+      new THREE.Color("#D96CE8")
     ]
 
     for (let i = 0; i < count; i++) {

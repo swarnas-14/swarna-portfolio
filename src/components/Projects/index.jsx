@@ -53,7 +53,7 @@ export default function Projects() {
                   </span>
                 </div>
 
-                <h3 className="font-display font-black text-2xl sm:text-3xl lg:text-4xl text-text-primary group-hover:text-accent-cyan transition-colors">
+                <h3 className="font-display font-black text-2xl sm:text-3xl lg:text-4xl text-text-primary group-hover:text-accent-indigo transition-colors">
                   {featured.title}
                 </h3>
 
@@ -131,7 +131,7 @@ export default function Projects() {
             >
               <GlowCard
                 className="card-base p-6 flex flex-col justify-between h-full group hover:border-accent-indigo/50 transition-all duration-300"
-                glowColor="rgba(99, 102, 241, 0.2)"
+                glowColor="rgba(8, 102, 232, 0.12)"
               >
                 <div>
                   <div className="flex items-center justify-between mb-4">
@@ -162,7 +162,7 @@ export default function Projects() {
                     </div>
                   </div>
 
-                  <h4 className="font-display font-bold text-lg text-text-primary mb-2 group-hover:text-accent-cyan transition-colors">
+                  <h4 className="font-display font-bold text-lg text-text-primary mb-2 group-hover:text-accent-indigo transition-colors">
                     {project.title}
                   </h4>
 
@@ -176,7 +176,7 @@ export default function Projects() {
                     {(project.techStack || project.technologies || []).map((tech, i) => (
                       <span
                         key={i}
-                        className="text-[11px] px-2 py-0.5 rounded bg-bg-secondary text-text-muted border border-border"
+                        className="text-[11px] px-2 py-0.5 rounded bg-bg-secondary text-text-secondary font-medium border border-border"
                       >
                         {tech}
                       </span>
