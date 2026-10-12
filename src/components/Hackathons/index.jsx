@@ -3,44 +3,26 @@ import { motion } from "framer-motion"
 import { hackathons } from "../../data/hackathons"
 import SectionHeader from "../ui/SectionHeader"
 import Lightbox from "../ui/Lightbox"
-import { Trophy, CheckCircle2, Clock, GitBranch, Users, Calendar, MapPin, Images, Eye, ExternalLink } from "lucide-react"
-import { isRealValue } from "../../utils/hasContent"
-import GlowCard from "../ui/GlowCard"
+import { Trophy, Calendar, MapPin, Users, Eye, Sparkles, ExternalLink } from "lucide-react"
+import { Github } from "../ui/Icons"
 
 export default function Hackathons() {
   const [lightboxOpen, setLightboxOpen] = useState(false)
-  const [lightboxImages, setLightboxImages] = useState([])
-  const [photoIndex, setPhotoIndex] = useState(0)
+  const [activePhotoIndex, setActivePhotoIndex] = useState(0)
 
-  const realHackathons = hackathons.filter(h => isRealValue(h.name))
+  const sih = hackathons[0]
+  if (!sih) return null
 
-  // Hide section if no real hackathons
-  if (realHackathons.length === 0) return null
+  const photos = sih.photos || []
 
-  const sih = realHackathons.find(h => h.id === "hackathon-001" || h.id === 1) || realHackathons[0]
-  const otherHackathons = realHackathons.filter(h => h.id !== sih?.id)
+  const lightboxImages = photos.map((p) => ({
+    src: p.url,
+    title: sih.name,
+    description: p.caption || sih.concept
+  }))
 
-  const openGallery = (hackathon, startIndex = 0) => {
-    const rawPhotos = hackathon.photos && hackathon.photos.length > 0
-      ? hackathon.photos
-      : (hackathon.images || []).map(img => (typeof img === "string" ? { url: img, caption: `${hackathon.name} photo` } : img))
-
-    if (rawPhotos.length > 0) {
-      setLightboxImages(rawPhotos.map(p => ({
-        src: p.url || p,
-        alt: p.caption || hackathon.name,
-        title: hackathon.name,
-        description: p.caption || `${hackathon.concept} • ${hackathon.date}`
-      })))
-    } else {
-      setLightboxImages([{
-        src: "",
-        alt: hackathon.name,
-        title: hackathon.name,
-        description: "Official event and team photographs coming soon."
-      }])
-    }
-    setPhotoIndex(startIndex)
+  const openLightbox = (idx) => {
+    setActivePhotoIndex(idx)
     setLightboxOpen(true)
   }
 
@@ -48,210 +30,133 @@ export default function Hackathons() {
     <section id="hackathons" className="section-padding relative">
       <div className="max-w-7xl mx-auto px-6">
         <SectionHeader
-          eyebrow="Competitive Engineering"
+          eyebrow="National Recognition"
           title={"Hackathons &\nNational Innovations"}
-          subtitle="Tackling complex problem statements under pressure with functional architectures."
+          subtitle="Tackling complex challenges under pressure with functional architectures and winning execution."
         />
 
-        {/* SIH 2026 Mega Showcase */}
-        {sih && (
+        <div className="mt-12">
           <motion.div
             initial={{ opacity: 0, y: 30 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            transition={{ duration: 0.7 }}
-            className="card-base p-8 lg:p-12 mb-16 relative overflow-hidden border-accent-indigo/40 glow-indigo"
+            transition={{ duration: 0.6 }}
+            className="card-base p-6 sm:p-10 relative overflow-hidden border-border bg-white shadow-sm"
           >
-            {/* Header / Meta */}
-            <div className="flex flex-wrap items-center justify-between gap-4 pb-8 border-b border-border">
+            {/* Header info */}
+            <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4 pb-6 border-b border-border">
               <div>
-                <div className="flex items-center gap-3 mb-2">
+                <div className="flex flex-wrap items-center gap-2.5 mb-2.5">
                   <span className="badge flex items-center gap-1.5">
-                    <Trophy size={14} className="text-amber-400" /> {sih.name}
+                    <Trophy size={13} className="text-amber-500" /> National Level
                   </span>
-                  <span className="font-mono text-xs text-accent-cyan px-2.5 py-1 rounded bg-accent-cyan/10 border border-accent-cyan/20">
-                    {sih.problemStatement}
+                  <span className="px-3 py-1 rounded-full text-xs font-mono font-semibold bg-emerald-50 border border-emerald-200 text-emerald-700 flex items-center gap-1">
+                    <Sparkles size={12} className="text-emerald-600" /> Winner · 1st Place (₹25,000)
                   </span>
                 </div>
-                <h3 className="font-display font-black text-2xl md:text-3xl text-text-primary">
-                  {sih.concept}
+
+                <h3 className="font-display font-black text-2xl sm:text-3xl text-text-primary">
+                  {sih.name}
                 </h3>
+                <p className="text-xs sm:text-sm font-mono text-accent-indigo mt-1">
+                  {sih.organizer || "Bansal Group of Institutes · In collaboration with HCLTech & IEEE"}
+                </p>
               </div>
 
-              <div className="flex items-center gap-4 text-xs font-mono text-text-muted">
+              <div className="flex flex-wrap items-center gap-4 text-xs font-mono text-text-secondary shrink-0">
                 <div className="flex items-center gap-1.5">
-                  <Calendar size={14} /> {sih.date}
+                  <Calendar size={14} className="text-accent-indigo" /> {sih.date}
                 </div>
                 <div className="flex items-center gap-1.5">
-                  <Users size={14} /> {sih.team}
+                  <MapPin size={14} className="text-accent-indigo" /> {sih.location || "Bhopal, India"}
                 </div>
+                {sih.team && (
+                  <div className="flex items-center gap-1.5">
+                    <Users size={14} className="text-accent-indigo" /> Team {sih.team}
+                  </div>
+                )}
               </div>
             </div>
 
-            {/* Description */}
-            <div className="my-8">
-              <p className="text-text-secondary leading-relaxed text-sm md:text-base max-w-4xl">
+            {/* Concept / Description */}
+            <div className="my-6 space-y-2">
+              <div className="font-display font-bold text-lg text-text-primary">
+                {sih.concept}
+              </div>
+              <p className="text-text-secondary text-sm sm:text-base leading-relaxed max-w-4xl whitespace-pre-line">
                 {sih.description}
               </p>
             </div>
 
-            {/* Implemented vs Planned Grid */}
-            <div className="grid md:grid-cols-2 gap-8 my-8">
-              {/* Implemented Features */}
-              <div className="p-6 rounded-2xl bg-bg-secondary border border-emerald-500/30">
-                <div className="flex items-center gap-2 mb-4 text-emerald-600 font-display font-bold text-base">
-                  <CheckCircle2 size={18} /> Implemented Capabilities
+            {/* 2 National Hackathon Photographs Side-by-Side */}
+            <div className="grid md:grid-cols-2 gap-6 my-6">
+              {photos.map((photo, pIdx) => (
+                <div
+                  key={pIdx}
+                  onClick={() => openLightbox(pIdx)}
+                  className="group relative rounded-2xl overflow-hidden border border-border bg-bg-secondary cursor-pointer hover:border-accent-indigo/60 transition-all duration-300 shadow-sm hover:shadow-md"
+                >
+                  <div className="relative aspect-[4/3] w-full overflow-hidden bg-bg-secondary">
+                    <img
+                      src={photo.url}
+                      alt={photo.caption || `${sih.name} photo`}
+                      className="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-500"
+                      loading="lazy"
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent opacity-60 group-hover:opacity-40 transition-opacity" />
+                    <div className="absolute top-3 right-3 w-8 h-8 rounded-full glass flex items-center justify-center text-text-primary opacity-0 group-hover:opacity-100 transition-opacity shadow-sm">
+                      <Eye size={16} />
+                    </div>
+                  </div>
+                  <div className="p-4 bg-white border-t border-border">
+                    <div className="text-xs font-semibold text-text-primary">
+                      {photo.caption}
+                    </div>
+                    <div className="text-[11px] font-mono text-text-secondary mt-0.5">
+                      National Level · Vision 2047 Viksit Bharat
+                    </div>
+                  </div>
                 </div>
-                <ul className="space-y-2.5">
-                  {sih.implementedFeatures.map((feat, i) => (
-                    <li key={i} className="flex items-start gap-2.5 text-xs sm:text-sm text-text-primary">
-                      <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 mt-2 shrink-0" />
-                      <span>{feat}</span>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-
-              {/* Planned / Future Scope */}
-              <div className="p-6 rounded-2xl bg-bg-secondary border border-amber-500/30">
-                <div className="flex items-center gap-2 mb-4 text-amber-600 font-display font-bold text-base">
-                  <Clock size={18} /> Planned / Future Roadmap
-                </div>
-                <ul className="space-y-2.5">
-                  {sih.plannedFeatures.map((feat, i) => (
-                    <li key={i} className="flex items-start gap-2.5 text-xs sm:text-sm text-text-secondary">
-                      <span className="w-1.5 h-1.5 rounded-full bg-amber-500 mt-2 shrink-0" />
-                      <span>{feat}</span>
-                    </li>
-                  ))}
-                </ul>
-              </div>
+              ))}
             </div>
 
-            {/* Multi-Photo Evidence Gallery Strip */}
-            {sih.photos && sih.photos.length > 0 && (
-              <div className="my-8 pt-6 border-t border-border/60">
-                <div className="flex items-center justify-between mb-4">
-                  <span className="text-xs font-mono uppercase tracking-widest text-text-muted flex items-center gap-2">
-                    <Images size={14} className="text-accent-cyan" /> Event Photographs & Evidence ({sih.photos.length} photos)
-                  </span>
-                  <button
-                    onClick={() => openGallery(sih, 0)}
-                    className="text-xs text-accent-indigo hover:text-accent-cyan transition-colors flex items-center gap-1 font-mono"
+            {/* Project / Award Links */}
+            {(sih.githubUrl || sih.verificationUrl) && (
+              <div className="pt-6 border-t border-border flex flex-wrap items-center gap-4">
+                {sih.githubUrl && (
+                  <a
+                    href={sih.githubUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="btn-secondary text-xs flex items-center gap-2"
                   >
-                    <Eye size={13} /> View Fullscreen Gallery
-                  </button>
-                </div>
-
-                <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3">
-                  {sih.photos.map((photo, pIdx) => (
-                    <div
-                      key={pIdx}
-                      onClick={() => openGallery(sih, pIdx)}
-                      className="group/photo relative aspect-video rounded-xl bg-bg-secondary border border-border overflow-hidden cursor-pointer hover:border-accent-indigo/60 transition-all duration-200"
-                    >
-                      <div className="w-full h-full flex flex-col items-center justify-center p-3 text-center bg-gradient-to-br from-bg-card to-bg-secondary">
-                        <Images size={20} className="text-accent-indigo mb-1 group-hover/photo:scale-110 transition-transform" />
-                        <span className="text-[11px] font-medium text-text-primary line-clamp-1">{photo.caption || `Photo ${pIdx + 1}`}</span>
-                        {photo.type && (
-                          <span className="text-[9px] uppercase font-mono text-accent-cyan mt-0.5">{photo.type}</span>
-                        )}
-                      </div>
-                      <div className="absolute inset-0 bg-accent-indigo/10 opacity-0 group-hover/photo:opacity-100 transition-opacity flex items-center justify-center">
-                        <Eye size={16} className="text-white drop-shadow" />
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            )}
-
-            {/* Hackathon Progression Pipeline */}
-            {sih.timeline && (
-              <div className="mt-12 pt-8 border-t border-border">
-                <div className="text-xs font-mono uppercase tracking-widest text-text-muted mb-6 flex items-center gap-2">
-                  <GitBranch size={14} className="text-accent-indigo" /> Solution Lifecycle Pipeline
-                </div>
-
-                <div className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-8 gap-3">
-                  {sih.timeline.map((step, idx) => (
-                    <div
-                      key={idx}
-                      className="p-3 rounded-xl bg-bg-card border border-border/80 flex flex-col justify-between"
-                    >
-                      <div className="font-mono text-[10px] text-accent-indigo font-bold mb-1">
-                        0{idx + 1}
-                      </div>
-                      <div className="font-display font-semibold text-xs text-text-primary mb-1">
-                        {step.step}
-                      </div>
-                      <div className="text-[10px] text-text-muted leading-tight">
-                        {step.description}
-                      </div>
-                    </div>
-                  ))}
-                </div>
+                    <Github size={14} /> Project Repository
+                  </a>
+                )}
+                {sih.verificationUrl && (
+                  <a
+                    href={sih.verificationUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="btn-primary text-xs flex items-center gap-2"
+                  >
+                    <ExternalLink size={14} /> View Certificate / Evidence
+                  </a>
+                )}
               </div>
             )}
           </motion.div>
-        )}
-
-        {/* Other Hackathons */}
-        {otherHackathons.length > 0 && (
-          <div className="grid md:grid-cols-2 gap-6">
-            {otherHackathons.map((hackathon) => (
-              <GlowCard key={hackathon.id} className="card-base p-6 border-border flex flex-col justify-between h-full" glowColor="rgba(24, 197, 232, 0.12)">
-                <div>
-                  <div className="flex items-center justify-between mb-3">
-                    <span className="badge">{hackathon.shortName || hackathon.name}</span>
-                    <span className="text-xs font-mono text-text-muted">{hackathon.date}</span>
-                  </div>
-                  <h4 className="font-display font-bold text-lg text-text-primary mb-2">
-                    {hackathon.concept || hackathon.name}
-                  </h4>
-                  <p className="text-text-secondary text-xs leading-relaxed mb-4">
-                    {hackathon.description}
-                  </p>
-                  <div className="flex flex-wrap gap-1.5 mb-4">
-                    {hackathon.technologies.map((t, i) => (
-                      <span key={i} className="text-[10px] px-2 py-0.5 rounded bg-bg-secondary text-text-muted border border-border">
-                        {t}
-                      </span>
-                    ))}
-                  </div>
-                </div>
-
-                <div className="pt-4 border-t border-border/40 flex items-center justify-between">
-                  <button
-                    onClick={() => openGallery(hackathon)}
-                    className="text-xs font-mono text-accent-indigo hover:text-accent-cyan transition-colors flex items-center gap-1.5"
-                  >
-                    <Images size={13} /> View Win Photos
-                  </button>
-                  {hackathon.githubUrl && hackathon.githubUrl !== "[ADD GITHUB URL]" && (
-                    <a
-                      href={hackathon.githubUrl}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="text-xs text-text-muted hover:text-text-primary flex items-center gap-1"
-                    >
-                      Repo <ExternalLink size={12} />
-                    </a>
-                  )}
-                </div>
-              </GlowCard>
-            ))}
-          </div>
-        )}
+        </div>
       </div>
 
+      {/* Fullscreen Lightbox for Zoomable Image Inspection */}
       <Lightbox
-        isOpen={lightboxOpen}
         images={lightboxImages}
-        currentIndex={photoIndex}
+        currentIndex={activePhotoIndex}
+        isOpen={lightboxOpen}
         onClose={() => setLightboxOpen(false)}
-        onPrev={() => setPhotoIndex(prev => (prev > 0 ? prev - 1 : lightboxImages.length - 1))}
-        onNext={() => setPhotoIndex(prev => (prev < lightboxImages.length - 1 ? prev + 1 : 0))}
+        onPrev={() => setActivePhotoIndex((prev) => (prev > 0 ? prev - 1 : lightboxImages.length - 1))}
+        onNext={() => setActivePhotoIndex((prev) => (prev < lightboxImages.length - 1 ? prev + 1 : 0))}
       />
     </section>
   )

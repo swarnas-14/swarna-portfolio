@@ -9,11 +9,11 @@ import About from "./components/About"
 import Journey from "./components/Journey"
 import TechStack from "./components/TechStack"
 import Projects from "./components/Projects"
-import Achievements from "./components/Achievements"
 import Certifications from "./components/Certifications"
 import DSA from "./components/DSA"
 import Learning from "./components/Learning"
 import Resume from "./components/Resume"
+import Hackathons from "./components/Hackathons"
 import Contact from "./components/Contact"
 import Footer from "./components/Footer"
 import { ShieldAlert, ArrowLeft, Loader2 } from "lucide-react"
@@ -124,11 +124,11 @@ export default function App() {
         <Journey />
         <TechStack />
         <Projects />
-        <Achievements />
         <Certifications />
         <DSA />
         <Learning />
         <Resume />
+        <Hackathons />
         <Contact />
       </main>
 

@@ -1,47 +1,35 @@
 export const hackathons = [
   {
-    "id": "hackathon-001",
-    "name": "BGI Viksit Bharat Hackathon",
-    "shortName": "[ABBREV]",
-    "problemStatement": "Waste management",
-    "concept": "Urban Clean ",
-    "description": "Urban Clean proposes a smart, technology-driven approach to urban sanitation by combining AI-powered waste management, ALOS integration, and a quick complaint reporting mechanism.\n\n- **Rapid Complaint System:** Designed to let users submit waste-related complaints in approximately 3 seconds.\n- **AI-Powered Waste Management:** Focuses on smarter waste segregation and sustainable waste handling.\n- **ALOS Integration:** Incorporates ALOS as part of the proposed solution.\n- **Smart Sanitation:** Aims to improve the reporting and management of garbage accumulation and sanitation issues.\n- **Sustainability:** Promotes cleaner public spaces, responsible waste disposal, and environmental awareness.",
-    "role": "UI/UX - Designer and Communication Head",
-    "team": "Swastika",
-    "date": "14/05/2026",
-    "result": "[ADD RESULT e.g. Finalist / Winner]",
-    "technologies": [
-      "[TECH 1]",
-      "[TECH 2]"
-    ],
-    "implementedFeatures": [
-      "[FEATURE 1]",
-      "[FEATURE 2]"
-    ],
-    "plannedFeatures": [
-      "[PLANNED 1]"
-    ],
-    "photos": [
+    id: "bgi-viksit-bharat",
+    name: "BGI Viksit Bharat Hackathon",
+    shortName: "Viksit Bharat",
+    level: "National Level",
+    problemStatement: "AI-Powered Urban Sanitation & Rapid Waste Management",
+    concept: "Urban Clean — Smart Sanitation & Rapid Reporting",
+    description: "Urban Clean proposes a smart, technology-driven approach to urban sanitation by combining AI-powered waste management, ALOS integration, and a sub-3-second complaint reporting mechanism. Won 1st Place at the prestigious National-Level BGI Hackathon (Vision 2047: Viksit Bharat).",
+    role: "UI/UX Designer & Communication Head",
+    team: "Swastika",
+    date: "May 2024",
+    location: "Bhopal, India",
+    organizer: "Bansal Group of Institutes · In collaboration with HCLTech & IEEE",
+    result: "Winner · 1st Place (₹25,000)",
+    achievement: "Winner · 1st Place",
+    prize: "₹25,000",
+    technologies: ["React", "Python", "Computer Vision", "Tailwind CSS", "REST APIs"],
+    photos: [
       {
-        "url": "/images/hackathons/hackathon-001-1791711658640-hack2.jpg",
-        "caption": "hack2",
-        "type": "team"
+        url: "/images/hackathons/bgi-viksit-bharat-1.jpg",
+        caption: "National Winner Award Ceremony · ₹25,000 Cheque Presentation",
+        type: "award"
       },
       {
-        "url": "/images/hackathons/hackathon-001-1791711673273-hack1.jpg",
-        "caption": "hack1",
-        "type": "team"
-      },
-      {
-        "url": "/images/hackathons/hackathon-001-1791711682554-hack3.jpg",
-        "caption": "hack3",
-        "type": "team"
+        url: "/images/hackathons/bgi-viksit-bharat-2.jpg",
+        caption: "Valedictory Stage Celebration with Team Swastika & Dignitaries",
+        type: "stage"
       }
     ],
-    "githubUrl": "https://github.com/swarnas-14/UrbanClean",
-    "position": "Winner",
-    "achievement": "Winner",
-    "verificationUrl": "https://drive.google.com/file/d/1u3koMpGxqF0J_MAR5npYrwltscTOcm6a/view?usp=drivesdk",
-    "coverPhoto": "/images/hackathons/hackathon-001-1791711658640-hack2.jpg"
+    githubUrl: "https://github.com/swarnas-14/UrbanClean",
+    verificationUrl: "https://drive.google.com/file/d/1u3koMpGxqF0J_MAR5npYrwltscTOcm6a/view?usp=drivesdk",
+    coverPhoto: "/images/hackathons/bgi-viksit-bharat-1.jpg"
   }
 ]
